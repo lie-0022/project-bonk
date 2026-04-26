@@ -1,0 +1,123 @@
+# .claudeignore — Claude Code가 컨텍스트에 포함하지 않을 파일/폴더 패턴
+# (효과: 토큰 절감, 탐색 속도 향상)
+# 작성일: 2026-04-26 / 대상 엔진: Unity 6.3 LTS
+
+# === Unity 생성 폴더 (재생성 가능, 무시) ===
+**/Library/
+**/Temp/
+**/Obj/
+**/obj/
+**/Logs/
+**/UserSettings/
+**/MemoryCaptures/
+**/Recordings/
+
+# === 빌드 출력 ===
+**/Build/
+**/Builds/
+**/Builds-*/
+*.apk
+*.aab
+*.ipa
+*.exe
+*.app
+
+# === Unity 에셋 바이너리 (텍스트 아님, Claude 분석 무의미) ===
+*.unity
+*.prefab
+*.asset
+*.mat
+*.physicMaterial
+*.physicsMaterial2D
+*.controller
+*.overrideController
+*.mask
+*.mixer
+*.preset
+*.lighting
+*.giparams
+*.cubemap
+*.flare
+*.fontsettings
+*.guiskin
+
+# === 3D/2D 모델 및 애니메이션 ===
+*.fbx
+*.dae
+*.obj
+*.blend
+*.3ds
+*.dxf
+*.max
+*.mb
+*.ma
+*.anim
+
+# === 이미지 (텍스처) ===
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tga
+*.tif
+*.tiff
+*.psd
+*.exr
+*.hdr
+*.webp
+*.svg
+
+# === 오디오 ===
+*.wav
+*.mp3
+*.ogg
+*.aif
+*.aiff
+*.flac
+
+# === 비디오 ===
+*.mp4
+*.mov
+*.avi
+*.webm
+
+# === Unity 메타 파일 (.cs.meta는 텍스트지만 Inspector 직렬화 정보뿐) ===
+*.meta
+
+# === IDE/에디터 (Unity가 자동 생성) ===
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.unityproj
+*.booproj
+*.svd
+*.pidb
+*.pdb
+
+# === 패키지 매니저 ===
+**/Packages/packages-lock.json
+
+# === BladeSurge 특화 (예제/튜토리얼 자산) ===
+**/Assets/TextMesh Pro/Examples & Extras/
+**/Assets/TextMeshPro/Examples & Extras/
+**/Assets/TutorialInfo/
+
+# === OS 생성 파일 ===
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# === Claude Code 자체 (워크트리/임시) ===
+**/.claude/worktrees/
+*.stackdump
+
+# === 백업 ===
+*.backup_*
