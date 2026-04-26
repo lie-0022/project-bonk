@@ -137,3 +137,11 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 *.lnk
+
+# === Claude Code 관련 ===
+bash.exe.stackdump
+src/BladeSurge/.claude/worktrees/
+src/BladeSurge/.claude/settings.local.json
+
+# === 임시/디버그 파일 ===
+*.stackdump
