@@ -5,10 +5,20 @@
 
 ## Engine & Language
 
-- **Engine**: Unity 6.3 LTS (6000.3.x)
-- **Language**: C#
+- **Engine**: Unity 6.3 LTS (6000.3.10f1)
+- **Language**: C# (.NET Standard 2.1)
 - **Rendering**: Universal Render Pipeline (URP) — Render Graph API (Compatibility Mode 사용 금지)
 - **Physics**: Unity PhysX 3D
+- **Project Path**: `src/BladeSurge/`
+
+## Input & Platform
+
+- **Target Platforms**: PC (Windows 11) — MVP 기준
+- **Input Methods**: Mixed (Keyboard/Mouse + Gamepad)
+- **Primary Input**: Keyboard/Mouse
+- **Gamepad Support**: Partial (점진 도입)
+- **Touch Support**: None
+- **Platform Notes**: Windows 11 우선. 추후 macOS/Steam Deck 검토
 
 ## Naming Conventions
 
@@ -23,15 +33,15 @@
 
 ## Performance Budgets
 
-- **Target Framerate**: [TO BE CONFIGURED — 60fps 권장]
-- **Frame Budget**: [TO BE CONFIGURED — 16.6ms @ 60fps]
-- **Draw Calls**: [TO BE CONFIGURED]
-- **Memory Ceiling**: [TO BE CONFIGURED]
+- **Target Framerate**: 60fps (PC 기준)
+- **Frame Budget**: 16.6ms @ 60fps
+- **Draw Calls**: MVP 단계 미세 튜닝 보류 (실측 후 결정)
+- **Memory Ceiling**: MVP 단계 미세 튜닝 보류 (실측 후 결정)
 
 ## Testing
 
 - **Framework**: Unity Test Framework (NUnit 기반)
-- **Minimum Coverage**: [TO BE CONFIGURED]
+- **Minimum Coverage**: MVP 단계 — 핵심 로직(스킬 공식, 데미지 계산 등) 필수 / 전체 비율은 추후 결정
 - **Required Tests**: Balance formulas, gameplay systems
 
 ## Forbidden Patterns
@@ -44,10 +54,33 @@
 
 ## Allowed Libraries / Addons
 
-- Unity Input System (`com.unity.inputsystem`) — 기본 Input 대신 사용 권장
-- [None configured yet — add as dependencies are approved]
+- Unity Input System (`com.unity.inputsystem`) — 기본 Input 대신 사용 권장 (BladeSurge 4파일 사용 중)
+- Unity UI (uGUI)
+- TextMesh Pro
+- Universal RP (`com.unity.render-pipelines.universal`)
+
+## Engine Specialists
+
+- **Primary**: `unity-csharp` (C# 스크립팅, MonoBehaviour, New Input System)
+- **Architect**: `unity-architect` (폴더 구조, Asmdef, ScriptableObject 아키텍처)
+- **Debugger**: `unity-debugger` (컴파일 에러, NullReferenceException, 성능)
+- **Disabled**: `godot-*` (5개) — `.claude/agents/_disabled/` 에 격리
+
+### File Extension Routing
+
+| File Extension / Type | Specialist to Spawn |
+|-----------------------|---------------------|
+| `.cs` (게임 로직) | `unity-csharp` |
+| `.cs` (Editor 폴더) | `unity-csharp` (Editor 컨텍스트 명시) |
+| `.shader`, `.shadergraph` | (추후 unity-shader 추가 검토) |
+| `.uxml`, `.uss` | (추후 unity-ui 추가 검토) |
+| `.unity` (Scene), `.prefab` | `unity-architect` |
+| `.asset` (ScriptableObject) | `unity-architect` |
+| `.asmdef` | `unity-architect` |
+| 컴파일/런타임 에러 | `unity-debugger` |
+| 일반 아키텍처 검토 | `unity-architect` (Primary) |
 
 ## Architecture Decisions Log
 
 <!-- Quick reference linking to full ADRs in docs/architecture/ -->
-- [No ADRs yet — use /architecture-decision to create one]
+- ADR-001 (가칭): Engine = Unity 6.3 LTS — 본 파일 Step 2 결정 (2026-04-26). 정식 ADR은 `/architecture-decision`으로 작성 권장.
