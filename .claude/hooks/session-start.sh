@@ -46,8 +46,8 @@ fi
 
 # Code health quick check
 if [ -d "src" ]; then
-    TODO_COUNT=$(grep -r "TODO" src/ 2>/dev/null | wc -l)
-    FIXME_COUNT=$(grep -r "FIXME" src/ 2>/dev/null | wc -l)
+    TODO_COUNT=$(grep -r --include="*.cs" --include="*.md" --include="*.gd" --exclude-dir=Library --exclude-dir=Temp --exclude-dir=Logs --exclude-dir=obj --exclude-dir=Build --exclude-dir=Builds "TODO" src/ 2>/dev/null | wc -l)
+    FIXME_COUNT=$(grep -r --include="*.cs" --include="*.md" --include="*.gd" --exclude-dir=Library --exclude-dir=Temp --exclude-dir=Logs --exclude-dir=obj --exclude-dir=Build --exclude-dir=Builds "FIXME" src/ 2>/dev/null | wc -l)
     if [ "$TODO_COUNT" -gt 0 ] || [ "$FIXME_COUNT" -gt 0 ]; then
         echo ""
         echo "Code health: ${TODO_COUNT} TODOs, ${FIXME_COUNT} FIXMEs in src/"
