@@ -53,6 +53,17 @@ See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 > **First session?** If the project has no engine configured and no game concept,
 > run `/start` to begin the guided onboarding flow.
 
+## Workflow
+
+**B타입 워크플로우 (2026-04-26~)**: 1인 개발자(PM/결정자) + AI(풀스택 개발자) 협업 모델.
+Sprint 시스템 폐지, continuous flow.
+
+@.claude/docs/workflow-b-type.md
+
+@.claude/docs/editor-handoff.md
+
+@.claude/docs/review-workflow.md
+
 ## Naming Conventions
 
 @.claude/docs/naming-conventions.md

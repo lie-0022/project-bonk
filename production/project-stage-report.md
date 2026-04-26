@@ -3,6 +3,11 @@
 **Date**: 2026-03-30
 **Stage**: Pre-Production
 
+> 📅 **2026-03-30 시점 스냅샷.** 본 보고서는 당시 sprint 기반 운영을 가정하고 작성됨.
+> 이후 2026-04-26 부로 **B타입 워크플로우(sprint 시스템 폐지)** 도입.
+> sprint-01, sprint-02는 `production/_archive/sprints/` 로 이동.
+> 현재 활성 워크플로우는 `.claude/docs/workflow-b-type.md` 참조.
+
 ---
 
 ## Completeness Overview

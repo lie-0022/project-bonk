@@ -81,7 +81,7 @@ project-bonk/
 │       └── Util/
 ├── design/gdd/             # GDD (18개 문서)
 ├── docs/architecture/      # ADR (7개)
-├── production/sprints/     # 스프린트 계획
+├── production/             # 프로덕션 문서 (sprints/는 _archive로 이동)
 └── prototypes/             # 초기 프로토타입
 ```
 
@@ -89,14 +89,14 @@ project-bonk/
 
 ## 🚧 Development Status
 
-**현재 단계**: Pre-Production (Sprint-02 완료)
+**현재 단계**: Pre-Production (Continuous flow, sprint 시스템 폐지)
 
 | 영역 | 진행률 | 비고 |
 |------|--------|------|
 | Design (GDD) | ~58% | 18 docs (game-concept, systems-index, 16 시스템) |
 | Architecture (ADR) | 7개 작성 | adr-0001 ~ adr-0007 |
 | Source Code | ~17% | 41 scripts (10 카테고리) |
-| Production | ~40% | Sprint-01, 02 종료 / Sprint-03 [TBD] |
+| Production | — | Sprint 시스템 retired (B타입 워크플로우, `production/_archive/` 참조) |
 | Tests | 0% | Unity Test Framework 미설정 |
 
 마지막 업데이트: 2026-04-26
