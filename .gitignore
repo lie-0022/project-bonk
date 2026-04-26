@@ -150,3 +150,7 @@ src/BladeSurge/.claude/settings.local.json
 *.backup_*
 *.backup
 *.bak
+
+# === Logs ===
+.claude/logs/
+*.log
