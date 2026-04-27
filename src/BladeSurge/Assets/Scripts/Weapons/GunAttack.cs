@@ -13,9 +13,11 @@ public class GunAttack : MonoBehaviour
         EnemyBase nearest = FindNearest(slot.Data.BaseRange);
         if (nearest == null) return;
 
-        Vector3 dir = (nearest.transform.position - _playerTransform.position);
-        dir.y = 0f;
-        dir.Normalize();
+        // 적의 콜라이더 중심을 조준해 공중/지상 적 모두 정확히 명중
+        Vector3 targetPoint = nearest.TryGetComponent<Collider>(out var col)
+            ? col.bounds.center
+            : nearest.transform.position;
+        Vector3 dir = (targetPoint - _playerTransform.position).normalized;
 
         int count = stats.ProjectileCount;
         float spreadAngle = 10f; // 발사체 수 > 1일 때 퍼짐 각도
@@ -33,7 +35,7 @@ public class GunAttack : MonoBehaviour
         GameObject obj = WeaponSystem.Instance.GetProjectile(slot.Data.WeaponType);
         if (obj == null) return;
 
-        obj.transform.position = _playerTransform.position + Vector3.up * 1f;
+        obj.transform.position = _playerTransform.position;
         obj.transform.rotation = Quaternion.LookRotation(direction);
 
         float speed = slot.Data.ProjectileSpeed * stats.ProjectileSpeed;
