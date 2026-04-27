@@ -7,7 +7,7 @@
 | suffix | 용도 | 예시 |
 |--------|------|------|
 | `Controller` | 입력·흐름 제어 | `PlayerController`, `CameraController` |
-| `System` | 게임 규칙 처리 | `XPSystem`, `GoldSystem`, `SkillSystem` |
+| `System` | 게임 규칙 처리 | `XPSystem`, `GoldSystem`, `WeaponSystem` |
 | `Component` | 데이터 컨테이너 | `HealthComponent` |
 | `Manager` | 싱글턴 조율자 | `GameManager` |
 | `UI` | UI 전용 스크립트 | `SkillSelectionUI`, `HUDController` |

@@ -50,7 +50,7 @@ O = 충돌 활성, X = 충돌 비활성
 | 태그 | 용도 | 사용처 |
 |------|------|--------|
 | `Player` | 플레이어 오브젝트 | `CameraController.Awake` |
-| `Enemy` | 적 오브젝트 | 투사체 히트 판정, 범위 스킬 타게팅 |
+| `Enemy` | 적 오브젝트 | 투사체 히트 판정, 범위 무기 타게팅 |
 | `Pickup` | XP/골드 드롭 | 픽업 트리거 감지 |
 | `Projectile` | 투사체 | 오브젝트 풀 반환 식별 |
 | `SpawnPoint` | 웨이브 스폰 위치 마커 | `WaveSpawner.Awake`에서 일괄 수집 |
@@ -65,7 +65,7 @@ O = 충돌 활성, X = 충돌 비활성
 | 값 | 스크립트 | 이유 |
 |----|----------|------|
 | -200 | `GameManager` | 모든 싱글턴의 기준. 가장 먼저 Instance 설정 |
-| -150 | `XPSystem`, `GoldSystem`, `SkillSystem`, `ObjectPool` | GameManager 이후, 게임플레이 스크립트 이전 |
+| -150 | `XPSystem`, `GoldSystem`, `WeaponSystem`, `ObjectPool` | GameManager 이후, 게임플레이 스크립트 이전 |
 | -100 | `CameraController` | PlayerController.Awake보다 먼저 완료돼야 함 |
 | -50 | `PlayerController` | CameraController 참조를 Awake에서 획득 |
 | 0 | 나머지 | 기본값 |

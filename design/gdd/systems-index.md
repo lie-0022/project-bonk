@@ -31,11 +31,11 @@ MVP(1-2주)는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 한다.
 | 9 | 웨이브 스폰 | Gameplay | MVP 🔴 | Designed | design/gdd/wave-spawner.md | 적 AI, 오브젝트 풀링 |
 | 10 | 경험치 시스템 | Progression | MVP 🔴 | Designed | design/gdd/xp-system.md | 적 AI |
 | 11 | 골드 시스템 | Progression | MVP 🟡 | 신규 필요 | — | 적 AI |
-| 12 | 무기 획득 시스템 | Gameplay | MVP 🔴 | Designed | design/gdd/skill-system.md | 데미지 시스템 |
+| 12 | 무기 획득 시스템 | Gameplay | MVP 🔴 | Designed | design/gdd/weapon-system.md | 데미지 시스템 |
 | 13 | 스펙 시스템 | Progression | MVP 🟡 | Designed | design/gdd/spec-system.md | 무기 획득 시스템 |
-| 14 | 레벨업·상자 선택 | Progression | MVP 🔴 | Designed | design/gdd/levelup-skill-selection.md | 경험치 시스템, 무기 획득, 스펙 |
+| 14 | 레벨업·상자 선택 | Progression | MVP 🔴 | Designed | design/gdd/levelup-selection.md | 경험치 시스템, 무기 획득, 스펙 |
 | 15 | 등급 시스템 | Progression | MVP 🟡 | 신규 필요 | — | 무기·스펙 시스템 |
-| 16 | 선택 UI (레벨업·상자) | UI | MVP 🟡 | Designed | design/gdd/skill-selection-ui.md | 무기 획득, 레벨업 선택 |
+| 16 | 선택 UI (레벨업·상자) | UI | MVP 🟡 | Designed | design/gdd/weapon-selection-ui.md | 무기 획득, 레벨업 선택 |
 | 17 | 바닥 드롭 아이템 | Gameplay | MVP 🟡 | Designed | design/gdd/drop-items.md | 적 AI |
 | 18 | HUD 시스템 | UI | MVP 🟡 | Designed | design/gdd/hud-system.md | 체력, XP, 무기, 골드, 게임 상태 |
 | 19 | 피격 피드백 | UI | MVP 🟡 | 신규 필요 | — | 데미지 시스템 |

@@ -9,7 +9,7 @@ Accepted
 ## Context
 
 ### Problem Statement
-XP 획득 → HUD 업데이트, 레벨업 → 스킬 선택 UI 표시처럼 시스템 간 통신이 빈번하다.
+XP 획득 → HUD 업데이트, 레벨업 → 무기 선택 UI 표시처럼 시스템 간 통신이 빈번하다.
 직접 참조 방식은 결합도를 높이고, Inspector 연결은 최소화 원칙에 위배된다.
 
 ### Constraints
@@ -62,15 +62,15 @@ public class HUDController : MonoBehaviour
 | 이벤트 | 발신 | 수신 |
 |--------|------|------|
 | `GameManager.OnGameStateChanged` | GameManager | CameraController, HUD, UI 전체 |
-| `XPSystem.OnLevelUp` | XPSystem | SkillSelectionUI, HUDController |
+| `XPSystem.OnLevelUp` | XPSystem | WeaponSelectionUI, HUDController |
 | `XPSystem.OnXPChanged` | XPSystem | HUDController |
 | `GoldSystem.OnGoldChanged` | GoldSystem | HUDController |
-| `SkillSystem.OnSkillEquipped` | SkillSystem | HUDController |
+| `WeaponSystem.OnWeaponsChanged` | WeaponSystem | HUDController |
 
 ### Architecture Diagram
 
 ```
-XPSystem ──OnLevelUp──► SkillSelectionUI
+XPSystem ──OnLevelUp──► WeaponSelectionUI
          ──OnXPChanged─► HUDController
 
 GameManager ──OnGameStateChanged──► CameraController

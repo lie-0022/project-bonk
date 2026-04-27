@@ -64,6 +64,13 @@ Sprint 시스템 폐지, continuous flow.
 
 @.claude/docs/review-workflow.md
 
+## Deprecated Concepts (참고 금지)
+
+초기 기획에서 폐기된 컨셉이 코드/문서에 잔재할 수 있다.
+새 작업 전 반드시 확인:
+
+@.claude/docs/deprecated-concepts.md
+
 ## Naming Conventions
 
 @.claude/docs/naming-conventions.md

@@ -10,7 +10,7 @@ GamePlay (Scene)
 │   ├── ObjectPool          ObjectPool.cs
 │   ├── XPSystem            XPSystem.cs
 │   ├── GoldSystem          GoldSystem.cs
-│   └── SkillSystem         SkillSystem.cs
+│   └── WeaponSystem        WeaponSystem.cs
 │
 ├── ── World ──             빈 오브젝트 (그루핑)
 │   ├── Environment         빈 오브젝트 (지형 묶음)

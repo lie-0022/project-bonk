@@ -9,7 +9,7 @@ Accepted
 ## Context
 
 ### Problem Statement
-여러 시스템(XP, 골드, 스킬 등)이 게임 전반에서 접근된다. Inspector 드래그 연결 없이
+여러 시스템(XP, 골드, 무기 등)이 게임 전반에서 접근된다. Inspector 드래그 연결 없이
 코드에서 직접 참조할 수 있는 접근 방식이 필요하다.
 
 ### Constraints
@@ -32,7 +32,7 @@ Accepted
 | `GameManager` | 게임 상태 전반 제어 |
 | `XPSystem` | 경험치·레벨업 전역 관리 |
 | `GoldSystem` | 골드 전역 관리 |
-| `SkillSystem` | 스킬 슬롯·발동 전역 관리 |
+| `WeaponSystem` | 무기 슬롯·발동 전역 관리 |
 | `ObjectPool` | 오브젝트 풀 전역 관리 |
 
 ### 싱글턴 금지 목록
@@ -66,7 +66,7 @@ public class XPSystem : MonoBehaviour
 [PlayerController] ──────────────────────────────┐
 [EnemyAI]          → XPSystem.Instance.AddXP()   │
 [WaveSpawner]      → GoldSystem.Instance          ├─ Singleton Systems
-[SkillSelectionUI] → SkillSystem.Instance         │
+[WeaponSelectionUI] → WeaponSystem.Instance       │
 [HUDController]    → GameManager.Instance         │
                                                   ┘
 [EnemyAI] → GetComponent<HealthComponent>()  ← Local Component

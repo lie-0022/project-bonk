@@ -60,7 +60,7 @@ BladeSurge.Tests    — 단위/통합 테스트 (tests/)
 ### 2. 데이터 아키텍처 (ScriptableObject 우선)
 
 권장 패턴:
-- **정적 게임 데이터** (스킬 수치, 적 스탯, 무기 능력치) → ScriptableObject
+- **정적 게임 데이터** (무기 수치, 적 스탯, 능력치) → ScriptableObject
 - **런타임 변경 상태** (현재 HP, 위치) → MonoBehaviour 또는 POCO
 - **하드코딩된 매직넘버 금지** — 모두 SO로 분리
 

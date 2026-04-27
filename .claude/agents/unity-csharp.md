@@ -25,7 +25,7 @@ Before writing any code:
 | **네임스페이스** | **사용 안 함** (현재 41 파일 중 0건) | 점진 도입은 사용자 결정 후에만 |
 | **필드** | `private` + `[SerializeField]` + `_camelCase` (실측 90회) | public 필드 절대 금지 |
 | **프로퍼티** | `public Type Name { get; private set; }` | 외부 노출은 프로퍼티만 |
-| **인터페이스** | I-prefix (`IDamageable`, `IPoolable`, `IInitializable`, `IEnemyController`, `ISkillData`, `ISkillSlot`, `IHitFeedback`) | 추상화는 인터페이스 우선 |
+| **인터페이스** | I-prefix (`IDamageable`, `IPoolable`, `IInitializable`, `IEnemyController`, `IHitFeedback`) | 추상화는 인터페이스 우선 |
 | **메서드명** | PascalCase (예: `TakeDamage`, `OnEnemyHit`) | snake_case 절대 금지 |
 | **이벤트** | `Action<T>` 또는 `event Action<T>`. 명명: `On + PascalCase` (`OnPlayerDied`) | UnityEvent보다 C# event 선호 |
 | **주석** | XML 주석 한국어 OK (`<summary>`, `<param>`) | 기존 코드 스타일 유지 |

@@ -9,7 +9,7 @@ Accepted
 ## Context
 
 ### Problem Statement
-적 스탯, 스킬 정의 등 게임플레이 수치를 ScriptableObject로 관리한다.
+적 스탯, 무기 정의 등 게임플레이 수치를 ScriptableObject로 관리한다.
 씬 오브젝트에 Inspector로 SO를 드래그 연결하면 씬마다 재연결이 필요하고
 Inspector 최소화 원칙에 위배된다.
 

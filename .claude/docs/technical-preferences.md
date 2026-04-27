@@ -41,7 +41,7 @@
 ## Testing
 
 - **Framework**: Unity Test Framework (NUnit 기반)
-- **Minimum Coverage**: MVP 단계 — 핵심 로직(스킬 공식, 데미지 계산 등) 필수 / 전체 비율은 추후 결정
+- **Minimum Coverage**: MVP 단계 — 핵심 로직(무기 공식, 데미지 계산 등) 필수 / 전체 비율은 추후 결정
 - **Required Tests**: Balance formulas, gameplay systems
 
 ## Forbidden Patterns

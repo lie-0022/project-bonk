@@ -37,7 +37,7 @@
 1. `/retrospective` — Sprint-01 회고 작성, systems-index 완료 수 업데이트
 2. `/sprint-plan` — Sprint-02 계획 수립 (3/30~다음 마일스톤)
 3. `camera-system.md` + `player-movement.md` 업데이트 — systems-index "수정 필요" 항목 2개 반영
-4. 나머지 MVP 시스템 구현 — EnemyAI, WaveSpawner, XPSystem, SkillSystem 등
+4. 나머지 MVP 시스템 구현 — EnemyAI, WaveSpawner, XPSystem, WeaponSystem 등
 5. `/architecture-decision` — 핵심 아키텍처 결정 ADR 작성 시작
 
 ---
@@ -57,10 +57,10 @@
 | 9 | 웨이브 스폰 | wave-spawner.md | 미구현 |
 | 10 | 경험치 시스템 | xp-system.md | 미구현 |
 | 11 | 골드 시스템 | 없음 | 미구현 |
-| 12 | 스킬 시스템 | skill-system.md | 미구현 |
-| 13 | 레벨업 선택 | levelup-skill-selection.md | 미구현 |
+| 12 | 무기 시스템 | weapon-system.md | 부분 (WeaponSystem.cs, 4-20) |
+| 13 | 레벨업 선택 | levelup-selection.md | 미구현 |
 | 14 | 등급 시스템 | 없음 | 미구현 |
-| 15 | 스킬 선택 UI | skill-selection-ui.md | 미구현 |
+| 15 | 무기 선택 UI | weapon-selection-ui.md | 미구현 |
 | 16 | HUD 시스템 | hud-system.md | 미구현 |
 | 17 | 캐릭터 선택 | 없음 | 미구현 |
 | 18 | 상자 시스템 | 없음 | 미구현 |

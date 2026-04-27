@@ -1,7 +1,7 @@
 /// <summary>
 /// 씬 로드 시 명시적 초기화 순서가 필요한 싱글턴 시스템의 계약.
 /// Unity Awake/Start 실행 순서에 의존하지 않고 GameManager가 순서를 제어한다.
-/// 구현: XPSystem, GoldSystem, SkillSystem, ObjectPool
+/// 구현: XPSystem, GoldSystem, WeaponSystem, ObjectPool
 /// </summary>
 public interface IInitializable
 {
