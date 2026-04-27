@@ -51,6 +51,10 @@ public class WeaponSystem : MonoBehaviour
         GameManager.OnGameStateChanged += OnGameStateChanged;
         PlayerStats.OnStatsChanged += OnStatsChanged;
         InitializeProjectilePool();
+
+        // 이미 Playing 상태일 수 있으므로 즉시 동기화 (Start 호출 순서 race 방지)
+        if (GameManager.Instance != null)
+            OnGameStateChanged(GameManager.Instance.CurrentState);
     }
 
     private void InitializeProjectilePool()

@@ -17,8 +17,8 @@ MonoBehaviour:
   BaseDamage: 20
   BaseAttackInterval: 1.5
   BaseRange: 3
-  SweepAngle: 60
-  SweepDuration: 0.2
+  SweepAngle: 200
+  SweepDuration: 0.7
   SweepSpeed: 360
   SwingInterval: 0.3
   ProjectileSpeed: 15

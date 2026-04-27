@@ -6,12 +6,7 @@ using UnityEngine;
 /// </summary>
 public class GunAttack : MonoBehaviour
 {
-    private Transform _playerTransform;
-
-    private void Awake()
-    {
-        _playerTransform = transform.root;
-    }
+    [SerializeField] private Transform _playerTransform; // 플레이어 루트 (Inspector 연결)
 
     public void Execute(WeaponSlot slot, PlayerStats stats)
     {
