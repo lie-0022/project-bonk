@@ -13,6 +13,8 @@ public class Projectile : MonoBehaviour, IPoolable
     private float _critMultiplier;
     private float _lifesteal;
     private Vector3 _startPosition;
+    private Vector3 _baseScale;            // 프리팹의 원본 스케일 (한 번만 캐싱)
+    private bool _baseScaleCached;
     private Transform _playerTransform;
     private bool _isActive;
 
@@ -20,6 +22,12 @@ public class Projectile : MonoBehaviour, IPoolable
                       float critChance, float critMultiplier, float lifesteal,
                       Transform playerTransform)
     {
+        if (!_baseScaleCached)
+        {
+            _baseScale = transform.localScale;
+            _baseScaleCached = true;
+        }
+
         _damage = damage;
         _speed = speed;
         _maxRange = maxRange;
@@ -29,7 +37,7 @@ public class Projectile : MonoBehaviour, IPoolable
         _lifesteal = lifesteal;
         _playerTransform = playerTransform;
         _startPosition = transform.position;
-        transform.localScale = Vector3.one * size;
+        transform.localScale = _baseScale * size;
         _isActive = true;
     }
 

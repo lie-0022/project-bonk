@@ -2445,7 +2445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3645bb0a34de7d646a5b921e084827a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwordAttack
-  _hitMode: 1
+  _hitMode: 0
   _playerTransform: {fileID: 1890822707}
   _pivotPoint: {fileID: 1890822707}
   _sweepCollider: {fileID: 106306683}
