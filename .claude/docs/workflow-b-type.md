@@ -20,7 +20,7 @@
 - **에셋 임포트** — FBX, PNG, 오디오, 기타
 - **Play 모드 테스트** — 실제 동작 검증, 게임필 판정
 - **빌드** — Build Profile 사용, 결과물 검수
-- **main 브랜치 push** — 정책상 본인만 (auto-push 훅은 cron 별도)
+- 본인 트리거 또는 AI에게 "푸시" 지시 (실 push는 AI/cron 가능)
 
 ### 본인이 안 하는 것
 
@@ -51,7 +51,6 @@
 - Unity Editor 직접 조작 (Scene/Prefab/Inspector)
 - Play 모드 실행
 - 에셋 파일(`.fbx`, `.png`, `.wav`) 임포트
-- main 브랜치 직접 push (정책)
 - 빌드 실행
 
 ---
@@ -69,7 +68,7 @@
 6. 본인  : Play 모드 테스트
 7. (필요시) 본인 ↔ AI 협업 디버깅
 8. AI    : 완료 commit (auto-commit 훅)
-9. 본인  : push (또는 자정 cron 자동)
+9. AI    : push (본인 지시 시) — 또는 본인 직접, 또는 자정 cron 자동
 ```
 
 ### 패턴 2: 버그 수정
