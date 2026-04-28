@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   WeaponType: 3
   WeaponName: Magic
-  BaseDamage: 25
-  BaseAttackInterval: 2
+  BaseDamage: 30
+  BaseAttackInterval: 1.5
   BaseRange: 12
   SweepAngle: 60
   SweepDuration: 0.2
   SweepSpeed: 360
   SwingInterval: 0.3
-  ProjectileSpeed: 10
+  MilestoneSweepAngles: [180, 240, 300, 360]
+  ProjectileSpeed: 8
   ProjectilePrefab: {fileID: 0}
+  MilestoneRangeMultipliers: [1.0, 1.17, 1.33, 1.67]
+  MilestonePierceCounts: [0, 1, 2, -1]
+  MilestoneExplosionRadii: [2.0, 3.0, 4.5, 7.0]

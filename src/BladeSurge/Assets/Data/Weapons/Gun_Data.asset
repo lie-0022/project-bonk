@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   WeaponType: 2
   WeaponName: Gun
-  BaseDamage: 15
-  BaseAttackInterval: 1
+  BaseDamage: 20
+  BaseAttackInterval: 0.8
   BaseRange: 15
   SweepAngle: 60
   SweepDuration: 0.2
   SweepSpeed: 360
   SwingInterval: 0.3
-  ProjectileSpeed: 15
+  MilestoneSweepAngles: [180, 240, 300, 360]
+  ProjectileSpeed: 20
   ProjectilePrefab: {fileID: 0}
+  MilestoneRangeMultipliers: [1.0, 1.3, 1.6, 2.0]
+  MilestonePierceCounts: [0, 1, 2, -1]
+  MilestoneExplosionRadii: [2.0, 3.0, 4.5, 7.0]

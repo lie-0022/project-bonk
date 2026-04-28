@@ -12,7 +12,7 @@ public class WeaponSystem : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private int _maxWeaponSlots = 3;
-    [SerializeField] private int _maxWeaponLevel = 5;
+    [SerializeField] private int _maxWeaponLevel = 15;
 
     [Header("Weapon Data")]
     [SerializeField] private WeaponDataSO _swordData;
@@ -125,10 +125,10 @@ public class WeaponSystem : MonoBehaviour
 
     // ── 공개 API ─────────────────────────────────────────────
 
-    /// <summary>새 무기를 추가한다. 슬롯이 가득 차면 무시.</summary>
-    public bool AddWeapon(WeaponType type)
+    /// <summary>새 무기를 추가한다. 슬롯이 가득 차면 무시. 보유 중이면 등급 적용해 강화.</summary>
+    public bool AddWeapon(WeaponType type, CardGrade grade = CardGrade.Common)
     {
-        if (HasWeapon(type)) return UpgradeWeapon(type);
+        if (HasWeapon(type)) return UpgradeWeapon(type, grade);
         if (_slots.Count >= _maxWeaponSlots) return false;
 
         var data = GetData(type);
@@ -139,13 +139,13 @@ public class WeaponSystem : MonoBehaviour
         return true;
     }
 
-    /// <summary>기존 무기를 강화한다. 최대 레벨이면 무시.</summary>
-    public bool UpgradeWeapon(WeaponType type)
+    /// <summary>기존 무기를 등급에 따라 강화한다. 최대 레벨이면 무시.</summary>
+    public bool UpgradeWeapon(WeaponType type, CardGrade grade = CardGrade.Common)
     {
         var slot = GetSlot(type);
         if (slot == null || slot.Level >= _maxWeaponLevel) return false;
 
-        slot.Upgrade(_stats.AttackSpeedMultiplier);
+        slot.Upgrade(grade, _stats.AttackSpeedMultiplier);
         OnWeaponsChanged?.Invoke();
         return true;
     }

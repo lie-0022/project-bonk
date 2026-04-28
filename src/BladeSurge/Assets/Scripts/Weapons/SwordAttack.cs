@@ -41,7 +41,7 @@ public class SwordAttack : MonoBehaviour
     public void Execute(WeaponSlot slot, PlayerStats stats)
     {
         if (_isSweeping) return;
-        Debug.Log($"[SwordAttack] Execute mode={_hitMode} swingCount={stats.ProjectileCount} sweepAngle={slot.Data.SweepAngle * stats.SizeMultiplier} dur={slot.Data.SweepDuration / stats.ProjectileSpeed:F2}s");
+        Debug.Log($"[SwordAttack] Execute mode={_hitMode} lvl={slot.Level} swingCount={stats.ProjectileCount} sweepAngle={slot.FinalSweepAngle} dmg={slot.FinalDamage:F1} dur={slot.Data.SweepDuration / stats.ProjectileSpeed:F2}s");
         StartCoroutine(SwingSequence(slot, stats));
     }
 
@@ -50,8 +50,9 @@ public class SwordAttack : MonoBehaviour
         _isSweeping = true;
         int swingCount = stats.ProjectileCount;
         float sweepDuration = slot.Data.SweepDuration / stats.ProjectileSpeed;
-        float sweepAngle = slot.Data.SweepAngle * stats.SizeMultiplier;
-        float damage = slot.Data.BaseDamage;
+        // 검 각도·데미지는 무기 레벨 + 등급 누적 결과 (slot에서 캐싱).
+        float sweepAngle = slot.FinalSweepAngle;
+        float damage = slot.FinalDamage;
 
         for (int i = 0; i < swingCount; i++)
         {
@@ -101,9 +102,6 @@ public class SwordAttack : MonoBehaviour
                     _sweepCollider.bounds.center,
                     _sweepCollider.bounds.extents,
                     _sweepCollider.transform.rotation);
-
-                if (hits.Length > 0)
-                    Debug.Log($"[SwordAttack] OverlapBox hits={hits.Length} at {_sweepCollider.bounds.center}");
 
                 foreach (var hit in hits)
                 {

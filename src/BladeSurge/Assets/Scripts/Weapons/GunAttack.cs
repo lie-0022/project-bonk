@@ -10,7 +10,7 @@ public class GunAttack : MonoBehaviour
 
     public void Execute(WeaponSlot slot, PlayerStats stats)
     {
-        EnemyBase nearest = FindNearest(slot.Data.BaseRange);
+        EnemyBase nearest = FindNearest(slot.FinalRange);
         if (nearest == null) return;
 
         // 적의 콜라이더 중심을 조준해 공중/지상 적 모두 정확히 명중
@@ -40,14 +40,14 @@ public class GunAttack : MonoBehaviour
 
         float speed = slot.Data.ProjectileSpeed * stats.ProjectileSpeed;
         obj.GetComponent<Projectile>()?.Setup(
-            slot.Data.BaseDamage,
+            slot.FinalDamage,
             speed,
-            slot.Data.BaseRange,
-            stats.SizeMultiplier,
+            slot.FinalRange,
             stats.CritChance,
             stats.CritMultiplier,
             stats.Lifesteal,
-            _playerTransform);
+            _playerTransform,
+            slot.FinalPierce);
     }
 
     private EnemyBase FindNearest(float range)

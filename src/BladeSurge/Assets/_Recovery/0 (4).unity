@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
   _maxWeaponSlots: 3
-  _maxWeaponLevel: 15
+  _maxWeaponLevel: 5
   _swordData: {fileID: 11400000, guid: 3e99a7f663cf643419e800e0099c5fab, type: 2}
   _gunData: {fileID: 11400000, guid: 52557da808c0175478c74952b3d7b28a, type: 2}
   _magicData: {fileID: 11400000, guid: e850ddad9cb9809489cb4e36fa0e15d4, type: 2}

@@ -18,7 +18,7 @@
 ### Core Rules
 
 1. 레벨업 또는 상자 선택지에서 무기와 동일한 풀에서 책(스펙) 형태로 등장
-2. 스펙 슬롯 수 및 최대 레벨은 TBD — 개발 중 결정
+2. 스펙 슬롯 수 3개, 최대 레벨 15 (무기 슬롯과 동일)
 3. 중복 선택 시 해당 스펙 강화 (레벨 +1)
 4. 스테이지 클리어 시 모든 스펙 초기화
 5. Playing 외 상태에서는 스펙 효과 중 타이머 기반 항목 정지
@@ -27,43 +27,47 @@
 
 #### MVP 구현 (16개)
 
+**최대 레벨**: 모든 패시브 **Lv 15** (무기와 통일).
+
 **생존 계열**
 
-| 패시브 | 영향 시스템 | 효과 (레벨당) |
-|--------|------------|--------------|
-| 최대 HP | HealthComponent | 최대 HP +20 |
-| HP 회복 | HealthComponent | +2 HP/초 자동 회복 |
-| 회피 | HealthComponent | 피해 완전 무효 확률 +8% |
+| 패시브 | 영향 시스템 | 공식 | Lv5 | Lv15 |
+|--------|------------|------|-----|------|
+| 최대 HP | HealthComponent | +15 HP/lvl (가산) | +75 | +225 |
+| HP 회복 | HealthComponent | +0.5 HP/s/lvl (가산) | +2.5/s | +7.5/s |
+| 회피 | HealthComponent | DR cap 60%, per-lvl 8% | 23.6% | 41.0% |
 
 **공격 계열**
 
-| 패시브 | 영향 시스템 | 적용 무기 | 효과 (레벨당) |
-|--------|------------|----------|--------------|
-| 공격 속도 | WeaponSystem | 전체 | 발동 간격 -10% |
-| 치명타 확률 | WeaponSystem | 전체 | 치명타 확률 +8% |
-| 치명타 데미지 | WeaponSystem | 전체 | 치명타 배율 +25% |
-| 생명 흡수 | WeaponSystem + HealthComponent | 전체 | 피해량의 10% HP 회복 |
+| 패시브 | 영향 시스템 | 적용 무기 | 공식 | Lv5 | Lv15 |
+|--------|------------|----------|------|-----|------|
+| 공격 속도 | WeaponSystem | 전체 | `interval × 0.95^lvl, floor 0.3` | ×0.77 | ×0.46 |
+| 치명타 확률 | WeaponSystem | 전체 | DR cap 75%, per-lvl 8% | 29.5% | 51.3% |
+| 치명타 데미지 | WeaponSystem | 전체 | +15% 배율/lvl | +75% | +225% |
+| 생명 흡수 | WeaponSystem + HealthComponent | 전체 | +2%/lvl, cap 25% | 10% | 25% (cap) |
 
 **투사체/공격 계열**
 
-| 패시브 | 영향 시스템 | 적용 무기 | 효과 (레벨당) |
-|--------|------------|----------|--------------|
-| 발사체 수 | WeaponSystem | 전체 (검=연속 휘두르기 횟수) | +1회 |
-| 발사체 속도 | WeaponSystem | 전체 (검=휘두르기 속도) | +20% |
+| 패시브 | 영향 시스템 | 적용 무기 | 공식 | Lv5 | Lv10 | Lv15 |
+|--------|------------|----------|------|-----|------|------|
+| 발사체 수 | WeaponSystem | 전체 (검=연속 휘두르기) | `floor(lvl/3)` | +1 | +3 | +5 |
+| 발사체 속도 | WeaponSystem | 전체 (검=휘두르기 속도) | +10%/lvl | +50% | +100% | +150% |
 
 **이동 계열**
 
-| 패시브 | 영향 시스템 | 효과 (레벨당) |
-|--------|------------|--------------|
-| 이동 속도 | PlayerController | +0.5 유닛/초 |
-| 추가 점프 | PlayerController | +1회 |
+| 패시브 | 영향 시스템 | 공식 | Lv5 | Lv15 |
+|--------|------------|------|-----|------|
+| 이동 속도 | PlayerController | +0.2/lvl 유닛/초 | +1.0 | +3.0 |
+| 추가 점프 | PlayerController | +1회/lvl | +5 | +15 |
 
 **기타**
 
-| 패시브 | 영향 시스템 | 효과 (레벨당) |
-|--------|------------|--------------|
-| 행운 | LevelupSystem | 고등급 선택지 확률 +10% |
-| 난이도 | WaveSpawner | 스폰량 +20%, XP/골드 보상 +25% |
+| 패시브 | 영향 시스템 | 공식 | Lv5 | Lv15 |
+|--------|------------|------|-----|------|
+| 행운 | LevelupSystem | DR cap 80%, per-lvl 10% | 32.8% | 64.5% |
+| 난이도 | WaveSpawner | 스폰 +15%/lvl, 보상 +20%/lvl | +75%/+100% | +225%/+300% |
+
+> **DR (Diminishing Returns) 공식**: `final = cap × (1 - (1 - perLevel)^level)` — 확률 패시브가 100%를 넘지 않도록 점감 적용.
 
 #### 나중에 구현 (추후)
 
@@ -79,7 +83,7 @@
 | 지속 시간 | 투사체 | 해당 무기 추가 시 |
 | 점프 높이 | 이동 | 추가 점프와 함께 |
 
-> 패시브 슬롯 수 3개, 최대 레벨 5 — 무기 슬롯과 동일.
+> 패시브 슬롯 수 3개, 최대 레벨 **15** — 무기 슬롯과 동일.
 
 ### Interactions with Other Systems
 
@@ -90,27 +94,46 @@
 ## Formulas
 
 ```
-최대 HP:        PlayerStats.MaxHp += 20 * level
-HP 회복:        PlayerStats.HpRegen += 2f * level  (초당)
-회피:           if (Random.value < 0.08f * level) damage = 0
+최대 HP:        PlayerStats.MaxHp += 15 * level
+HP 회복:        PlayerStats.HpRegen += 0.5f * level  (초당)
 
-공격 속도:      weapon.AttackInterval *= Mathf.Pow(0.9f, level)
-치명타 확률:    if (Random.value < 0.08f * level) isCrit = true
-치명타 데미지:  critDamage = baseDamage * (1f + 0.25f * level)
-생명 흡수:      healAmount = dealtDamage * 0.1f * level
+회피 (DR):      dodgeChance = 0.60f * (1f - Mathf.Pow(1f - 0.08f, level))
+                if (Random.value < dodgeChance) damage = 0
 
-발사체 수 (검): swingCount = 1 + level  (한 쿨타임 내 연속 휘두르기)
-발사체 수 (총/마법): projectileCount = 1 + level
-발사체 속도:    projectileSpeed *= (1f + 0.2f * level)
-              검 휘두르기 속도 *= (1f + 0.2f * level)
+공격 속도:      mult = Mathf.Max(Mathf.Pow(0.95f, level), 0.30f)
+                weapon.AttackInterval = baseInterval * mult
 
-이동 속도:      PlayerStats.MoveSpeed += 0.5f * level
+치명타 확률 (DR): critChance = 0.75f * (1f - Mathf.Pow(1f - 0.08f, level))
+                if (Random.value < critChance) isCrit = true
+치명타 데미지:  critDamage = baseDamage * (1f + 0.15f * level)
+생명 흡수:      lifestealRatio = Mathf.Min(0.02f * level, 0.25f)
+                healAmount = dealtDamage * lifestealRatio
+
+발사체 수 (검): swingCount = 1 + Mathf.FloorToInt(level / 3f)
+발사체 수 (총/마법): projectileCount = 1 + Mathf.FloorToInt(level / 3f)
+발사체 속도:    projectileSpeed *= (1f + 0.1f * level)
+              검 휘두르기 속도 *= (1f + 0.1f * level)
+
+이동 속도:      PlayerStats.MoveSpeed += 0.2f * level
 추가 점프:      PlayerStats.ExtraJumps += level
 
-행운:           epicChance += 0.1f * level  (레벨업 선택지 등급 가중치)
-난이도:         WaveSpawner.SpawnRateMultiplier += 0.2f * level
-              XP/골드 보상 *= (1f + 0.25f * level)
+행운 (DR):      epicChance = 0.80f * (1f - Mathf.Pow(1f - 0.10f, level))
+                // 레벨업 선택지 고등급 가중치
+난이도:         WaveSpawner.SpawnRateMultiplier += 0.15f * level
+                XP/골드 보상 *= (1f + 0.20f * level)
 ```
+
+### DR (Diminishing Returns) 공식 설명
+
+```
+final = cap × (1 - (1 - perLevel)^level)
+```
+
+- `cap`: 절대 상한 (회피 60%, 크리 75%, 행운 80%)
+- `perLevel`: 레벨당 비율 (회피 0.08, 크리 0.08, 행운 0.10)
+- `level`: 현재 패시브 레벨 (1~15)
+
+레벨이 올라갈수록 증가폭이 줄어들지만, 절대로 cap을 넘지 않는다. Lv∞에서도 cap에 점근.
 
 ## Edge Cases
 
@@ -131,11 +154,14 @@ HP 회복:        PlayerStats.HpRegen += 2f * level  (초당)
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
 | 패시브 슬롯 수 | 3 | 무기 슬롯과 동일 |
-| 패시브 최대 레벨 | 5 | 무기 최대 레벨과 동일 |
-| 공격 속도 감소율 | 10%/레벨 | 너무 크면 너무 빠름 |
-| 치명타 확률 | 8%/레벨 | 5레벨 = 40% 상한 |
-| 발사체 수 최대 | 5 (레벨 4까지) | 검 5연속 휘두르기 상한 |
-| 난이도 스폰 증가 | 20%/레벨 | 5레벨 = 스폰량 2배 |
+| 패시브 최대 레벨 | 15 | 무기 최대 레벨과 동일 |
+| 공속 감소율 | 5%/레벨 (곱셈) | floor 0.30 (70% 감소가 한계) |
+| 회피 cap | 60% | DR 적용, 항상 cap 미만 |
+| 치명타 확률 cap | 75% | DR 적용 |
+| 행운 cap | 80% | DR 적용 |
+| 생명 흡수 cap | 25% | 가산식, 12레벨에서 cap 도달 |
+| 발사체 수 증가 | 3레벨당 +1 | Lv15 = +5 |
+| 난이도 스폰 증가 | 15%/레벨 | Lv15 = 스폰량 ×3.25 |
 
 > **제외된 패시브**: 아머, 크기 — 무기 차별성 강화를 위해 MVP에서 제외
 
@@ -148,5 +174,5 @@ HP 회복:        PlayerStats.HpRegen += 2f * level  (초당)
 
 ## Open Questions
 
-- 스펙 슬롯 수 및 최대 레벨 — 개발 중 결정
 - 각 스펙 세부 수치 — 플레이테스트 후 밸런싱
+- 등급(Common/Epic/Unique/Legend)별 패시브 효과 차등 — `levelup-selection.md`에 명시. 무기와 동일 패턴 적용 검토 (Lv 가속).

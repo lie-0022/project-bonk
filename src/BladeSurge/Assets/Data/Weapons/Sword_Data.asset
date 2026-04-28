@@ -17,9 +17,13 @@ MonoBehaviour:
   BaseDamage: 20
   BaseAttackInterval: 1.5
   BaseRange: 3
-  SweepAngle: 200
+  SweepAngle: 180
   SweepDuration: 0.7
   SweepSpeed: 360
   SwingInterval: 0.3
+  MilestoneSweepAngles: [180, 240, 300, 360]
   ProjectileSpeed: 15
   ProjectilePrefab: {fileID: 0}
+  MilestoneRangeMultipliers: [1.0, 1.4, 1.8, 2.5]
+  MilestonePierceCounts: [0, 1, 2, -1]
+  MilestoneExplosionRadii: [2.0, 3.0, 4.5, 7.0]
