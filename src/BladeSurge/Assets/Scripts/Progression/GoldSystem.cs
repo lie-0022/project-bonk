@@ -40,7 +40,11 @@ public class GoldSystem : MonoBehaviour, IInitializable
 
     private void OnEnemyDied(float xpReward, Vector3 position)
     {
-        int reward = xpReward >= 20f ? _rusherGold : _chaserGold;
+        int baseReward = xpReward >= 20f ? _rusherGold : _chaserGold;
+        float rewardMult = PlayerStats.Instance != null
+            ? PlayerStats.Instance.DifficultyRewardMultiplier
+            : 1f;
+        int reward = Mathf.RoundToInt(baseReward * rewardMult);
         SpawnGoldOrb(reward, position);
     }
 

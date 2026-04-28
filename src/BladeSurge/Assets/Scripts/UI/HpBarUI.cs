@@ -28,19 +28,14 @@ public class HpBarUI : MonoBehaviour
             return;
         }
 
-        _health.OnDamaged += OnDamaged;
+        _health.OnHealthChanged += Refresh;
         Refresh();
     }
 
     private void OnDestroy()
     {
         if (_health != null)
-            _health.OnDamaged -= OnDamaged;
-    }
-
-    private void OnDamaged(float amount, float currentHp)
-    {
-        Refresh();
+            _health.OnHealthChanged -= Refresh;
     }
 
     private void Refresh()

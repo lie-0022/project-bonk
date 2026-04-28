@@ -15,8 +15,14 @@ public class HealthComponent : MonoBehaviour, IDamageable
     public bool IsAlive { get; private set; } = true;
     public bool IsInvincible { get; set; }
 
+    /// <summary>회피 확률 (0~1). PlayerStats에서 패시브 반영해 외부에서 set. 적은 0 유지.</summary>
+    public float DodgeChance { get; set; } = 0f;
+
     /// <summary>피격 시 발생. (피해량, 현재 HP)</summary>
     public event Action<float, float> OnDamaged;
+
+    /// <summary>HP 또는 MaxHp 변경 시 발생. UI 갱신용 — 데미지/힐/MaxHp 변경 모두 포괄.</summary>
+    public event Action OnHealthChanged;
 
     /// <summary>사망 시 발생. (xpReward) — 적 전용 값, 플레이어는 0</summary>
     public event Action<float> OnDeath;
@@ -34,9 +40,16 @@ public class HealthComponent : MonoBehaviour, IDamageable
     {
         if (!IsAlive || IsInvincible || amount <= 0f) return;
 
+        if (DodgeChance > 0f && UnityEngine.Random.value < DodgeChance)
+        {
+            Debug.Log($"[Health] {gameObject.name} 회피! ({DodgeChance:P1})");
+            return;
+        }
+
         CurrentHp = Mathf.Max(0f, CurrentHp - amount);
         Debug.Log($"[Health] {gameObject.name} HP: {CurrentHp:F1} / {_maxHp:F1} (피해: {amount})");
         OnDamaged?.Invoke(amount, CurrentHp);
+        OnHealthChanged?.Invoke();
 
         if (CurrentHp <= 0f)
             Die();
@@ -50,6 +63,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
         CurrentHp = _maxHp;
         IsAlive = true;
         IsInvincible = false;
+        OnHealthChanged?.Invoke();
     }
 
     /// <summary>
@@ -59,13 +73,37 @@ public class HealthComponent : MonoBehaviour, IDamageable
     {
         _maxHp = _maxHp * multiplier;
         CurrentHp = _maxHp;
+        OnHealthChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// 최대 HP를 직접 설정한다. PlayerStats 패시브 반영용.
+    /// refillToFull=true면 현재 HP도 최대로 회복. false면 비율 유지.
+    /// </summary>
+    public void SetMaxHp(float newMax, bool refillToFull)
+    {
+        if (newMax <= 0f) return;
+        if (refillToFull)
+        {
+            _maxHp = newMax;
+            CurrentHp = newMax;
+        }
+        else
+        {
+            float ratio = _maxHp > 0f ? CurrentHp / _maxHp : 1f;
+            _maxHp = newMax;
+            CurrentHp = Mathf.Min(_maxHp, _maxHp * ratio);
+        }
+        OnHealthChanged?.Invoke();
     }
 
     /// <summary>HP를 회복한다. 최대 HP를 초과하지 않는다.</summary>
     public void Heal(float amount)
     {
         if (!IsAlive || amount <= 0f) return;
+        float before = CurrentHp;
         CurrentHp = Mathf.Min(CurrentHp + amount, _maxHp);
+        if (CurrentHp != before) OnHealthChanged?.Invoke();
     }
 
     private void Die()

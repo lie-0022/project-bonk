@@ -55,11 +55,10 @@ public class GameManager : MonoBehaviour
                 ChangeState(GameState.Playing);
         }
 
-        // R: GameOver / Win 상태에서 재시작
-        if (Keyboard.current.rKey.wasPressedThisFrame)
+        // R: 어떤 상태에서든 재시작 (Starting 제외)
+        if (Keyboard.current.rKey.wasPressedThisFrame && CurrentState != GameState.Starting)
         {
-            if (CurrentState == GameState.GameOver || CurrentState == GameState.Win)
-                RestartGame();
+            RestartGame();
         }
     }
 

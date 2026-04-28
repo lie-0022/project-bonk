@@ -25,9 +25,9 @@
 
 ### 패시브 항목 목록
 
-#### MVP 구현 (16개)
+#### MVP 구현 (12개)
 
-**최대 레벨**: 모든 패시브 **Lv 15** (무기와 통일).
+**최대 레벨**: 모든 패시브 **Lv 15** (무기와 통일). MVP 패시브 **12종**.
 
 **생존 계열**
 
@@ -51,13 +51,14 @@
 | 패시브 | 영향 시스템 | 적용 무기 | 공식 | Lv5 | Lv10 | Lv15 |
 |--------|------------|----------|------|-----|------|------|
 | 발사체 수 | WeaponSystem | 전체 (검=연속 휘두르기) | `floor(lvl/3)` | +1 | +3 | +5 |
-| 발사체 속도 | WeaponSystem | 전체 (검=휘두르기 속도) | +10%/lvl | +50% | +100% | +150% |
+
+> **발사체 속도**는 별도 패시브가 아닌 **공격 속도 패시브의 파생 효과**다. 공격 속도가 X배 빨라지면 발사체 이동 속도/검 휘두르기 속도도 X배 빨라진다. (`ProjectileSpeed = 1 / AttackSpeedMultiplier`)
 
 **이동 계열**
 
 | 패시브 | 영향 시스템 | 공식 | Lv5 | Lv15 |
 |--------|------------|------|-----|------|
-| 이동 속도 | PlayerController | +0.2/lvl 유닛/초 | +1.0 | +3.0 |
+| 이동 속도 | PlayerController | +1.0/lvl 유닛/초 | +5.0 | +15.0 |
 | 추가 점프 | PlayerController | +1회/lvl | +5 | +15 |
 
 **기타**
@@ -111,10 +112,12 @@ HP 회복:        PlayerStats.HpRegen += 0.5f * level  (초당)
 
 발사체 수 (검): swingCount = 1 + Mathf.FloorToInt(level / 3f)
 발사체 수 (총/마법): projectileCount = 1 + Mathf.FloorToInt(level / 3f)
-발사체 속도:    projectileSpeed *= (1f + 0.1f * level)
-              검 휘두르기 속도 *= (1f + 0.1f * level)
 
-이동 속도:      PlayerStats.MoveSpeed += 0.2f * level
+// 발사체 속도는 AttackSpeed의 파생값
+projectileSpeed = 1f / attackSpeedMultiplier
+검 휘두르기 속도 *= projectileSpeed
+
+이동 속도:      PlayerStats.MoveSpeed += 1.0f * level
 추가 점프:      PlayerStats.ExtraJumps += level
 
 행운 (DR):      epicChance = 0.80f * (1f - Mathf.Pow(1f - 0.10f, level))

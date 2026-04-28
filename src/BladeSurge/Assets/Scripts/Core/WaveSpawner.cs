@@ -79,7 +79,11 @@ public class WaveSpawner : MonoBehaviour
         if (_spawnTimer <= 0f)
         {
             SpawnEnemy();
-            _spawnTimer = _waves[CurrentWave - 1].SpawnInterval;
+            float baseInterval = _waves[CurrentWave - 1].SpawnInterval;
+            float spawnMult = PlayerStats.Instance != null
+                ? PlayerStats.Instance.DifficultySpawnMultiplier
+                : 1f;
+            _spawnTimer = baseInterval / Mathf.Max(spawnMult, 0.01f);
         }
 
         // 웨이브 타이머

@@ -15,7 +15,6 @@ public enum PassiveType
     CritDamage,
     Lifesteal,
     ProjectileCount,
-    ProjectileSpeed,
     MoveSpeed,
     ExtraJump,
     Luck,
@@ -65,7 +64,8 @@ public class PlayerStats : MonoBehaviour
     public float CritMultiplier { get; private set; }     // base + bonus
     public float Lifesteal { get; private set; }          // 0~0.25 (cap)
     public int ProjectileCount { get; private set; }
-    public float ProjectileSpeed { get; private set; }    // 1.0 + bonus
+    /// <summary>발사체 이동 속도 / 검 휘두르기 속도 배율. AttackSpeed 패시브와 연동된 파생 값.</summary>
+    public float ProjectileSpeed { get; private set; }    // 1 / AttackSpeedMultiplier
 
     // 메타
     public float LuckChance { get; private set; }         // 0~0.80 (cap), 등급 가중치 보정용
@@ -73,7 +73,10 @@ public class PlayerStats : MonoBehaviour
     public float DifficultyRewardMultiplier { get; private set; } // 1.0 + 0.20*lvl
 
     // ── 패시브 레벨 저장 ─────────────────────────────────
+    // _levels: 선택 횟수 (Lv 15 cap 판정용)
+    // _effectiveLevels: 등급 가중치 누적 (수치 산출용). 커먼 1회=+1.0, 레전드 1회=+4.0.
     private readonly Dictionary<PassiveType, int> _levels = new();
+    private readonly Dictionary<PassiveType, float> _effectiveLevels = new();
 
     private void Awake()
     {
@@ -82,17 +85,26 @@ public class PlayerStats : MonoBehaviour
         ResetPassives();
     }
 
-    /// <summary>현재 패시브 레벨 조회. 미보유 시 0 반환.</summary>
+    /// <summary>현재 패시브 선택 횟수 조회 (Lv 15 cap 판정용). 미보유 시 0.</summary>
     public int GetPassiveLevel(PassiveType type) =>
         _levels.TryGetValue(type, out int lv) ? lv : 0;
 
-    /// <summary>패시브 레벨을 1 증가시킨다. 최대 레벨 도달 시 무시.</summary>
+    /// <summary>등급 가중치 적용된 effective level 조회 (수치 환산용).</summary>
+    public float GetEffectiveLevel(PassiveType type) =>
+        _effectiveLevels.TryGetValue(type, out float lv) ? lv : 0f;
+
+    /// <summary>
+    /// 패시브 레벨을 1 증가시킨다. 등급 가중치는 effective level에 누적.
+    /// 최대 레벨(15회 선택) 도달 시 무시.
+    /// </summary>
     /// <returns>실제로 증가했으면 true.</returns>
-    public bool IncrementPassive(PassiveType type)
+    public bool IncrementPassive(PassiveType type, CardGrade grade = CardGrade.Common)
     {
         int current = GetPassiveLevel(type);
         if (current >= MaxPassiveLevel) return false;
+
         _levels[type] = current + 1;
+        _effectiveLevels[type] = GetEffectiveLevel(type) + GradeBonus.PassiveWeight(grade);
         RecalculateStats();
         return true;
     }
@@ -101,45 +113,46 @@ public class PlayerStats : MonoBehaviour
     public void ResetPassives()
     {
         _levels.Clear();
+        _effectiveLevels.Clear();
         RecalculateStats();
     }
 
-    /// <summary>패시브 레벨을 기반으로 최종 스탯을 재계산한다.</summary>
+    /// <summary>패시브 effective level을 기반으로 최종 스탯을 재계산한다.</summary>
     public void RecalculateStats()
     {
-        // 가산식 (선형 누적)
-        MoveSpeed = _baseMoveSpeed + 0.2f * GetPassiveLevel(PassiveType.MoveSpeed);
-        ExtraJumps = _baseExtraJumps + GetPassiveLevel(PassiveType.ExtraJump);
-        MaxHp = _baseMaxHp + 15f * GetPassiveLevel(PassiveType.MaxHp);
-        HpRegen = 0.5f * GetPassiveLevel(PassiveType.HpRegen) + _baseHpRegen;
-        CritMultiplier = _baseCritMultiplier + 0.15f * GetPassiveLevel(PassiveType.CritDamage);
-        ProjectileCount = _baseProjectileCount + GetPassiveLevel(PassiveType.ProjectileCount) / 3;
-        ProjectileSpeed = 1f + 0.1f * GetPassiveLevel(PassiveType.ProjectileSpeed);
+        // 가산식 (선형 누적, effective level 사용)
+        MoveSpeed = _baseMoveSpeed + 1.0f * GetEffectiveLevel(PassiveType.MoveSpeed);
+        ExtraJumps = _baseExtraJumps + Mathf.FloorToInt(GetEffectiveLevel(PassiveType.ExtraJump));
+        MaxHp = _baseMaxHp + 15f * GetEffectiveLevel(PassiveType.MaxHp);
+        HpRegen = 0.5f * GetEffectiveLevel(PassiveType.HpRegen) + _baseHpRegen;
+        CritMultiplier = _baseCritMultiplier + 0.15f * GetEffectiveLevel(PassiveType.CritDamage);
+        ProjectileCount = _baseProjectileCount + Mathf.FloorToInt(GetEffectiveLevel(PassiveType.ProjectileCount) / 3f);
 
-        // DR (Diminishing Returns) — final = cap × (1 - (1-perLevel)^level)
-        DodgeChance = DiminishingReturns(GetPassiveLevel(PassiveType.Dodge), 0.08f, 0.60f);
-        CritChance = DiminishingReturns(GetPassiveLevel(PassiveType.CritChance), 0.08f, 0.75f);
-        LuckChance = DiminishingReturns(GetPassiveLevel(PassiveType.Luck), 0.10f, 0.80f);
+        // DR (Diminishing Returns) — final = cap × (1 - (1-perLevel)^effLv)
+        DodgeChance = DiminishingReturns(GetEffectiveLevel(PassiveType.Dodge), 0.08f, 0.60f);
+        CritChance = DiminishingReturns(GetEffectiveLevel(PassiveType.CritChance), 0.08f, 0.75f);
+        LuckChance = DiminishingReturns(GetEffectiveLevel(PassiveType.Luck), 0.10f, 0.80f);
 
         // Cap 가산식
-        Lifesteal = Mathf.Min(0.02f * GetPassiveLevel(PassiveType.Lifesteal), 0.25f);
+        Lifesteal = Mathf.Min(0.02f * GetEffectiveLevel(PassiveType.Lifesteal), 0.25f);
 
-        // 곱셈 + floor
-        float atkMult = Mathf.Pow(0.95f, GetPassiveLevel(PassiveType.AttackSpeed));
+        // 곱셈 + floor (공격 속도 = 발사체 속도/검 모션 속도와 연동)
+        float atkMult = Mathf.Pow(0.95f, GetEffectiveLevel(PassiveType.AttackSpeed));
         AttackSpeedMultiplier = Mathf.Max(atkMult, 0.30f);
+        ProjectileSpeed = 1f / AttackSpeedMultiplier;
 
         // 난이도
-        int diffLv = GetPassiveLevel(PassiveType.Difficulty);
+        float diffLv = GetEffectiveLevel(PassiveType.Difficulty);
         DifficultySpawnMultiplier = 1f + 0.15f * diffLv;
         DifficultyRewardMultiplier = 1f + 0.20f * diffLv;
 
         OnStatsChanged?.Invoke();
     }
 
-    /// <summary>점감 공식: final = cap × (1 - (1-perLevel)^level)</summary>
-    private static float DiminishingReturns(int level, float perLevel, float cap)
+    /// <summary>점감 공식: final = cap × (1 - (1-perLevel)^effLv)</summary>
+    private static float DiminishingReturns(float effLevel, float perLevel, float cap)
     {
-        if (level <= 0) return 0f;
-        return cap * (1f - Mathf.Pow(1f - perLevel, level));
+        if (effLevel <= 0f) return 0f;
+        return cap * (1f - Mathf.Pow(1f - perLevel, effLevel));
     }
 }

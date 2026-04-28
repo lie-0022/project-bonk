@@ -33,4 +33,17 @@ public static class GradeBonus
         CardGrade.Legend => new Entry(0.50f, 0.22f),
         _                => new Entry(0f, 0f),
     };
+
+    /// <summary>
+    /// 패시브 1회 선택 시 적용할 가중치. 레벨은 항상 +1이지만 수치 환산용 effective level은 등급별 차등.
+    /// 커먼=1.0 / 에픽=1.5 / 유니크=2.5 / 레전드=4.0 (튜닝 대상).
+    /// </summary>
+    public static float PassiveWeight(CardGrade grade) => grade switch
+    {
+        CardGrade.Common => 1.0f,
+        CardGrade.Epic   => 1.5f,
+        CardGrade.Unique => 2.5f,
+        CardGrade.Legend => 4.0f,
+        _                => 1.0f,
+    };
 }

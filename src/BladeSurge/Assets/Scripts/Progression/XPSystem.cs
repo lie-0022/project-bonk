@@ -61,7 +61,11 @@ public class XPSystem : MonoBehaviour, IInitializable
     private void OnEnemyDied(float xpReward, Vector3 position)
     {
         if (!_isActive || xpReward <= 0f) return;
-        SpawnXPOrb(xpReward, position);
+
+        float rewardMult = PlayerStats.Instance != null
+            ? PlayerStats.Instance.DifficultyRewardMultiplier
+            : 1f;
+        SpawnXPOrb(xpReward * rewardMult, position);
     }
 
     private void SpawnXPOrb(float xpReward, Vector3 position)

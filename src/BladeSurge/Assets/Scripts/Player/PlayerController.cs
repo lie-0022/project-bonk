@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
 
     private bool _inputEnabled = true;
 
+    // 점프 카운팅 (1 + ExtraJumps 까지 가능)
+    private int _jumpsUsed;
+
     private void Awake()
     {
         _cc = GetComponent<CharacterController>();
@@ -103,10 +106,20 @@ public class PlayerController : MonoBehaviour
 
         // 수직 속도 (중력·점프)
         if (grounded && _velocity.y < 0f)
+        {
             _velocity.y = -2f;
+            _jumpsUsed = 0;
+        }
 
-        if (_input.Player.Jump.WasPressedThisFrame() && grounded)
-            _velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+        if (_input.Player.Jump.WasPressedThisFrame())
+        {
+            int maxJumps = 1 + (PlayerStats.Instance != null ? PlayerStats.Instance.ExtraJumps : 0);
+            if (_jumpsUsed < maxJumps)
+            {
+                _velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+                _jumpsUsed++;
+            }
+        }
 
         _velocity.y += _gravity * Time.deltaTime;
 
@@ -131,7 +144,8 @@ public class PlayerController : MonoBehaviour
         _moveDirection = forward * input.y + right * input.x;
         if (_moveDirection.sqrMagnitude > 1f) _moveDirection.Normalize();
 
-        return _moveDirection * _moveSpeed;
+        float speed = PlayerStats.Instance != null ? PlayerStats.Instance.MoveSpeed : _moveSpeed;
+        return _moveDirection * speed;
     }
 
     private void TryDash()

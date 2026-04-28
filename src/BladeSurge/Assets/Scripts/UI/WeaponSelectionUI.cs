@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
-/// 레벨업 무기 선택 UI. 패널 + 3개 카드 버튼.
+/// 레벨업 선택 UI. 패널 + 3개 카드 버튼.
 /// LevelupWeaponSelection.OnSelectionRequired 수신 → 카드 그리기 → 클릭 또는 1/2/3 키로 선택.
-/// 출처: design/gdd/weapon-selection-ui.md
+/// 무기와 패시브 카드를 동일한 슬롯에 표시한다.
+/// 출처: design/gdd/weapon-selection-ui.md, design/gdd/spec-system.md
 /// </summary>
 public class WeaponSelectionUI : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class WeaponSelectionUI : MonoBehaviour
     [SerializeField] private Color _uniqueColor = new(1.0f, 0.85f, 0.2f);
     [SerializeField] private Color _legendColor = new(0.95f, 0.25f, 0.25f);
 
-    private readonly List<LevelupWeaponSelection.WeaponChoice> _currentChoices = new();
+    private readonly List<LevelupChoice> _currentChoices = new();
     private bool _isOpen;
 
     private void Awake()
@@ -57,7 +58,6 @@ public class WeaponSelectionUI : MonoBehaviour
     {
         if (!_isOpen) return;
 
-        // 1/2/3 단축키 (unscaled — Time.timeScale = 0 상황 대응)
         var kb = Keyboard.current;
         if (kb == null) return;
 
@@ -66,7 +66,7 @@ public class WeaponSelectionUI : MonoBehaviour
         else if (kb.digit3Key.wasPressedThisFrame) TrySelect(2);
     }
 
-    private void Show(IReadOnlyList<LevelupWeaponSelection.WeaponChoice> choices)
+    private void Show(IReadOnlyList<LevelupChoice> choices)
     {
         _currentChoices.Clear();
         _currentChoices.AddRange(choices);
@@ -96,13 +96,13 @@ public class WeaponSelectionUI : MonoBehaviour
         _isOpen = false;
     }
 
-    private void BindCard(CardView view, LevelupWeaponSelection.WeaponChoice choice, int index)
+    private void BindCard(CardView view, LevelupChoice choice, int index)
     {
         Color gradeColor = GetGradeColor(choice.Grade);
 
         if (view.GradeFrame != null) view.GradeFrame.color = gradeColor;
-        if (view.WeaponNameText != null) view.WeaponNameText.text = GetWeaponName(choice.WeaponType);
-        if (view.DescriptionText != null) view.DescriptionText.text = GetWeaponDescription(choice.WeaponType);
+        if (view.WeaponNameText != null) view.WeaponNameText.text = GetCardName(choice);
+        if (view.DescriptionText != null) view.DescriptionText.text = GetCardDescription(choice);
         if (view.GradeText != null)
         {
             view.GradeText.text = $"[{GetGradeLabel(choice.Grade)}]";
@@ -112,7 +112,7 @@ public class WeaponSelectionUI : MonoBehaviour
         {
             view.StateText.text = choice.IsNew
                 ? "신규"
-                : $"강화 Lv {choice.CurrentLevel} → Lv {choice.CurrentLevel + 1}";
+                : $"Lv {choice.CurrentLevel} → Lv {choice.CurrentLevel + 1}";
         }
 
         if (view.Button != null)
@@ -129,7 +129,6 @@ public class WeaponSelectionUI : MonoBehaviour
         if (!_isOpen) return;
         if (index < 0 || index >= _currentChoices.Count) return;
 
-        // 중복 선택 방지: 모든 카드 비활성화
         for (int i = 0; i < _cards.Length; i++)
         {
             if (_cards[i]?.Button != null) _cards[i].Button.interactable = false;
@@ -137,7 +136,7 @@ public class WeaponSelectionUI : MonoBehaviour
 
         var chosen = _currentChoices[index];
         Hide();
-        LevelupWeaponSelection.Instance?.ChooseWeapon(chosen);
+        LevelupWeaponSelection.Instance?.Choose(chosen);
     }
 
     private Color GetGradeColor(CardGrade grade) => grade switch
@@ -158,6 +157,20 @@ public class WeaponSelectionUI : MonoBehaviour
         _                => "?",
     };
 
+    private static string GetCardName(LevelupChoice choice) => choice.Kind switch
+    {
+        LevelupChoiceKind.Weapon  => GetWeaponName(choice.WeaponType),
+        LevelupChoiceKind.Passive => GetPassiveName(choice.PassiveType),
+        _                         => "?",
+    };
+
+    private static string GetCardDescription(LevelupChoice choice) => choice.Kind switch
+    {
+        LevelupChoiceKind.Weapon  => GetWeaponDescription(choice.WeaponType),
+        LevelupChoiceKind.Passive => GetPassiveDescription(choice.PassiveType),
+        _                         => string.Empty,
+    };
+
     private static string GetWeaponName(WeaponType type) => type switch
     {
         WeaponType.Sword => "검",
@@ -172,5 +185,39 @@ public class WeaponSelectionUI : MonoBehaviour
         WeaponType.Gun   => "고속 관통 투사체",
         WeaponType.Magic => "느린 폭발 투사체",
         _                => string.Empty,
+    };
+
+    private static string GetPassiveName(PassiveType type) => type switch
+    {
+        PassiveType.MaxHp           => "최대 체력",
+        PassiveType.HpRegen         => "체력 재생",
+        PassiveType.Dodge           => "회피",
+        PassiveType.AttackSpeed     => "공격 속도",
+        PassiveType.CritChance      => "치명타 확률",
+        PassiveType.CritDamage      => "치명타 피해",
+        PassiveType.Lifesteal       => "생명 흡수",
+        PassiveType.ProjectileCount => "발사체 수",
+        PassiveType.MoveSpeed       => "이동 속도",
+        PassiveType.ExtraJump       => "추가 점프",
+        PassiveType.Luck            => "행운",
+        PassiveType.Difficulty      => "난이도",
+        _                           => "?",
+    };
+
+    private static string GetPassiveDescription(PassiveType type) => type switch
+    {
+        PassiveType.MaxHp           => "최대 HP +15/Lv",
+        PassiveType.HpRegen         => "HP 회복 +0.5/s/Lv",
+        PassiveType.Dodge           => "피해 회피 (cap 60%)",
+        PassiveType.AttackSpeed     => "공속/발사체 속도 ↑ (floor 0.30)",
+        PassiveType.CritChance      => "치명타 (cap 75%)",
+        PassiveType.CritDamage      => "치명타 피해 +15%/Lv",
+        PassiveType.Lifesteal       => "데미지의 +2%/Lv 흡혈 (cap 25%)",
+        PassiveType.ProjectileCount => "발사체 수 +1 (3Lv마다)",
+        PassiveType.MoveSpeed       => "이동 속도 +1.0/Lv",
+        PassiveType.ExtraJump       => "추가 점프 +1/Lv",
+        PassiveType.Luck            => "고등급 카드 확률 (cap 80%)",
+        PassiveType.Difficulty      => "스폰+15%/Lv, 보상+20%/Lv",
+        _                           => string.Empty,
     };
 }
