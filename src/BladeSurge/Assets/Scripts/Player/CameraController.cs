@@ -67,6 +67,8 @@ public class CameraController : MonoBehaviour
     {
         if (_target == null) return;
         if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameState.Playing) return;
+        // timeScale=0 (레벨업 선택 등) 동안 카메라 회전 입력 차단
+        if (Time.timeScale == 0f) return;
 
         float mouseX = Mouse.current.delta.x.ReadValue();
         float mouseY = Mouse.current.delta.y.ReadValue();

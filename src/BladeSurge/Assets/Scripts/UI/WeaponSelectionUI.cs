@@ -39,17 +39,19 @@ public class WeaponSelectionUI : MonoBehaviour
     private readonly List<LevelupChoice> _currentChoices = new();
     private bool _isOpen;
 
+    // 커서 상태 백업 (Show 시 잠금 해제, Hide 시 복원)
+    private CursorLockMode _previousLockState;
+    private bool _previousCursorVisible;
+
     private void Awake()
     {
+        // 구독은 Awake에서 (GameObject 비활성화 후에도 이벤트 받을 수 있도록)
+        LevelupWeaponSelection.OnSelectionRequired += Show;
+        Debug.Log($"[WeaponSelectionUI] Awake 완료. 구독 등록. panelRoot={(_panelRoot != null ? _panelRoot.name : "NULL")}");
         Hide();
     }
 
-    private void OnEnable()
-    {
-        LevelupWeaponSelection.OnSelectionRequired += Show;
-    }
-
-    private void OnDisable()
+    private void OnDestroy()
     {
         LevelupWeaponSelection.OnSelectionRequired -= Show;
     }
@@ -68,31 +70,61 @@ public class WeaponSelectionUI : MonoBehaviour
 
     private void Show(IReadOnlyList<LevelupChoice> choices)
     {
+        Debug.Log($"[WeaponSelectionUI] Show 호출. choices={choices.Count}");
         _currentChoices.Clear();
         _currentChoices.AddRange(choices);
 
-        for (int i = 0; i < _cards.Length; i++)
+        if (_cards != null)
         {
-            if (_cards[i] == null) continue;
+            for (int i = 0; i < _cards.Length; i++)
+            {
+                var view = _cards[i];
+                if (view == null) continue;
 
-            if (i < choices.Count)
-            {
-                BindCard(_cards[i], choices[i], i);
-                _cards[i].Root?.SetActive(true);
-            }
-            else
-            {
-                _cards[i].Root?.SetActive(false);
+                bool shouldShow = i < choices.Count;
+
+                if (shouldShow)
+                {
+                    BindCard(view, choices[i], i);
+                }
+
+                // Unity-safe null check (destroyed object 대응)
+                if (view.Root != null)
+                {
+                    view.Root.SetActive(shouldShow);
+                }
             }
         }
 
-        if (_panelRoot != null) _panelRoot.SetActive(true);
+        if (_panelRoot != null)
+        {
+            _panelRoot.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("[WeaponSelectionUI] _panelRoot 가 매핑 안됨. Inspector 확인 필요.");
+        }
+
+        // 커서 잠금 해제 (현재 상태 백업 후 마우스 활성화)
+        _previousLockState = Cursor.lockState;
+        _previousCursorVisible = Cursor.visible;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         _isOpen = true;
     }
 
     private void Hide()
     {
         if (_panelRoot != null) _panelRoot.SetActive(false);
+
+        // 커서 상태 복원 (Show 전에 호출되면 백업값이 디폴트라 게임 시작 시 무해)
+        if (_isOpen)
+        {
+            Cursor.lockState = _previousLockState;
+            Cursor.visible = _previousCursorVisible;
+        }
+
         _isOpen = false;
     }
 
