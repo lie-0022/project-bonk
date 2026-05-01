@@ -1454,6 +1454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 576936517}
   - component: {fileID: 576936518}
+  - component: {fileID: 576936519}
   m_Layer: 0
   m_Name: WeaponSlotsHUD
   m_TagString: Untagged
@@ -1509,6 +1510,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &576936519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576936516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f2d5b5b01bb284bb861168019ae8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponSlotsHUD
+  _slots:
+  - Root: {fileID: 958086137}
+    Label: {fileID: 1145843106}
+  - Root: {fileID: 1807203126}
+    Label: {fileID: 1628392845}
+  - Root: {fileID: 822711396}
+    Label: {fileID: 1718171569}
 --- !u!1 &583938526
 GameObject:
   m_ObjectHideFlags: 0
