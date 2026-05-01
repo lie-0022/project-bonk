@@ -146,6 +146,9 @@ src/BladeSurge/.claude/settings.local.json
 # === 임시/디버그 파일 ===
 *.stackdump
 
+# === Unity 자동 복구 파일 (실수로 만들어진 임시 Scene) ===
+src/BladeSurge/Assets/_Recovery/
+
 # === Backup files ===
 *.backup_*
 *.backup
