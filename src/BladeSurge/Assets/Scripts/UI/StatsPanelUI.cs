@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 public class StatsPanelUI : MonoBehaviour
 {
     [Header("Refs")]
-    [SerializeField] private GameObject _panelRoot;
+    [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private TextMeshProUGUI _statsText;
 
     private bool _isOpen;
@@ -30,7 +30,7 @@ public class StatsPanelUI : MonoBehaviour
 
     private void Start()
     {
-        if (_panelRoot != null) _panelRoot.SetActive(false);
+        SetVisible(false);
         _isOpen = false;
     }
 
@@ -51,7 +51,7 @@ public class StatsPanelUI : MonoBehaviour
     {
         _previousTimeScale = Time.timeScale;
         Time.timeScale = 0f;
-        if (_panelRoot != null) _panelRoot.SetActive(true);
+        SetVisible(true);
         _isOpen = true;
         Refresh();
     }
@@ -59,8 +59,16 @@ public class StatsPanelUI : MonoBehaviour
     private void Close()
     {
         Time.timeScale = _previousTimeScale;
-        if (_panelRoot != null) _panelRoot.SetActive(false);
+        SetVisible(false);
         _isOpen = false;
+    }
+
+    private void SetVisible(bool visible)
+    {
+        if (_canvasGroup == null) return;
+        _canvasGroup.alpha = visible ? 1f : 0f;
+        _canvasGroup.blocksRaycasts = visible;
+        _canvasGroup.interactable = visible;
     }
 
     private void RefreshIfOpen()

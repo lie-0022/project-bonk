@@ -2126,8 +2126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492edc0c6cf95a041ae5d512eedda65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsPanelUI
-  _panelRoot: {fileID: 0}
-  _statsText: {fileID: 0}
+  _panelRoot: {fileID: 654319337}
+  _statsText: {fileID: 2094325042}
 --- !u!114 &654319340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6609,8 +6609,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
