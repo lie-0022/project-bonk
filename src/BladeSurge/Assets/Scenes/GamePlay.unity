@@ -2087,6 +2087,7 @@ GameObject:
   - component: {fileID: 654319341}
   - component: {fileID: 654319340}
   - component: {fileID: 654319339}
+  - component: {fileID: 654319342}
   m_Layer: 0
   m_Name: StatsPanel
   m_TagString: Untagged
@@ -2126,7 +2127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492edc0c6cf95a041ae5d512eedda65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsPanelUI
-  _panelRoot: {fileID: 654319337}
+  _canvasGroup: {fileID: 654319342}
   _statsText: {fileID: 2094325042}
 --- !u!114 &654319340
 MonoBehaviour:
@@ -2166,6 +2167,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654319337}
   m_CullTransparentMesh: 1
+--- !u!225 &654319342
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654319337}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &710953745
 GameObject:
   m_ObjectHideFlags: 0
