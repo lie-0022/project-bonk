@@ -53,6 +53,9 @@ public class LevelupWeaponSelection : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int _choiceCount = 3;
 
+    /// <summary>패시브 슬롯 상한. spec-system.md:21,87,159 — 3종 빌드 정체성.</summary>
+    private const int MaxPassiveSlots = 3;
+
     /// <summary>선택지 표시 요청. LevelupSelectionUI(WeaponSelectionUI)가 구독한다.</summary>
     public static event Action<IReadOnlyList<LevelupChoice>> OnSelectionRequired;
 
@@ -212,12 +215,21 @@ public class LevelupWeaponSelection : MonoBehaviour
         var stats = PlayerStats.Instance;
         if (stats == null) return;
 
+        int ownedCount = 0;
+        foreach (var p in AllPassives)
+            if (stats.GetPassiveLevel(p) > 0) ownedCount++;
+
+        bool slotsFull = ownedCount >= MaxPassiveSlots;
+
         foreach (var passive in AllPassives)
         {
             int level = stats.GetPassiveLevel(passive);
             if (level >= PlayerStats.MaxPassiveLevel) continue;
 
-            pool.Add(new LevelupChoice(passive, CardGradeRoller.Roll(), level == 0, level));
+            bool isNew = level == 0;
+            if (isNew && slotsFull) continue;
+
+            pool.Add(new LevelupChoice(passive, CardGradeRoller.Roll(), isNew, level));
         }
     }
 
