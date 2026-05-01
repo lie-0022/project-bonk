@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5dee4a7c2fb2d4083fdef423c6c136, type: 3}
-  m_Name: Sword_Data
+  m_Name: Weapon_Sword_Data
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   WeaponType: 1
   WeaponName: Sword
