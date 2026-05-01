@@ -1390,7 +1390,7 @@ GameObject:
   - component: {fileID: 471266872}
   - component: {fileID: 471266873}
   m_Layer: 0
-  m_Name: 'Cards '
+  m_Name: Cards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1979,7 +1979,7 @@ GameObject:
   - component: {fileID: 1028363970}
   - component: {fileID: 1028363973}
   m_Layer: 0
-  m_Name: 'Card1 '
+  m_Name: Card1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2844,7 +2844,7 @@ GameObject:
   - component: {fileID: 1186934177}
   - component: {fileID: 1186934176}
   m_Layer: 0
-  m_Name: 'GradeFrame '
+  m_Name: GradeFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3161,7 +3161,7 @@ GameObject:
   - component: {fileID: 1427754806}
   - component: {fileID: 1427754805}
   m_Layer: 0
-  m_Name: 'WeaponName '
+  m_Name: WeaponName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3613,7 +3613,7 @@ GameObject:
   - component: {fileID: 1560553551}
   - component: {fileID: 1560553550}
   m_Layer: 0
-  m_Name: 'WeaponName '
+  m_Name: WeaponName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3750,7 +3750,7 @@ GameObject:
   - component: {fileID: 1581093007}
   - component: {fileID: 1581093006}
   m_Layer: 0
-  m_Name: 'WeaponName '
+  m_Name: WeaponName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3887,7 +3887,7 @@ GameObject:
   - component: {fileID: 1634347525}
   - component: {fileID: 1634347524}
   m_Layer: 0
-  m_Name: 'GradeFrame '
+  m_Name: GradeFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4030,7 +4030,7 @@ GameObject:
   - component: {fileID: 1704183211}
   - component: {fileID: 1704183210}
   m_Layer: 0
-  m_Name: 'GradeFrame '
+  m_Name: GradeFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4931,7 +4931,7 @@ GameObject:
   - component: {fileID: 1916516967}
   - component: {fileID: 1916516966}
   m_Layer: 0
-  m_Name: 'LevelupWeaponSelection '
+  m_Name: LevelupWeaponSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
