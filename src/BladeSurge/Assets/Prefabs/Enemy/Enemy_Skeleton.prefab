@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 2193716550596913456}
   - component: {fileID: 7753551510723211950}
   - component: {fileID: 5968510146394089365}
-  - component: {fileID: 8086045331489903320}
   - component: {fileID: 6310086151525983480}
   - component: {fileID: 9059797424172283576}
+  - component: {fileID: 8310173676162138762}
   m_Layer: 9
-  m_Name: Enemy_Rusher
+  m_Name: Enemy_Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,27 +78,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
   _maxHp: 50
   _xpReward: 20
---- !u!114 &8086045331489903320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5487335593461023878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 439d5a3b41550f046bb7c2da7182ab24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RusherAI
-  _spawnInvincibilityDuration: 0.5
-  _approachSpeed: 2
-  _chargeWindupTime: 2.5
-  _windupWarnDuration: 0.5
-  _chargeSpeed: 15
-  _maxChargeDistance: 8
-  _rushCooldown: 3
-  _chargeDamage: 20
-  _contactRadius: 1.5
 --- !u!114 &6310086151525983480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +112,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.448099, z: 1}
   m_Center: {x: 0, y: 1.2074124, z: 0}
+--- !u!114 &8310173676162138762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487335593461023878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1156df007bd3aa44b74af0f88956a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChaserAI
+  _spawnInvincibilityDuration: 0.5
+  _moveSpeed: 3.5
+  _contactDamage: 8
+  _contactInterval: 0.5
+  _contactRadius: 1.2
 --- !u!1001 &7407532950801115870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,10 +184,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 98b9c847bf069a34d850104677aed63d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8428891243827405045}
   m_SourcePrefab: {fileID: 100100000, guid: 98b9c847bf069a34d850104677aed63d, type: 3}
 --- !u!4 &7009411390448143669 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 98b9c847bf069a34d850104677aed63d, type: 3}
   m_PrefabInstance: {fileID: 7407532950801115870}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7641973226935768975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 98b9c847bf069a34d850104677aed63d, type: 3}
+  m_PrefabInstance: {fileID: 7407532950801115870}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8428891243827405045
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7641973226935768975}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: b29b2128ad71ad649baeac918d2d5a2e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7b5056122448fa746b6d797c85d0552e, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

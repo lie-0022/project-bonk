@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4309747408120970121}
   - component: {fileID: 1664601698569914598}
   m_Layer: 9
-  m_Name: Enemy_Chaser
+  m_Name: Enemy_Slime
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
