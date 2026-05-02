@@ -885,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ace992a1932cd04aa1e68c19016f547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChestSpawner
-  _chestPrefab: {fileID: 0}
+  _chestPrefab: {fileID: 2227707435454547597, guid: 1705fd05a6d8a4a419db096f457a99de, type: 3}
   _areaCenter: {x: 0, y: 0}
   _areaSize: {x: 40, y: 40}
   _spawnY: 0.5
