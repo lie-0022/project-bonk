@@ -62,7 +62,7 @@ public class LevelupWeaponSelection : MonoBehaviour
     /// <summary>선택 완료 후 발생. (전투 재개 시점 동기화용)</summary>
     public static event Action OnSelectionComplete;
 
-    private readonly Queue<int> _pendingLevelUps = new();
+    private readonly Queue<int> _pendingSelections = new();
     private bool _isSelecting;
     private float _previousTimeScale = 1f;
 
@@ -102,23 +102,23 @@ public class LevelupWeaponSelection : MonoBehaviour
 
     private void OnLevelUp(int level)
     {
-        _pendingLevelUps.Enqueue(level);
+        _pendingSelections.Enqueue(level);
         TryStartNext();
     }
 
     /// <summary>외부 시스템(상자 등)에서 카드 선택 1회 요청. 진행 중이면 큐에 누적.</summary>
     public void RequestSelection()
     {
-        _pendingLevelUps.Enqueue(0);
+        _pendingSelections.Enqueue(0);
         TryStartNext();
     }
 
     private void TryStartNext()
     {
         if (_isSelecting) return;
-        if (_pendingLevelUps.Count == 0) return;
+        if (_pendingSelections.Count == 0) return;
 
-        _pendingLevelUps.Dequeue();
+        _pendingSelections.Dequeue();
 
         // UI 미구독 시 timeScale=0 진입하면 영원히 멈추므로 차단 (개발 단계 보호용)
         if (OnSelectionRequired == null)
