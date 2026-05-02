@@ -106,6 +106,13 @@ public class LevelupWeaponSelection : MonoBehaviour
         TryStartNext();
     }
 
+    /// <summary>외부 시스템(상자 등)에서 카드 선택 1회 요청. 진행 중이면 큐에 누적.</summary>
+    public void RequestSelection()
+    {
+        _pendingLevelUps.Enqueue(0);
+        TryStartNext();
+    }
+
     private void TryStartNext()
     {
         if (_isSelecting) return;
