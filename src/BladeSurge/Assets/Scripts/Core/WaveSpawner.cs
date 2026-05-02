@@ -64,7 +64,7 @@ public class WaveSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (!_isSpawning || _playerTransform == null) return;
+        if (_playerTransform == null) return;
 
         if (_inTransition)
         {
@@ -73,6 +73,8 @@ public class WaveSpawner : MonoBehaviour
                 StartWave(CurrentWave); // CurrentWave는 이미 다음 인덱스로 증가된 상태
             return;
         }
+
+        if (!_isSpawning) return;
 
         // 스폰 타이머
         _spawnTimer -= Time.deltaTime;

@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
         if (_moveDirection.sqrMagnitude > 1f) _moveDirection.Normalize();
 
         float speed = PlayerStats.Instance != null ? PlayerStats.Instance.MoveSpeed : _moveSpeed;
+        speed *= DropItemEffects.MoveSpeedMultiplier;
         return _moveDirection * speed;
     }
 

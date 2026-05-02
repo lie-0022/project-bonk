@@ -55,7 +55,7 @@ public class GoldOrb : MonoBehaviour, IPoolable
             transform.position = new Vector3(_spawnPosition.x, y, _spawnPosition.z);
 
             float sqrDist = (transform.position - _playerTransform.position).sqrMagnitude;
-            if (sqrDist <= _attractRadius * _attractRadius)
+            if (DropItemEffects.MagnetActive || sqrDist <= _attractRadius * _attractRadius)
                 _isAttracting = true;
         }
     }

@@ -24,6 +24,11 @@ public class ChaserAI : EnemyBase
         base.Update(); // 스폰 무적 타이머
 
         if (!_isActive || _playerTransform == null) return;
+        if (DropItemEffects.TimeStopActive)
+        {
+            if (_rb != null) _rb.linearVelocity = Vector3.zero;
+            return;
+        }
 
         MoveTowardPlayer();
         HandleContactDamage();

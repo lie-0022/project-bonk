@@ -57,9 +57,9 @@ public class XPOrb : MonoBehaviour, IPoolable
             float y = _spawnPosition.y + Mathf.Sin(Time.time * _bobSpeed + _bobOffset) * _bobHeight;
             transform.position = new Vector3(_spawnPosition.x, y, _spawnPosition.z);
 
-            // 플레이어 거리 체크
+            // 플레이어 거리 체크 (자석 활성 시 거리 무시)
             float sqrDist = (transform.position - _playerTransform.position).sqrMagnitude;
-            if (sqrDist <= _attractRadius * _attractRadius)
+            if (DropItemEffects.MagnetActive || sqrDist <= _attractRadius * _attractRadius)
                 _isAttracting = true;
         }
     }
