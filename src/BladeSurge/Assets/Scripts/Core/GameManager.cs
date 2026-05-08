@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -62,8 +63,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Header("Scene Transitions")]
+    [SerializeField] private string _gameOverSceneName = "GameOver";
+    [SerializeField] private float _gameOverTransitionDelay = 1.5f;
+
     /// <summary>
     /// 게임 상태를 전환한다. 동일 상태로의 중복 전환은 무시한다.
+    /// GameOver/Win 상태로 전환되면 결과 화면 씬으로 자동 이동한다.
     /// </summary>
     public void ChangeState(GameState newState)
     {
@@ -72,6 +78,17 @@ public class GameManager : MonoBehaviour
         CurrentState = newState;
         Time.timeScale = (newState == GameState.Paused) ? 0f : 1f;
         OnGameStateChanged?.Invoke(newState);
+
+        if (newState == GameState.GameOver || newState == GameState.Win)
+            StartCoroutine(LoadResultsAfterDelay());
+    }
+
+    private IEnumerator LoadResultsAfterDelay()
+    {
+        // 사망/클리어 연출 시간 확보
+        yield return new WaitForSecondsRealtime(_gameOverTransitionDelay);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(_gameOverSceneName);
     }
 
     private void RestartGame()

@@ -1437,7 +1437,6 @@ MonoBehaviour:
   _distance: 15
   _pitchMin: -20
   _pitchMax: 70
-  _sensitivity: 0.3
 --- !u!1 &339205797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2800,7 @@ Transform:
   - {fileID: 1916516965}
   - {fileID: 2113206256}
   - {fileID: 237608950}
+  - {fileID: 1253857326}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &922333148
@@ -4217,6 +4217,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186934174}
   m_CullTransparentMesh: 1
+--- !u!1 &1253857325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1253857326}
+  - component: {fileID: 1253857327}
+  m_Layer: 0
+  m_Name: RunStats
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1253857326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253857325}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 913152675}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1253857327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253857325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ed6949c0010904a8aabb22655d9cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RunStats
 --- !u!1 &1304915907
 GameObject:
   m_ObjectHideFlags: 0
@@ -4524,6 +4568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c733d70d584873e46bf6d08d3e0e8093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  _gameOverSceneName: GameOver
+  _gameOverTransitionDelay: 1.5
 --- !u!4 &1395442894
 Transform:
   m_ObjectHideFlags: 0
