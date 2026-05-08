@@ -929,8 +929,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314c4db09196e1c4f97a17f2ce3fc75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  _mobPrefab: {fileID: 6522973415233889521, guid: 1d4f412ba32145846af9f38e17e14d47, type: 3}
-  _mobInitialSize: 50
+  _mobPrefabs:
+  - {fileID: 6522973415233889521, guid: 1d4f412ba32145846af9f38e17e14d47, type: 3}
+  _mobInitialSizePerPrefab: 50
 --- !u!1 &166053386
 GameObject:
   m_ObjectHideFlags: 0
@@ -7445,12 +7446,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09537f74ca39fc54b8232939c0551383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugStageSelector
-  _race: 0
-  _slimeMob: {fileID: 6522973415233889521, guid: 1d4f412ba32145846af9f38e17e14d47, type: 3}
+  _race: 1
+  _slimeMobs:
+  - {fileID: 6522973415233889521, guid: 1d4f412ba32145846af9f38e17e14d47, type: 3}
   _slimeBoss: {fileID: 6329516999241024568, guid: 4bc2cb8726ed6dc439a031e28c42de73, type: 3}
-  _skeletonMob: {fileID: 5487335593461023878, guid: 66c01be100910164ba1966f753980433, type: 3}
+  _skeletonMobs:
+  - {fileID: 5487335593461023878, guid: 66c01be100910164ba1966f753980433, type: 3}
+  - {fileID: 5487335593461023878, guid: a0d8eca9de9814343a160230aece4fc8, type: 3}
+  - {fileID: 5487335593461023878, guid: eb9a71262e338104ba05c2d9ba643340, type: 3}
+  - {fileID: 5487335593461023878, guid: 0f5cc4156a4254148a437ba698e4da91, type: 3}
   _skeletonBoss: {fileID: 6329516999241024568, guid: 4e55f21a535c0cf42a599351408ef9c5, type: 3}
-  _goblinMob: {fileID: 5487335593461023878, guid: e4a4c77618c317f4cbfa949319d4f2ed, type: 3}
+  _goblinMobs:
+  - {fileID: 5487335593461023878, guid: e4a4c77618c317f4cbfa949319d4f2ed, type: 3}
   _goblinBoss: {fileID: 6329516999241024568, guid: 892b9db1a45e89c4f9b50f180751dbf6, type: 3}
   _objectPool: {fileID: 115576364}
   _waveSpawner: {fileID: 1653113460}

@@ -18,6 +18,7 @@ public class BossAI : MonoBehaviour
 
     private BossEnemy _boss;
     private Rigidbody _rb;
+    private EnemyAnimator _enemyAnimator;
     private Transform _player;
     private HealthComponent _playerHealth;
     private float _contactTimer;
@@ -26,6 +27,7 @@ public class BossAI : MonoBehaviour
     {
         _boss = GetComponent<BossEnemy>();
         _rb = GetComponent<Rigidbody>();
+        _enemyAnimator = GetComponent<EnemyAnimator>();
     }
 
     private void Update()
@@ -35,6 +37,13 @@ public class BossAI : MonoBehaviour
         // BossEnemy의 활성 상태를 그대로 따른다.
         EnsurePlayerRef();
         if (_player == null) return;
+
+        // 스폰 애니 동안 정지 (EnemyBase._spawnAnimDelay 처리)
+        if (!_boss.IsActive)
+        {
+            if (_rb != null) _rb.linearVelocity = Vector3.zero;
+            return;
+        }
 
         // 일시정지/사망/타임스톱 중에는 정지
         if (DropItemEffects.TimeStopActive)
@@ -93,6 +102,7 @@ public class BossAI : MonoBehaviour
             _contactTimer -= Time.deltaTime;
             if (_contactTimer <= 0f)
             {
+                if (_enemyAnimator != null) _enemyAnimator.PlayAttack();
                 DamageDealer.Deal(
                     new DamageInfo(_contactDamage, DamageSource.Enemy, gameObject),
                     _playerHealth);

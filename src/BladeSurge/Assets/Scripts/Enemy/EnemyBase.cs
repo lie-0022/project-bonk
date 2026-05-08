@@ -15,6 +15,10 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
     public static event System.Action<float, Vector3> OnEnemyDied;
 
     [SerializeField] private float _spawnInvincibilityDuration = 0.5f;
+    [Tooltip("스폰 애니 재생 동안 AI 이동을 지연(초). 0이면 즉시 활성.")]
+    [SerializeField] private float _spawnAnimDelay = 0f;
+    [Tooltip("사망 애니 재생 후 풀 반환까지의 지연(초). 0이면 즉시 반환.")]
+    [SerializeField] private float _deathAnimDelay = 0f;
 
     protected Rigidbody _rb;
     protected HealthComponent _health;
@@ -26,6 +30,9 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
     private float _spawnInvincibilityTimer;
 
     public abstract EnemyType EnemyType { get; }
+
+    /// <summary>스폰 딜레이/게임 상태로 인한 AI 정지 여부. BossAI 등 외부 AI가 참조.</summary>
+    public bool IsActive => _isActive;
 
     protected virtual void Awake()
     {
@@ -69,11 +76,19 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
     {
         _playerTransform = playerTransform;
         _playerHealth = playerTransform.GetComponent<HealthComponent>();
-        _isActive = true;
+        _isActive = _spawnAnimDelay <= 0f;
 
         ActiveEnemies.Add(this);
         GameManager.OnGameStateChanged += OnGameStateChanged;
         OnActivate();
+
+        if (_spawnAnimDelay > 0f) StartCoroutine(EnableAfterDelay(_spawnAnimDelay));
+    }
+
+    private System.Collections.IEnumerator EnableAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _isActive = true;
     }
 
     /// <summary>AI를 즉시 정지한다. 게임 상태 변화 또는 사망 시 호출.</summary>
@@ -112,12 +127,24 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
 
     /// <summary>
     /// 사망 처리. 서브클래스에서 풀 미사용/특수 처리(Win 트리거 등) 가 필요하면 override.
+    /// _deathAnimDelay > 0 이면 사망 애니 재생을 위해 풀 반환을 지연시킨다.
     /// </summary>
     protected virtual void HandleDeath(float xpReward)
     {
         FireEnemyDied(xpReward, transform.position);
         Deactivate();
-        ObjectPool.Instance.ReturnToPool(gameObject, EnemyType);
+
+        if (_deathAnimDelay > 0f)
+            StartCoroutine(DelayedReturnToPool(_deathAnimDelay));
+        else
+            ObjectPool.Instance.ReturnToPool(gameObject, EnemyType);
+    }
+
+    private System.Collections.IEnumerator DelayedReturnToPool(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (gameObject.activeSelf)
+            ObjectPool.Instance.ReturnToPool(gameObject, EnemyType);
     }
 
     /// <summary>OnEnemyDied 정적 이벤트를 발화한다. 서브클래스가 풀 우회 사망 처리 시 사용.</summary>

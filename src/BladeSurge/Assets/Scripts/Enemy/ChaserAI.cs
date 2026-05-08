@@ -11,12 +11,14 @@ public class ChaserAI : EnemyBase
     [SerializeField] private float _contactRadius = 1.2f;
 
     private float _contactTimer;
+    private EnemyAnimator _enemyAnimator;
 
     public override EnemyType EnemyType => EnemyType.Mob;
 
     protected override void OnActivate()
     {
         _contactTimer = 0f;
+        if (_enemyAnimator == null) _enemyAnimator = GetComponent<EnemyAnimator>();
     }
 
     protected override void Update()
@@ -58,6 +60,7 @@ public class ChaserAI : EnemyBase
             _contactTimer -= Time.deltaTime;
             if (_contactTimer <= 0f)
             {
+                if (_enemyAnimator != null) _enemyAnimator.PlayAttack();
                 DamageDealer.Deal(
                     new DamageInfo(_contactDamage, DamageSource.Enemy, gameObject),
                     _playerHealth);

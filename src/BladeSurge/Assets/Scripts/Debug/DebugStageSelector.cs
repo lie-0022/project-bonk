@@ -2,10 +2,11 @@ using UnityEngine;
 
 /// <summary>
 /// 디버그용 스테이지(종족) 선택기. 인스펙터에서 _race를 골라두면 게임 시작 시
-/// ObjectPool의 mob 프리팹과 WaveSpawner의 boss 프리팹을 해당 종족 쌍으로 교체한다.
+/// ObjectPool의 mob 프리팹 배열과 WaveSpawner의 boss 프리팹을 해당 종족 쌍으로 교체한다.
 ///
+/// 종족별로 잡몹은 여러 종류를 등록할 수 있다 (예: Skeleton 스테이지엔 Warrior/Minion/Rogue/Mage 4종 혼합).
 /// 정식 스테이지 진행 시스템이 도입되기 전까지의 임시 도구. Awake에서 동작하므로
-/// ObjectPool.Initialize / WaveSpawner.Start 보다 먼저 적용된다 (스크립트 실행 순서 무관).
+/// ObjectPool.Initialize / WaveSpawner.Start 보다 먼저 적용된다.
 /// </summary>
 public class DebugStageSelector : MonoBehaviour
 {
@@ -13,11 +14,11 @@ public class DebugStageSelector : MonoBehaviour
     [SerializeField] private EnemyRace _race = EnemyRace.Slime;
 
     [Header("Race 프리팹 매핑")]
-    [SerializeField] private GameObject _slimeMob;
+    [SerializeField] private GameObject[] _slimeMobs;
     [SerializeField] private GameObject _slimeBoss;
-    [SerializeField] private GameObject _skeletonMob;
+    [SerializeField] private GameObject[] _skeletonMobs;
     [SerializeField] private GameObject _skeletonBoss;
-    [SerializeField] private GameObject _goblinMob;
+    [SerializeField] private GameObject[] _goblinMobs;
     [SerializeField] private GameObject _goblinBoss;
 
     [Header("타깃 컴포넌트")]
@@ -32,23 +33,23 @@ public class DebugStageSelector : MonoBehaviour
             return;
         }
 
-        GameObject mob;
+        GameObject[] mobs;
         GameObject boss;
         switch (_race)
         {
-            case EnemyRace.Skeleton: mob = _skeletonMob; boss = _skeletonBoss; break;
-            case EnemyRace.Goblin:   mob = _goblinMob;   boss = _goblinBoss;   break;
-            default:                 mob = _slimeMob;    boss = _slimeBoss;    break;
+            case EnemyRace.Skeleton: mobs = _skeletonMobs; boss = _skeletonBoss; break;
+            case EnemyRace.Goblin:   mobs = _goblinMobs;   boss = _goblinBoss;   break;
+            default:                 mobs = _slimeMobs;    boss = _slimeBoss;    break;
         }
 
-        if (mob == null || boss == null)
+        if (mobs == null || mobs.Length == 0 || boss == null)
         {
             Debug.LogWarning($"[DebugStageSelector] {_race} 프리팹 미설정 — 적용 생략");
             return;
         }
 
-        _objectPool.SetMobPrefab(mob);
+        _objectPool.SetMobPrefabs(mobs);
         _waveSpawner.SetBossPrefab(boss);
-        Debug.Log($"[DebugStageSelector] Race={_race} mob={mob.name} boss={boss.name}");
+        Debug.Log($"[DebugStageSelector] Race={_race} mobs={mobs.Length}종 boss={boss.name}");
     }
 }
