@@ -57,8 +57,11 @@ See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 
 **B타입 워크플로우 (2026-04-26~)**: 1인 개발자(PM/결정자) + AI(풀스택 개발자) 협업 모델.
 Sprint 시스템 폐지, continuous flow.
+**2026-05-08**: Unity MCP 도입으로 AI가 Scene/GameObject/컴포넌트/프리팹/머티리얼/Build Settings 등을 직접 처리. Editor handoff는 외부 자산·체감 테스트·미세 시각 튜닝에 한정.
 
 @.claude/docs/workflow-b-type.md
+
+@.claude/docs/mcp-capabilities.md
 
 @.claude/docs/editor-handoff.md
 

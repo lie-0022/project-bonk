@@ -2,6 +2,8 @@
 
 > 1인 개발자(결정자/PM) + AI(풀스택 개발자) 협업 모델.
 > CCGS 기본 워크플로우(`docs/WORKFLOW-GUIDE.md`)와 호환되며, 본 문서는 본인-AI 분담을 명문화한다.
+>
+> **2026-05-08 갱신**: Unity MCP 도입으로 AI의 직접 처리 영역이 크게 확장. 상세 능력/한계는 `.claude/docs/mcp-capabilities.md` 참조.
 
 ---
 
@@ -11,15 +13,11 @@
 
 - **게임 디자인 결정** — 어떤 게임, 어떤 기능, 어떤 방향
 - **AI 작업 결과 검토 + 승인** — 코드/문서 합부 판단, 거부/수정 지시
-- **Unity Editor 작업** (AI가 직접 못 하는 영역)
-  - Scene 구성 (GameObject 배치, Hierarchy)
-  - Prefab 제작
-  - Inspector 값 설정
-  - Material/Shader 적용
-  - Animator/Animation 클립 연결
-- **에셋 임포트** — FBX, PNG, 오디오, 기타
-- **Play 모드 테스트** — 실제 동작 검증, 게임필 판정
-- **빌드** — Build Profile 사용, 결과물 검수
+- **외부 자산 임포트** — FBX, PNG, 오디오, 기타 — Project 창 드래그
+- **Play 모드 *체감* 테스트** — 게임필/조작감/난이도 판정 (AI는 동작 확인만 가능)
+- **빌드 결과 검수** — .exe 실행 후 정상 동작 확인
+- **Inspector 시각 미세 조정 (선택)** — RectTransform 픽셀 튜닝, 레이아웃 마무리
+- **Animator/Animation 클립 연결** (MCP API 제한적인 영역)
 - 본인 트리거 또는 AI에게 "푸시" 지시 (실 push는 AI/cron 가능)
 
 ### 본인이 안 하는 것
@@ -27,58 +25,82 @@
 - 코드 작성 (`.cs`)
 - 문서 작성 (`.md` — GDD, ADR, README 등)
 - 리팩토링
-- 디버깅 분석 (단, 콘솔 에러 복사는 함)
+- 디버깅 분석 (단, 콘솔 에러 복사·플레이 결과 보고는 함)
 - 커밋 메시지 작성 (auto-commit 훅이 처리)
 - 테스트 코드 작성
+- **씬/GameObject/컴포넌트/프리팹 일상적 조작** — AI가 MCP로 처리
 
 ---
 
-## AI 역할: 풀스택 개발자
+## AI 역할: 풀스택 개발자 + Editor Operator
 
-### AI가 처리
+### AI가 직접 처리 (코드 + Editor)
 
+#### 코드 / 문서
 - **모든 코드 구현** — `unity-csharp` 전문 에이전트 활용
 - **GDD/ADR/문서 작성** — 8섹션 룰 준수, 증분 작성
 - **코드 리팩토링** — 컨벤션 따라 자동
-- **버그 진단** — `unity-debugger` 활용
+- **버그 진단** — `unity-debugger` 활용 + 런타임 `execute_code` 시뮬레이션
 - **시스템 설계 제안** — `unity-architect` 활용
-- **Git commit** — auto-commit 훅으로 자동 처리
+- **Git commit / squash / push** — auto-commit 훅 + 명시적 commit
 - **기존 코드 분석/설명** — 본인 학습 보조
-- **Editor 작업 지시 문서화** — `editor-handoff.md` 양식 따라
 
-### AI 한계 (못 함)
+#### Unity Editor (MCP 경유)
+- 씬 생성·로드·저장·검증·자동복구
+- GameObject 생성·삭제·이동·이름변경·계층 조작
+- 컴포넌트 부착·제거·속성 설정
+- 머티리얼/텍스처/셰이더/ScriptableObject CRUD
+- 프리팹 생성·열기·저장
+- Build Settings 씬 등록·플레이어 설정 변경
+- Play 모드 시작·정지 (검증·시뮬레이션 용)
+- 콘솔 조회·필터링·Clear
+- Missing script 자동 복구
+- 런타임 C# 코드 실행 (`execute_code`) — 강제 데미지 등 시뮬레이션
+- 캡처 (제한적) — Game View / Scene View / 위치 지정 캡처
 
-- Unity Editor 직접 조작 (Scene/Prefab/Inspector)
-- Play 모드 실행
-- 에셋 파일(`.fbx`, `.png`, `.wav`) 임포트
-- 빌드 실행
+> 상세는 `.claude/docs/mcp-capabilities.md`
+
+### AI 한계 (정말 못 함)
+
+- 외부 파일 자체 생성 (`.fbx`, `.png`, `.wav` 등) — 본인이 임포트해야 함
+- Play 모드 *체감* 검증 (조작감, 게임필) — 본인만 가능
+- Build 결과물 동작 검증
+- 시각 자산 디자인 (아이콘, 스프라이트, UI 미술)
+- 사운드/음악 제작
+- Pivot/Scale 모델 재수정 (Blender 등)
+
+### AI 한계 (불완전 — 본인 손이 더 빠름)
+
+- Inspector 픽셀 단위 시각 튜닝
+- Animator 그래프 시각 작업
+- 복잡한 Variant Prefab 트리
+- "이게 예쁜가" 같은 디자인 판단
 
 ---
 
 ## 작업 패턴
 
-### 패턴 1: 새 기능 추가
+### 패턴 1: 새 기능 추가 (코드 + 씬 작업 — AI가 직접)
 
 ```
-1. 본인  : "X 기능 추가해줘" (GDD 참조 가능)
-2. AI    : 구현 계획 제시 (필요 시 Plan mode)
-3. 본인  : 검토 + 승인
-4. AI    : 코드 작성 + Editor 핸드오프 문서
-5. 본인  : Unity Editor 작업 (핸드오프 체크리스트 따라)
-6. 본인  : Play 모드 테스트
-7. (필요시) 본인 ↔ AI 협업 디버깅
-8. AI    : 완료 commit (auto-commit 훅)
-9. AI    : push (본인 지시 시) — 또는 본인 직접, 또는 자정 cron 자동
+1. 본인  : "X 기능 추가해줘"
+2. AI    : 구현 계획 제시 (필요 시 옵션 A/B/C)
+3. 본인  : 검토 + 승인 (또는 옵션 선택)
+4. AI    : 코드 작성 → 컴파일 확인
+5. AI    : 씬에 GameObject/컴포넌트 직접 배치 (MCP)
+6. AI    : 속성 설정 + 씬 저장 + commit
+7. 본인  : Play 모드 체감 테스트
+8. (이상 시) 본인 → AI 증상/콘솔 보고 → AI 수정 → 반복
 ```
 
 ### 패턴 2: 버그 수정
 
 ```
-1. 본인  : Unity 콘솔 에러 메시지 복사 → 채팅
-2. AI    : 진단 + 수정안 제시
-3. 본인  : 승인
-4. AI    : 코드 수정
-5. 본인  : Editor 재진입 + Play 검증
+1. 본인  : 증상 보고 (또는 AI가 console에서 자동 수집)
+2. AI    : 진단 (필요 시 Debug.Log 추가, Play 시뮬레이션, execute_code)
+3. AI    : 수정안 적용 + 컴파일 확인
+4. 본인  : Play 재검증
+5. AI    : 진단 로그 정리 + commit
 ```
 
 ### 패턴 3: 큰 결정 (아키텍처/디자인)
@@ -88,6 +110,25 @@
 2. AI    : 옵션 A/B/C + 각각 장단점/근거
 3. 본인  : 선택
 4. AI    : 선택 근거 ADR로 기록 + 코드 적용
+```
+
+### 패턴 4: 외부 자산 통합 (자산 도착 후)
+
+```
+1. 본인  : .fbx / .png / .wav 등 Project 창에 드래그 임포트
+2. 본인  : "X 자산 임포트했어. 어디에 연결?"
+3. AI    : 어떤 SO/프리팹 필드에 연결할지 안내 + 가능하면 직접 연결 (MCP)
+4. 본인  : 시각/청각 검증
+5. AI    : commit
+```
+
+### 패턴 5: 빌드 / 출시 준비
+
+```
+1. AI    : Build Settings 씬 등록, Player Settings (이름/버전)
+2. 본인  : 메뉴 File > Build And Run (또는 Build Profile)
+3. 본인  : .exe 실행 검증
+4. (이상 시) 본인 → AI 보고 → AI 수정
 ```
 
 ---
