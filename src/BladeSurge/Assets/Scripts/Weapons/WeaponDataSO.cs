@@ -14,6 +14,10 @@ public class WeaponDataSO : ScriptableObject
     [Header("Identity")]
     public WeaponType WeaponType;
     public string WeaponName;
+    [Tooltip("UI 아이콘 (HUD/카드/슬롯 표시용). null이면 등급 색 박스 표시.")]
+    public Sprite Icon;
+    [Tooltip("UI 카드 설명 텍스트. 한 줄 권장.")]
+    [TextArea(1, 3)] public string Description;
 
     [Header("Base Stats (Lv1)")]
     public float BaseDamage;
