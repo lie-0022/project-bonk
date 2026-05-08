@@ -38,6 +38,13 @@ public class ObjectPool : MonoBehaviour
         Prewarm(EnemyType.Mob, _mobInitialSize);
     }
 
+    /// <summary>Initialize 이전(Awake)에 호출해 mob 프리팹을 외부에서 교체. DebugStageSelector 용.</summary>
+    public void SetMobPrefab(GameObject prefab)
+    {
+        if (prefab == null) return;
+        _mobPrefab = prefab;
+    }
+
     private void Prewarm(EnemyType type, int count)
     {
         _pools[type] = new Queue<GameObject>();

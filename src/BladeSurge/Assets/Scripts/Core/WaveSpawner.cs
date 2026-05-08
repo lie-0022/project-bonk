@@ -52,6 +52,13 @@ public class WaveSpawner : MonoBehaviour
     private float _transitionTimer;
     private bool _bossSpawned;
 
+    /// <summary>Start 이전(Awake)에 호출해 보스 프리팹을 외부에서 교체. DebugStageSelector 용.</summary>
+    public void SetBossPrefab(GameObject prefab)
+    {
+        if (prefab == null) return;
+        _bossPrefab = prefab;
+    }
+
     private void Start()
     {
         _playerTransform = GameObject.FindWithTag("Player")?.transform;
