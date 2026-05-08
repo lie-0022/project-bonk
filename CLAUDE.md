@@ -53,6 +53,21 @@ See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 > **First session?** If the project has no engine configured and no game concept,
 > run `/start` to begin the guided onboarding flow.
 
+## Unity MCP (Editor 직접 조작)
+
+CoplayDev `unity-mcp` 설치됨 (2026-05-08). `mcp__UnityMCP__*` 도구로 Editor 직접 조작 가능.
+
+**규칙**:
+- Scene/GameObject/Component/Prefab/ScriptableObject 작업은 **MCP 도구 우선 사용**
+- 핸드오프 문서(`.claude/docs/editor-handoff.md`)는 MCP가 못 하는 것에만:
+  - `.fbx` / `.png` / `.wav` 등 외부 에셋 임포트
+  - Play 모드 체감 판정 ("이 점프 느낌 어때?")
+  - Material/Shader 비주얼 튜닝
+  - 빌드 (Build Profile)
+- `manage_components` Add 시 **FQN 필수** (네임스페이스 미사용 프로젝트면 클래스명 그대로)
+- `execute_code`에서 `using` 지시문 금지 — 메서드 바디로 실행됨, 항상 FQN 사용
+- MCP 서버 미연결 상태(`/mcp` 확인)면 Editor에서 `Window > MCP For Unity` → `Start Server` 후 재시도
+
 ## Workflow
 
 **B타입 워크플로우 (2026-04-26~)**: 1인 개발자(PM/결정자) + AI(풀스택 개발자) 협업 모델.
