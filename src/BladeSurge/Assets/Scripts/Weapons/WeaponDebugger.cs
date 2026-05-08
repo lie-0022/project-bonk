@@ -25,6 +25,7 @@ public class WeaponDebugger : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (Keyboard.current == null) return;
 
         // 무기 선택 UI가 열려 있으면 1/2/3 키는 UI가 소비 — 디버그 입력 무시
@@ -43,6 +44,7 @@ public class WeaponDebugger : MonoBehaviour
         if (Keyboard.current.digit3Key.wasPressedThisFrame) TryAdd(WeaponType.Magic);
 
         if (Keyboard.current.digit0Key.wasPressedThisFrame) BumpLuck();
+#endif
     }
 
     private void PrintCurrentMode()

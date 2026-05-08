@@ -10,7 +10,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _distance = 15f;
     [SerializeField] private float _pitchMin = -20f;
     [SerializeField] private float _pitchMax = 70f;
-    [SerializeField] private float _sensitivity = 0.15f;
+
+    /// <summary>현재 적용된 마우스 감도. SettingsService(PlayerPrefs)에서 동적으로 읽는다.</summary>
+    private float Sensitivity => SettingsService.MouseSensitivity;
 
     /// <summary>카메라 수평 Forward. 플레이어 이동 기준축.</summary>
     public Vector3 HorizontalForward =>
@@ -72,8 +74,8 @@ public class CameraController : MonoBehaviour
 
         float mouseX = Mouse.current.delta.x.ReadValue();
         float mouseY = Mouse.current.delta.y.ReadValue();
-        _yaw   += mouseX * _sensitivity;
-        _pitch -= mouseY * _sensitivity;
+        _yaw   += mouseX * Sensitivity;
+        _pitch -= mouseY * Sensitivity;
         _pitch  = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0f);
