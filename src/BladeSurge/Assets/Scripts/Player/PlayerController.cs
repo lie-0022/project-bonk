@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviour
         _input.Player.Enable();
         GameManager.OnGameStateChanged += OnGameStateChanged;
         if (_health != null) _health.OnDeath += OnPlayerDeath;
-        Debug.Log($"[PlayerController.OnEnable] hp ref={(_health != null)}, OnDeath subscribed");
     }
 
     private void OnDisable()
@@ -74,7 +73,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnPlayerDeath(float _)
     {
-        Debug.Log($"[PlayerController.OnPlayerDeath] called — GameManager.Instance={(GameManager.Instance != null)}, currentState={(GameManager.Instance != null ? GameManager.Instance.CurrentState.ToString() : "null")}");
         if (GameManager.Instance == null) return;
         GameManager.Instance.ChangeState(GameState.GameOver);
     }

@@ -32,14 +32,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("[GameManager.Start] begin — initializing subsystems");
-        try { ObjectPool.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] ObjectPool.Initialize threw: {e}"); }
-        try { PickupPool.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] PickupPool.Initialize threw: {e}"); }
-        try { XPSystem.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] XPSystem.Initialize threw: {e}"); }
-        try { GoldSystem.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] GoldSystem.Initialize threw: {e}"); }
+        ObjectPool.Instance.Initialize();
+        PickupPool.Instance.Initialize();
+        XPSystem.Instance.Initialize();
+        GoldSystem.Instance.Initialize();
 
         ChangeState(GameState.Playing);
-        Debug.Log($"[GameManager.Start] done — state={CurrentState}");
     }
 
     private void Update()
@@ -75,33 +73,29 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ChangeState(GameState newState)
     {
-        Debug.Log($"[GameManager.ChangeState] {CurrentState} -> {newState}");
         if (CurrentState == newState) return;
 
         CurrentState = newState;
         Time.timeScale = (newState == GameState.Paused) ? 0f : 1f;
+
+        // 구독자 한 명이 던져도 후속 처리(씬 전환 코루틴)가 끊기지 않도록 격리
         try
         {
             OnGameStateChanged?.Invoke(newState);
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"[GameManager.ChangeState] OnGameStateChanged subscriber threw: {e}");
+            Debug.LogError($"[GameManager] OnGameStateChanged subscriber threw: {e}");
         }
 
         if (newState == GameState.GameOver || newState == GameState.Win)
-        {
-            Debug.Log("[GameManager.ChangeState] starting LoadResultsAfterDelay coroutine");
             StartCoroutine(LoadResultsAfterDelay());
-        }
     }
 
     private IEnumerator LoadResultsAfterDelay()
     {
-        Debug.Log($"[GameManager.LoadResultsAfterDelay] waiting {_gameOverTransitionDelay}s");
         // 사망/클리어 연출 시간 확보
         yield return new WaitForSecondsRealtime(_gameOverTransitionDelay);
-        Debug.Log($"[GameManager.LoadResultsAfterDelay] loading scene '{_gameOverSceneName}'");
         Time.timeScale = 1f;
         SceneManager.LoadScene(_gameOverSceneName);
     }
