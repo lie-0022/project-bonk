@@ -76,7 +76,14 @@ public class BossHpBarUI : MonoBehaviour
 
     private void SetVisible(bool visible)
     {
-        if (_root != null) _root.SetActive(visible);
-        else gameObject.SetActive(visible);
+        if (_root != null && _root != gameObject)
+        {
+            _root.SetActive(visible);
+            return;
+        }
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(visible);
+        var selfImage = GetComponent<Image>();
+        if (selfImage != null) selfImage.enabled = visible;
     }
 }

@@ -37,6 +37,12 @@ public class BossEnemy : EnemyBase
         base.Awake();
     }
 
+    /// <summary>Activate 시 서브클래스 초기화 — 보스는 BossAI가 별도 컴포넌트로 동작하므로 빈 구현.</summary>
+    protected override void OnActivate()
+    {
+        // BossAI가 _isActive 상태와 player 참조를 BossEnemy 베이스로부터 읽음
+    }
+
     public override void OnSpawn()
     {
         base.OnSpawn();
