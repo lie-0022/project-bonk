@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 3901627601033023220}
   - component: {fileID: 8957038245392038925}
   m_Layer: 9
-  m_Name: Boss_Placeholder
+  m_Name: Boss_Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,8 +186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   _spawnInvincibilityDuration: 0.5
-  _bossName: BOSS
-  _hpBarColor: {r: 0.85, g: 0.2, b: 0.2, a: 1}
+  _bossName: BONE LORD
+  _hpBarColor: {r: 0.85, g: 0.85, b: 0.9, a: 1}
   _goldReward: 200
   _deathDelay: 1
 --- !u!114 &8957038245392038925

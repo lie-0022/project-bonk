@@ -12,7 +12,7 @@ public class ChaserAI : EnemyBase
 
     private float _contactTimer;
 
-    public override EnemyType EnemyType => EnemyType.Chaser;
+    public override EnemyType EnemyType => EnemyType.Mob;
 
     protected override void OnActivate()
     {

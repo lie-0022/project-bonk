@@ -5,7 +5,6 @@ using UnityEngine;
 public struct WaveData
 {
     public float SpawnInterval;
-    public float ChaserRatio;    // 0~1, 나머지는 Rusher
     public float HpMultiplier;
     public float SpeedMultiplier;
 }
@@ -32,11 +31,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("Wave Data")]
     [SerializeField] private WaveData[] _waves = new WaveData[]
     {
-        new WaveData { SpawnInterval = 2.0f, ChaserRatio = 1.00f, HpMultiplier = 1.0f, SpeedMultiplier = 1.0f },
-        new WaveData { SpawnInterval = 1.5f, ChaserRatio = 0.80f, HpMultiplier = 1.2f, SpeedMultiplier = 1.1f },
-        new WaveData { SpawnInterval = 1.2f, ChaserRatio = 0.70f, HpMultiplier = 1.5f, SpeedMultiplier = 1.2f },
-        new WaveData { SpawnInterval = 1.0f, ChaserRatio = 0.60f, HpMultiplier = 1.8f, SpeedMultiplier = 1.3f },
-        new WaveData { SpawnInterval = 0.8f, ChaserRatio = 0.50f, HpMultiplier = 2.2f, SpeedMultiplier = 1.5f },
+        new WaveData { SpawnInterval = 2.0f, HpMultiplier = 1.0f, SpeedMultiplier = 1.0f },
+        new WaveData { SpawnInterval = 1.5f, HpMultiplier = 1.2f, SpeedMultiplier = 1.1f },
+        new WaveData { SpawnInterval = 1.2f, HpMultiplier = 1.5f, SpeedMultiplier = 1.2f },
+        new WaveData { SpawnInterval = 1.0f, HpMultiplier = 1.8f, SpeedMultiplier = 1.3f },
+        new WaveData { SpawnInterval = 0.8f, HpMultiplier = 2.2f, SpeedMultiplier = 1.5f },
     };
 
     /// <summary>현재 웨이브 번호 (1-based). HUD 표시용.</summary>
@@ -113,9 +112,8 @@ public class WaveSpawner : MonoBehaviour
         Vector3 spawnPos = _playerTransform.position + offset;
 
         WaveData wave = _waves[CurrentWave - 1];
-        EnemyType type = Random.value < wave.ChaserRatio ? EnemyType.Chaser : EnemyType.Rusher;
 
-        GameObject obj = ObjectPool.Instance.GetFromPool(type);
+        GameObject obj = ObjectPool.Instance.GetFromPool(EnemyType.Mob);
         if (obj == null) return;
 
         obj.transform.position = spawnPos;

@@ -1,21 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 적 오브젝트를 타입별로 관리하는 오브젝트 풀.
-/// WaveSpawner가 GetFromPool로 꺼내고, 적 AI가 ReturnToPool로 반환한다.
+/// MVP: 단일 mob 종족만 풀링 — 스테이지별 종족 교체는 인스펙터에서 _mobPrefab 갱신.
+/// 보스는 풀 사용하지 않음 (BossEnemy가 직접 Instantiate/Destroy).
 /// </summary>
 public class ObjectPool : MonoBehaviour
 {
     public static ObjectPool Instance { get; private set; }
 
     [Header("Prefabs")]
-    [SerializeField] private GameObject _chaserPrefab;
-    [SerializeField] private GameObject _rusherPrefab;
+    [Tooltip("현재 스테이지의 잡몹 프리팹 (Slime/Skeleton/Goblin 등 — EnemyType.Mob).")]
+    [FormerlySerializedAs("_chaserPrefab")]
+    [SerializeField] private GameObject _mobPrefab;
 
     [Header("Pool Sizes")]
-    [SerializeField] private int _chaserInitialSize = 50;
-    [SerializeField] private int _rusherInitialSize = 20;
+    [FormerlySerializedAs("_chaserInitialSize")]
+    [SerializeField] private int _mobInitialSize = 60;
 
     private readonly Dictionary<EnemyType, Queue<GameObject>> _pools = new();
     private readonly Dictionary<EnemyType, GameObject> _prefabs = new();
@@ -31,11 +34,8 @@ public class ObjectPool : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        _prefabs[EnemyType.Chaser] = _chaserPrefab;
-        _prefabs[EnemyType.Rusher] = _rusherPrefab;
-
-        Prewarm(EnemyType.Chaser, _chaserInitialSize);
-        Prewarm(EnemyType.Rusher, _rusherInitialSize);
+        _prefabs[EnemyType.Mob] = _mobPrefab;
+        Prewarm(EnemyType.Mob, _mobInitialSize);
     }
 
     private void Prewarm(EnemyType type, int count)
