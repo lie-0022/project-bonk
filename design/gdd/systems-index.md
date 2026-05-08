@@ -55,6 +55,11 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 | 24 | 보스 몬스터 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 적 AI, 체력 시스템 |
 | 25 | 랭킹 시스템 | Meta | Alpha 🟣 | 신규 필요 | — | — | 게임 상태 관리 |
 | 26 | 외부 재화·해금 | Meta | Alpha 🟣 | 신규 필요 | — | — | 랭킹, 게임 상태 |
+| 27 | 결과 화면 (GameOver/Win) | UI | MVP 🔴 | Implemented (no doc) | — | GameOverUI.cs, RunStats.cs | 게임 상태 관리, 경험치/골드, 적 AI |
+| 28 | 메인 메뉴 | UI | MVP 🔴 | In Progress | — | MainMenuUI.cs | 게임 상태 관리 |
+| 29 | 옵션 영속화 | Infra | MVP 🟡 | Implemented (no doc) | — | SettingsService.cs | 없음 (PlayerPrefs 래퍼) |
+| 30 | 오디오 시스템 | Infra | MVP 🔴 | In Progress | — | AudioManager.cs | 옵션 영속화 |
+| 31 | Editor 자동화 | Editor 🛠 | — | Implemented (no doc) | — | PlayModeStartScene.cs | 없음 (개발 편의) |
 
 ---
 
@@ -65,8 +70,10 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 | **Core** | 모든 것의 기반 — 카메라, 상태 관리, 오브젝트 풀링 |
 | **Gameplay** | 게임을 재미있게 만드는 시스템 — 전투, AI, 이동 |
 | **Progression** | 플레이어 성장 — XP, 레벨업, 골드, 무기 선택 |
-| **UI** | 플레이어 정보 표시 — HUD, 무기 선택, 피격 피드백 |
+| **UI** | 플레이어 정보 표시 — HUD, 무기 선택, 피격 피드백, 화면 흐름 |
 | **Meta** | 런 간 영구 진행 — 랭킹, 해금 |
+| **Infra** | 게임 외 영속/외부 연결 — 옵션 저장, 오디오 채널 |
+| **Editor** 🛠 | 개발자 편의 도구 — 빌드 설정, Play 자동화 |
 
 ---
 
@@ -162,14 +169,16 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 
 | 지표 | 수치 |
 |------|------|
-| 총 시스템 수 | 26 |
-| MVP 시스템 수 | 20 |
+| 총 시스템 수 | 31 |
+| MVP 시스템 수 (게임 시스템) | 20 |
+| MVP 시스템 수 (UI/Infra 추가) | +4 |
 | Vertical Slice 시스템 수 | 4 |
 | Alpha 시스템 수 | 2 |
-| Implemented (코드+문서) | 20 / 26 |
-| Implemented (no doc) | 0 / 26 ✅ |
-| 설계 문서 있음 | 20 / 26 |
-| MVP 구현 완료 | 20 / 20 ✅ |
+| Editor 도구 | 1 |
+| Implemented (코드+문서) | 20 / 31 |
+| Implemented (no doc) | 3 / 31 (GameOver UI / SettingsService / PlayModeStartScene) |
+| In Progress | 2 / 31 (MainMenu / AudioManager — 인프라/골격만) |
+| 게임 시스템 MVP 구현 완료 | 20 / 20 ✅ |
 
 ---
 
@@ -179,6 +188,9 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 - [x] 골드 시스템 GDD 작성 (`design/gdd/gold-system.md`) — 2026-05-08
 - [x] 등급 시스템 GDD 작성 (`design/gdd/grade-system.md`) — 2026-05-08
 - [x] 피격 피드백 GDD 작성 (`design/gdd/hit-feedback.md`) — 2026-05-08
+- [ ] 결과 화면 GDD 작성 (`design/gdd/results-screen.md`) — RunStats + GameOverUI 통합
+- [ ] 옵션 영속화 GDD 작성 (`design/gdd/settings-service.md`) — PlayerPrefs 키 정의 + 기본값 + UI 슬라이더 매핑
+- [ ] 오디오 시스템 GDD 작성 (`design/gdd/audio-system.md`) — 채널 구조 + 카탈로그 SO 설계 + AudioMixer 도입 시점
 
 ### Vertical Slice 단계 진입 시
 - [ ] 캐릭터 선택 시스템 — 시작 캐릭터(검사/거너/마법사) 분기
