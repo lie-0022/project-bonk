@@ -6,4 +6,5 @@ public enum EnemyType
     None = 0,
     Chaser,   // 근접 추적형
     Rusher,   // 돌진형
+    Boss,     // 보스 (1회성, 풀 미사용)
 }

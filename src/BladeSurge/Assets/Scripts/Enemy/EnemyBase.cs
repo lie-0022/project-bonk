@@ -110,10 +110,19 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
             _rb.linearVelocity = Vector3.zero;
     }
 
-    private void HandleDeath(float xpReward)
+    /// <summary>
+    /// 사망 처리. 서브클래스에서 풀 미사용/특수 처리(Win 트리거 등) 가 필요하면 override.
+    /// </summary>
+    protected virtual void HandleDeath(float xpReward)
     {
-        OnEnemyDied?.Invoke(xpReward, transform.position);
+        FireEnemyDied(xpReward, transform.position);
         Deactivate();
         ObjectPool.Instance.ReturnToPool(gameObject, EnemyType);
+    }
+
+    /// <summary>OnEnemyDied 정적 이벤트를 발화한다. 서브클래스가 풀 우회 사망 처리 시 사용.</summary>
+    protected static void FireEnemyDied(float xpReward, Vector3 position)
+    {
+        OnEnemyDied?.Invoke(xpReward, position);
     }
 }

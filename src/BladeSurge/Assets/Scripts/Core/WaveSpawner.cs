@@ -21,6 +21,14 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _waveDuration = 60f;
     [SerializeField] private float _waveTransitionDelay = 1f;
 
+    [Header("Boss")]
+    [Tooltip("이 웨이브가 종료된 직후 보스를 스폰한다. 1-based. 0 또는 음수면 비활성.")]
+    [SerializeField] private int _bossSpawnAfterWave = 1;
+    [Tooltip("보스 프리팹 (BossEnemy 컴포넌트 부착 필요).")]
+    [SerializeField] private GameObject _bossPrefab;
+    [Tooltip("보스 스폰 거리 (플레이어로부터).")]
+    [SerializeField] private float _bossSpawnRadius = 15f;
+
     [Header("Wave Data")]
     [SerializeField] private WaveData[] _waves = new WaveData[]
     {
@@ -43,6 +51,7 @@ public class WaveSpawner : MonoBehaviour
     private float _waveTimer;
     private bool _inTransition;
     private float _transitionTimer;
+    private bool _bossSpawned;
 
     private void Start()
     {
@@ -121,11 +130,23 @@ public class WaveSpawner : MonoBehaviour
 
     private void AdvanceWave()
     {
+        // 지정된 웨이브 종료 후 보스 스폰 (한 번만)
+        if (!_bossSpawned && _bossSpawnAfterWave > 0 && CurrentWave == _bossSpawnAfterWave)
+            SpawnBoss();
+
         if (CurrentWave >= _waves.Length)
         {
-            // 모든 웨이브 완료 → Win
+            // 모든 웨이브 완료. 보스 모드일 때는 보스 사망이 Win을 트리거하므로 여기선 스폰만 정지.
             _isSpawning = false;
-            GameManager.Instance.ChangeState(GameState.Win);
+            if (_bossSpawnAfterWave <= 0 && !_bossSpawned)
+            {
+                // 보스 모드 비활성 — 기존 동작(웨이브 클리어 = Win)
+                GameManager.Instance.ChangeState(GameState.Win);
+            }
+            else
+            {
+                Debug.Log("[WaveSpawner] 모든 웨이브 종료 — 보스 사망 대기 중");
+            }
             return;
         }
 
@@ -135,6 +156,37 @@ public class WaveSpawner : MonoBehaviour
         _isSpawning = false;
 
         Debug.Log($"[WaveSpawner] Wave {CurrentWave} 전환 중...");
+    }
+
+    private void SpawnBoss()
+    {
+        if (_bossPrefab == null)
+        {
+            Debug.LogWarning("[WaveSpawner] Boss 프리팹 미설정 — 보스 스폰 생략");
+            _bossSpawned = true;
+            return;
+        }
+        if (_playerTransform == null) return;
+
+        float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        Vector3 offset = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * _bossSpawnRadius;
+        Vector3 spawnPos = _playerTransform.position + offset;
+        spawnPos.y = Mathf.Max(spawnPos.y, 1f);
+
+        GameObject obj = Instantiate(_bossPrefab, spawnPos, Quaternion.identity);
+        var boss = obj.GetComponent<BossEnemy>();
+        if (boss == null)
+        {
+            Debug.LogError("[WaveSpawner] Boss 프리팹에 BossEnemy 컴포넌트 없음");
+            Destroy(obj);
+            return;
+        }
+
+        boss.OnSpawn();
+        boss.Activate(_playerTransform);
+        _bossSpawned = true;
+
+        Debug.Log($"[WaveSpawner] Boss 스폰 (Wave {CurrentWave} 종료 후)");
     }
 
     private void StartWave(int waveIndex)
