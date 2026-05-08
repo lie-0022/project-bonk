@@ -1,51 +1,60 @@
-# Systems Index: [TBD]
+# Systems Index: BladeSurge (Bonk)
 
-> **Status**: Updated
+> **Status**: MVP 18 시스템 구현 완료 — 자산 통합/폴리싱 단계
 > **Created**: 2026-03-26
-> **Last Updated**: 2026-04-17
+> **Last Updated**: 2026-05-08
 > **Source Concept**: design/gdd/game-concept.md
 
 ---
 
 ## Overview
 
-[TBD]는 귀엽고 밝은 중세판타지 세계관의 3D 뱀파이어 서바이벌라이크다.
+BladeSurge(Bonk)는 귀엽고 밝은 중세판타지 세계관의 3D 뱀파이어 서바이벌라이크다.
 플레이어는 검사·마법사·거너 중 하나를 선택해 3개 스테이지(3분/5분/7분)를 생존한다.
 코어 루프는 "이동·회피·점프 → 자동공격 → 적 처치 → 경험치·골드 획득 → 무기 획득·강화 → 반복"으로 구성된다.
-MVP(1-2주)는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 한다.
+MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02 기준 18 MVP 시스템 모두 구현 완료.
+
+---
+
+## Status 범례
+
+- **Designed** — 설계 문서만 존재
+- **Implemented** — 코드 + 설계 문서 모두 존재
+- **Implemented (no doc)** — 코드만 존재, 설계 문서 미작성
+- **신규 필요** — 코드/문서 둘 다 없음
 
 ---
 
 ## Systems Enumeration
 
-| # | System Name | Category | Priority | Status | Design Doc | Depends On |
-|---|-------------|----------|----------|--------|------------|------------|
-| 1 | 오빗 카메라 | Core | MVP 🔴 | Designed | design/gdd/camera-system.md | 없음 |
-| 2 | 게임 상태 관리 | Core | MVP 🔴 | Designed | design/gdd/game-state-manager.md | 없음 |
-| 3 | 체력 시스템 | Core | MVP 🔴 | Designed | design/gdd/health-system.md | 없음 |
-| 4 | 오브젝트 풀링 | Core | MVP 🟢 | Designed | design/gdd/object-pooling.md | 없음 |
-| 5 | 플레이어 이동+점프 | Core | MVP 🔴 | Designed | design/gdd/player-movement.md | 오빗 카메라, 게임 상태 관리 |
-| 6 | 데미지 시스템 | Gameplay | MVP 🔴 | Designed | design/gdd/damage-system.md | 체력 시스템 |
-| 7 | 기본 자동 공격 | Gameplay | MVP 🔴 | Designed | design/gdd/basic-attack.md | 데미지 시스템 |
-| 8 | 적 AI | Gameplay | MVP 🔴 | Designed | design/gdd/enemy-ai.md | 체력 시스템, 플레이어 이동 |
-| 9 | 웨이브 스폰 | Gameplay | MVP 🔴 | Designed | design/gdd/wave-spawner.md | 적 AI, 오브젝트 풀링 |
-| 10 | 경험치 시스템 | Progression | MVP 🔴 | Designed | design/gdd/xp-system.md | 적 AI |
-| 11 | 골드 시스템 | Progression | MVP 🟡 | 신규 필요 | — | 적 AI |
-| 12 | 무기 획득 시스템 | Gameplay | MVP 🔴 | Designed | design/gdd/weapon-system.md | 데미지 시스템 |
-| 13 | 스펙 시스템 | Progression | MVP 🟡 | Designed | design/gdd/spec-system.md | 무기 획득 시스템 |
-| 14 | 레벨업·상자 선택 | Progression | MVP 🔴 | Designed | design/gdd/levelup-selection.md | 경험치 시스템, 무기 획득, 스펙 |
-| 15 | 등급 시스템 | Progression | MVP 🟡 | 신규 필요 | — | 무기·스펙 시스템 |
-| 16 | 선택 UI (레벨업·상자) | UI | MVP 🟡 | Designed | design/gdd/weapon-selection-ui.md | 무기 획득, 레벨업 선택 |
-| 17 | 바닥 드롭 아이템 | Gameplay | MVP 🟡 | Designed | design/gdd/drop-items.md | 적 AI |
-| 18 | HUD 시스템 | UI | MVP 🟡 | Designed | design/gdd/hud-system.md | 체력, XP, 무기, 골드, 게임 상태 |
-| 19 | 피격 피드백 | UI | MVP 🟡 | 신규 필요 | — | 데미지 시스템 |
-| 20 | 상자 기본 | Gameplay | MVP 🟡 | 신규 필요 | — | 골드, 등급 시스템 |
-| 19 | 캐릭터 선택 | UI | Vertical 🔵 | 신규 필요 | — | 게임 상태 관리 |
-| 20 | 상인 시스템 | Gameplay | Vertical 🔵 | 신규 필요 | — | 골드, 등급 시스템 |
-| 21 | 스테이지 진행 | Core | Vertical 🔵 | 신규 필요 | — | 게임 상태, 웨이브 스폰 |
-| 22 | 보스 몬스터 | Gameplay | Vertical 🔵 | 신규 필요 | — | 적 AI, 체력 시스템 |
-| 23 | 랭킹 시스템 | Meta | Alpha 🟣 | 신규 필요 | — | 게임 상태 관리 |
-| 24 | 외부 재화·해금 | Meta | Alpha 🟣 | 신규 필요 | — | 랭킹, 게임 상태 |
+| # | System Name | Category | Priority | Status | Design Doc | Code | Depends On |
+|---|-------------|----------|----------|--------|------------|------|------------|
+| 1 | 오빗 카메라 | Core | MVP 🔴 | Implemented | design/gdd/camera-system.md | CameraController.cs | 없음 |
+| 2 | 게임 상태 관리 | Core | MVP 🔴 | Implemented | design/gdd/game-state-manager.md | GameManager.cs | 없음 |
+| 3 | 체력 시스템 | Core | MVP 🔴 | Implemented | design/gdd/health-system.md | HealthComponent.cs | 없음 |
+| 4 | 오브젝트 풀링 | Core | MVP 🟢 | Implemented | design/gdd/object-pooling.md | ObjectPool.cs, PickupPool.cs | 없음 |
+| 5 | 플레이어 이동+점프 | Core | MVP 🔴 | Implemented | design/gdd/player-movement.md | PlayerController.cs | 오빗 카메라, 게임 상태 관리 |
+| 6 | 데미지 시스템 | Gameplay | MVP 🔴 | Implemented | design/gdd/damage-system.md | DamageDealer.cs | 체력 시스템 |
+| 7 | 기본 자동 공격 | Gameplay | MVP 🔴 | Implemented | design/gdd/basic-attack.md | BasicAttack.cs | 데미지 시스템 |
+| 8 | 적 AI | Gameplay | MVP 🔴 | Implemented | design/gdd/enemy-ai.md | EnemyBase.cs, ChaserAI.cs, RusherAI.cs | 체력 시스템, 플레이어 이동 |
+| 9 | 웨이브 스폰 | Gameplay | MVP 🔴 | Implemented | design/gdd/wave-spawner.md | WaveSpawner.cs | 적 AI, 오브젝트 풀링 |
+| 10 | 경험치 시스템 | Progression | MVP 🔴 | Implemented | design/gdd/xp-system.md | XPSystem.cs, XPOrb.cs | 적 AI |
+| 11 | 골드 시스템 | Progression | MVP 🟡 | Implemented | design/gdd/gold-system.md | GoldSystem.cs, GoldOrb.cs | 적 AI |
+| 12 | 무기 획득 시스템 | Gameplay | MVP 🔴 | Implemented | design/gdd/weapon-system.md | WeaponSystem.cs, WeaponSlot.cs, WeaponDataSO.cs, SwordAttack/GunAttack/MagicAttack.cs, Projectile.cs | 데미지 시스템 |
+| 13 | 스펙 시스템 | Progression | MVP 🟡 | Implemented | design/gdd/spec-system.md | PlayerStats.cs, PlayerStatsBinder.cs | 무기 획득 시스템 |
+| 14 | 레벨업·상자 선택 | Progression | MVP 🔴 | Implemented | design/gdd/levelup-selection.md | LevelupWeaponSelection.cs | 경험치 시스템, 무기 획득, 스펙 |
+| 15 | 등급 시스템 | Progression | MVP 🟡 | Implemented | design/gdd/grade-system.md | CardGrade.cs, CardGradeRoller.cs | 무기·스펙 시스템 |
+| 16 | 선택 UI (레벨업·상자) | UI | MVP 🟡 | Implemented | design/gdd/weapon-selection-ui.md | WeaponSelectionUI.cs | 무기 획득, 레벨업 선택 |
+| 17 | 바닥 드롭 아이템 | Gameplay | MVP 🟡 | Implemented | design/gdd/drop-items.md | DropItem.cs, DropItemSpawner.cs, DropItemEffects.cs | 적 AI |
+| 18 | HUD 시스템 | UI | MVP 🟡 | Implemented | design/gdd/hud-system.md | HpBarUI/XpBarUI/TopBarUI/DashCooldownUI/WeaponSlotsHUD/PassiveSlotsHUD/StatsPanelUI/ChestPromptUI.cs | 체력, XP, 무기, 골드, 게임 상태 |
+| 19 | 피격 피드백 | UI | MVP 🟡 | Implemented | design/gdd/hit-feedback.md | HitFlash.cs, IHitFeedback.cs | 데미지 시스템 |
+| 20 | 상자 기본 | Gameplay | MVP 🟡 | Implemented | design/gdd/chest-system.md | ChestSystem.cs, ChestSpawner.cs, Chest.cs | 골드, 등급 시스템 |
+| 21 | 캐릭터 선택 | UI | Vertical 🔵 | 신규 필요 | — | — | 게임 상태 관리 |
+| 22 | 상인 시스템 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 골드, 등급 시스템 |
+| 23 | 스테이지 진행 | Core | Vertical 🔵 | 신규 필요 | — | — | 게임 상태, 웨이브 스폰 |
+| 24 | 보스 몬스터 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 적 AI, 체력 시스템 |
+| 25 | 랭킹 시스템 | Meta | Alpha 🟣 | 신규 필요 | — | — | 게임 상태 관리 |
+| 26 | 외부 재화·해금 | Meta | Alpha 🟣 | 신규 필요 | — | — | 랭킹, 게임 상태 |
 
 ---
 
@@ -153,19 +162,31 @@ MVP(1-2주)는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 한다.
 
 | 지표 | 수치 |
 |------|------|
-| 총 시스템 수 | 24 |
-| MVP 시스템 수 | 18 |
-| Vertical Slice 시스템 수 | 5 |
+| 총 시스템 수 | 26 |
+| MVP 시스템 수 | 20 |
+| Vertical Slice 시스템 수 | 4 |
 | Alpha 시스템 수 | 2 |
-| 설계 문서 있음 | 16 / 24 |
+| Implemented (코드+문서) | 20 / 26 |
+| Implemented (no doc) | 0 / 26 ✅ |
+| 설계 문서 있음 | 20 / 26 |
+| MVP 구현 완료 | 20 / 20 ✅ |
 
 ---
 
 ## Next Steps
 
-- [ ] `CameraController.cs` — 오빗 카메라 구현
-- [ ] `PlayerController.cs` — 점프·낙하 데미지 추가, 오빗 카메라 기준 이동
-- [ ] `WeaponSystem.cs` — 무기 획득·자동 발동 구현
-- [ ] `LevelupWeaponSelection.cs` — 레벨업 무기 선택 구현
-- [ ] 골드 시스템 GDD 작성
-- [ ] 등급 시스템 GDD 작성
+### 문서 보완 (코드는 있으나 GDD 미작성)
+- [x] 골드 시스템 GDD 작성 (`design/gdd/gold-system.md`) — 2026-05-08
+- [x] 등급 시스템 GDD 작성 (`design/gdd/grade-system.md`) — 2026-05-08
+- [x] 피격 피드백 GDD 작성 (`design/gdd/hit-feedback.md`) — 2026-05-08
+
+### Vertical Slice 단계 진입 시
+- [ ] 캐릭터 선택 시스템 — 시작 캐릭터(검사/거너/마법사) 분기
+- [ ] 보스 몬스터 시스템 — 모델 + AI + 등장 트리거 + 체력바
+- [ ] 스테이지 진행 시스템 — Stage 1/2/3 전환
+
+### MVP 폴리싱 (구현된 시스템 대상)
+- [ ] UI 시각 디자인 — `production/remaining-work.md` 1장 참조
+- [ ] 사운드 통합 — 9 카테고리 (`production/remaining-work.md` 3장)
+- [ ] VFX 통합 — 5 카테고리 (`production/remaining-work.md` 4장)
+- [ ] 자산 통합 — 맵·캐릭터·보스 모델링 (`production/remaining-work.md` 2장)
