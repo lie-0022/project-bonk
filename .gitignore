@@ -152,6 +152,9 @@ src/BladeSurge/Assets/_Recovery/
 # === Unity 디버그 스크린샷 (UnityMCP 캡처) ===
 src/BladeSurge/Assets/Screenshots/
 
+# === 미적용/검토 중인 임시 자산 (커밋 금지) ===
+src/BladeSurge/Assets/_Imports/
+
 # === Backup files ===
 *.backup_*
 *.backup
