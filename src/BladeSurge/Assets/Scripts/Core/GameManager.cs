@@ -75,20 +75,33 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ChangeState(GameState newState)
     {
+        Debug.Log($"[GameManager.ChangeState] {CurrentState} -> {newState}");
         if (CurrentState == newState) return;
 
         CurrentState = newState;
         Time.timeScale = (newState == GameState.Paused) ? 0f : 1f;
-        OnGameStateChanged?.Invoke(newState);
+        try
+        {
+            OnGameStateChanged?.Invoke(newState);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[GameManager.ChangeState] OnGameStateChanged subscriber threw: {e}");
+        }
 
         if (newState == GameState.GameOver || newState == GameState.Win)
+        {
+            Debug.Log("[GameManager.ChangeState] starting LoadResultsAfterDelay coroutine");
             StartCoroutine(LoadResultsAfterDelay());
+        }
     }
 
     private IEnumerator LoadResultsAfterDelay()
     {
+        Debug.Log($"[GameManager.LoadResultsAfterDelay] waiting {_gameOverTransitionDelay}s");
         // 사망/클리어 연출 시간 확보
         yield return new WaitForSecondsRealtime(_gameOverTransitionDelay);
+        Debug.Log($"[GameManager.LoadResultsAfterDelay] loading scene '{_gameOverSceneName}'");
         Time.timeScale = 1f;
         SceneManager.LoadScene(_gameOverSceneName);
     }
