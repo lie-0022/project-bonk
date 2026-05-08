@@ -32,12 +32,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ObjectPool.Instance.Initialize();
-        PickupPool.Instance.Initialize();
-        XPSystem.Instance.Initialize();
-        GoldSystem.Instance.Initialize();
+        Debug.Log("[GameManager.Start] begin — initializing subsystems");
+        try { ObjectPool.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] ObjectPool.Initialize threw: {e}"); }
+        try { PickupPool.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] PickupPool.Initialize threw: {e}"); }
+        try { XPSystem.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] XPSystem.Initialize threw: {e}"); }
+        try { GoldSystem.Instance.Initialize(); } catch (System.Exception e) { Debug.LogError($"[GameManager.Start] GoldSystem.Initialize threw: {e}"); }
 
         ChangeState(GameState.Playing);
+        Debug.Log($"[GameManager.Start] done — state={CurrentState}");
     }
 
     private void Update()
