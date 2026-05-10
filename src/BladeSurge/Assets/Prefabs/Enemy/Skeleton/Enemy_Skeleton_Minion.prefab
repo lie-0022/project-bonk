@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8310173676162138762}
   - component: {fileID: 5646571930085734012}
   - component: {fileID: 2867033072630249200}
+  - component: {fileID: 1311769176343372076}
   m_Layer: 9
   m_Name: Enemy_Skeleton_Minion
   m_TagString: Enemy
@@ -166,6 +167,19 @@ MonoBehaviour:
   _horizontalImpulse: 1.5
   _torque: 5
   _despawnAfter: 5
+--- !u!114 &1311769176343372076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487335593461023878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 1
 --- !u!1001 &1538493666953026876
 PrefabInstance:
   m_ObjectHideFlags: 0

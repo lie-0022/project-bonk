@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1633094041069799001}
   - component: {fileID: 3901627601033023220}
   - component: {fileID: 8957038245392038925}
+  - component: {fileID: 8894143076829985577}
   m_Layer: 9
   m_Name: Boss_Goblin
   m_TagString: Enemy
@@ -186,6 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   _spawnInvincibilityDuration: 0.5
+  _spawnAnimDelay: 0
+  _deathAnimDelay: 0
   _bossName: GOBLIN CHIEF
   _hpBarColor: {r: 0.7, g: 0.45, b: 0.2, a: 1}
   _goldReward: 200
@@ -206,3 +209,16 @@ MonoBehaviour:
   _contactDamage: 25
   _contactInterval: 0.8
   _contactRadius: 2.5
+--- !u!114 &8894143076829985577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 2

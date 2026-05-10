@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4681919610624519167}
   - component: {fileID: 4309747408120970121}
   - component: {fileID: 1664601698569914598}
+  - component: {fileID: 159784859300641680}
   m_Layer: 9
   m_Name: Enemy_Slime
   m_TagString: Enemy
@@ -114,6 +115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaserAI
   _spawnInvincibilityDuration: 0.5
+  _spawnAnimDelay: 0
+  _deathAnimDelay: 0
   _moveSpeed: 3.5
   _contactDamage: 8
   _contactInterval: 0.5
@@ -131,6 +134,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitFlash
   _flashDuration: 0.1
+--- !u!114 &159784859300641680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6522973415233889521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 1
 --- !u!1001 &8342255408362037185
 PrefabInstance:
   m_ObjectHideFlags: 0

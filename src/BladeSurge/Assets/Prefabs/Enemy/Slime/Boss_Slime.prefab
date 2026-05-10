@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3901627601033023220}
   - component: {fileID: 8957038245392038925}
   - component: {fileID: 8961591166928667358}
+  - component: {fileID: 7640777763770293228}
   m_Layer: 9
   m_Name: Boss_Slime
   m_TagString: Enemy
@@ -105,6 +106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   _spawnInvincibilityDuration: 0.5
+  _spawnAnimDelay: 0
+  _deathAnimDelay: 0
   _bossName: SLIME KING
   _hpBarColor: {r: 0.3, g: 0.85, b: 0.4, a: 1}
   _goldReward: 200
@@ -148,6 +151,19 @@ CapsuleCollider:
   m_Height: 11.856112
   m_Direction: 1
   m_Center: {x: 0, y: 4.8994484, z: -0.16868591}
+--- !u!114 &7640777763770293228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 2
 --- !u!1001 &7201268733026683845
 PrefabInstance:
   m_ObjectHideFlags: 0

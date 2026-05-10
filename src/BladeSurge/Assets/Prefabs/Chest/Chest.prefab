@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3207012183426636622}
   - component: {fileID: 5322234124384451587}
   - component: {fileID: 4774578767198392530}
+  - component: {fileID: 4510644633543726677}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -70,6 +71,19 @@ MonoBehaviour:
   _interactRadius: 3
   _openDelay: 1.2
   _closedChildPrefix: Closed_
+--- !u!114 &4510644633543726677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2227707435454547597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 3
 --- !u!1001 &7995920114905388147
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6310086151525983480}
   - component: {fileID: 9059797424172283576}
   - component: {fileID: 8310173676162138762}
+  - component: {fileID: 1517749942134812306}
   m_Layer: 9
   m_Name: Enemy_Goblin
   m_TagString: Enemy
@@ -125,10 +126,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaserAI
   _spawnInvincibilityDuration: 0.5
+  _spawnAnimDelay: 0
+  _deathAnimDelay: 0
   _moveSpeed: 3.5
   _contactDamage: 8
   _contactInterval: 0.5
   _contactRadius: 1.2
+--- !u!114 &1517749942134812306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487335593461023878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd2d5b778fff5b43be9744e366781a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
+  _type: 1
 --- !u!1001 &7407532950801115870
 PrefabInstance:
   m_ObjectHideFlags: 0
