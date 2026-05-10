@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 8683379108056361020}
   - component: {fileID: 646954511087159141}
   - component: {fileID: 7688850845347570580}
+  - component: {fileID: 1899711132927789749}
+  - component: {fileID: 5251465253696480052}
   m_Layer: 9
   m_Name: Boss_Skeleton
   m_TagString: Enemy
@@ -199,6 +201,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapTracker
   _type: 2
+--- !u!114 &1899711132927789749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d450df4be6b1984b94ea6efbe61f1be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossAttackOrchestrator
+  _initialDelay: 3
+  _intervalBetweenAttacks: 1
+--- !u!114 &5251465253696480052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e8d2e9c8596fe489f273636660b50a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroundSlamAttack
+  _cooldown: 5
+  _windupDuration: 1.5
+  _damage: 50
+  _radius: 4
+  _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _impactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
+  _targetPlayer: 1
 --- !u!1001 &285046948659275734
 PrefabInstance:
   m_ObjectHideFlags: 0
