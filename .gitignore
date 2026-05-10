@@ -155,6 +155,10 @@ src/BladeSurge/Assets/Screenshots/
 # === 미적용/검토 중인 임시 자산 (커밋 금지) ===
 src/BladeSurge/Assets/_Imports/
 
+# === GitHub 100MB 한도 초과 대용량 자산 (로컬 전용, 협업 시 별도 공유) ===
+src/BladeSurge/Assets/Art/Pickups/Chest/Art/Meshes/Chest/Meshes.fbx
+src/BladeSurge/Assets/Art/Pickups/Chest/Art/Meshes/Chest/Meshes.fbx.meta
+
 # === Backup files ===
 *.backup_*
 *.backup

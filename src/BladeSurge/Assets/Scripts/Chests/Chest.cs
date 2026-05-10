@@ -11,6 +11,12 @@ using UnityEngine.InputSystem;
 public class Chest : MonoBehaviour
 {
     [SerializeField] private float _interactRadius = 2.0f;
+    [Tooltip("열림 연출 후 GameObject 파괴까지 지연(초). 0이면 즉시.")]
+    [SerializeField] private float _openDelay = 1.2f;
+    [Tooltip("Visual 자식의 어떤 자식들을 닫힘 시 활성화할지. 'Closed' 접두사로 자동 인식.")]
+    [SerializeField] private string _closedChildPrefix = "Closed_";
+
+    private bool _opened;
 
     /// <summary>가장 가까운 상자가 바뀔 때 발동. (chest 또는 null, cost)</summary>
     public static event Action<Chest, int> OnNearestChanged;
@@ -84,12 +90,38 @@ public class Chest : MonoBehaviour
 
     private void TryOpen()
     {
+        if (_opened) return;
         var system = ChestSystem.Instance;
         if (system == null) return;
 
-        if (system.TryPurchase())
-            Destroy(gameObject);
-        // OnDisable이 s_active에서 제거 + nearest null 통지 처리
+        if (!system.TryPurchase()) return;
+        _opened = true;
+
+        // 닫힘 자식 비활성, 그 외(Opened/Gold) 활성 — 시각 전환
+        var visual = transform.Find("Visual");
+        if (visual != null)
+        {
+            foreach (Transform t in visual)
+            {
+                bool isClosed = t.name.StartsWith(_closedChildPrefix);
+                t.gameObject.SetActive(!isClosed);
+            }
+        }
+
+        // 즉시 nearest 통지 해제 — 더 이상 상호작용 불가
+        Deactivate();
+
+        if (_openDelay > 0f) Destroy(gameObject, _openDelay);
+        else Destroy(gameObject);
+    }
+
+    private void Deactivate()
+    {
+        if (s_active.Remove(this) && s_nearest == this)
+        {
+            s_nearest = null;
+            OnNearestChanged?.Invoke(null, 0);
+        }
     }
 
     private void OnDrawGizmosSelected()
