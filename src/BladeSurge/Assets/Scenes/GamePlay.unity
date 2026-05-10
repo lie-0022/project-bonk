@@ -1243,6 +1243,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 243589859}
   m_CullTransparentMesh: 1
+--- !u!1 &266082301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266082303}
+  - component: {fileID: 266082302}
+  m_Layer: 0
+  m_Name: JarSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &266082302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266082301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d645e1300b2c434bba761ede6379178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JarSpawner
+  _jarPrefab: {fileID: 5256059761181873141, guid: a4e26af728777ea4196e4779d1a69f61, type: 3}
+  _areaCenter: {x: 0, y: 0}
+  _areaSize: {x: 40, y: 40}
+  _spawnY: 0
+  _jarCount: 20
+  _minDistance: 3
+  _maxAttemptsPerJar: 30
+--- !u!4 &266082303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266082301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &308246923
 GameObject:
   m_ObjectHideFlags: 0
@@ -8029,3 +8080,4 @@ SceneRoots:
   - {fileID: 344260886}
   - {fileID: 2038637588}
   - {fileID: 1009488520}
+  - {fileID: 266082303}

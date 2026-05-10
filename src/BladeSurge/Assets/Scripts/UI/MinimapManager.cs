@@ -24,12 +24,14 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private float _bossSize   = 16f;
     [SerializeField] private float _chestSize  = 10f;
     [SerializeField] private float _coinSize   = 4f;
+    [SerializeField] private float _jarSize    = 6f;
 
     [SerializeField] private Color _playerColor = new Color(0.4f, 0.85f, 1f);
     [SerializeField] private Color _enemyColor  = new Color(0.9f, 0.2f, 0.2f);
     [SerializeField] private Color _bossColor   = new Color(1f, 0.1f, 0.1f);
     [SerializeField] private Color _chestColor  = new Color(1f, 0.85f, 0.2f);
     [SerializeField] private Color _coinColor   = new Color(1f, 0.95f, 0.4f);
+    [SerializeField] private Color _jarColor    = new Color(0.3f, 0.6f, 1f);
 
     [Tooltip("마커가 사용할 단색 흰 sprite. 비우면 Default-UI 사각형 사용.")]
     [SerializeField] private Sprite _markerSprite;
@@ -145,6 +147,7 @@ public class MinimapManager : MonoBehaviour
             case MinimapTracker.MarkerType.Boss:   return _bossSize;
             case MinimapTracker.MarkerType.Chest:  return _chestSize;
             case MinimapTracker.MarkerType.Coin:   return _coinSize;
+            case MinimapTracker.MarkerType.Jar:    return _jarSize;
             default: return _enemySize;
         }
     }
@@ -157,6 +160,7 @@ public class MinimapManager : MonoBehaviour
             case MinimapTracker.MarkerType.Boss:   return _bossColor;
             case MinimapTracker.MarkerType.Chest:  return _chestColor;
             case MinimapTracker.MarkerType.Coin:   return _coinColor;
+            case MinimapTracker.MarkerType.Jar:    return _jarColor;
             default: return _enemyColor;
         }
     }

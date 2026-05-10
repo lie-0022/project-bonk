@@ -13,6 +13,7 @@ public class MinimapTracker : MonoBehaviour
         Boss,
         Chest,
         Coin,
+        Jar,
     }
 
     [SerializeField] private MarkerType _type = MarkerType.Enemy;
