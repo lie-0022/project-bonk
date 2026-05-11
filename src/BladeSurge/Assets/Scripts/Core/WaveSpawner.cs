@@ -191,6 +191,9 @@ public class WaveSpawner : MonoBehaviour
         boss.Activate(_playerTransform);
         _bossSpawned = true;
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayBgm(BgmTrack.BossBattle);
+
         Debug.Log($"[WaveSpawner] Boss 스폰 (Wave {CurrentWave} 종료 후)");
     }
 

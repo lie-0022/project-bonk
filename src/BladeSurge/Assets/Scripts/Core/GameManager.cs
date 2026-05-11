@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
         XPSystem.Instance.Initialize();
         GoldSystem.Instance.Initialize();
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayBgmPlaylist(BgmTrack.GameplayStage1, BgmTrack.GameplayStage2);
+
         ChangeState(GameState.Playing);
     }
 
