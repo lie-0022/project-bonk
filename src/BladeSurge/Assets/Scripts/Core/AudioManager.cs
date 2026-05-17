@@ -113,6 +113,16 @@ public class AudioManager : MonoBehaviour
         _playlistIndex = 0;
     }
 
+    /// <summary>BGM 트랙의 AudioClip을 미리 메모리로 로드해 첫 재생 시 hitch를 방지.</summary>
+    public void PreloadBgm(BgmTrack track)
+    {
+        if (_catalog == null) return;
+        var entry = _catalog.GetBgm(track);
+        if (entry == null || entry.Clip == null) return;
+        if (entry.Clip.loadState != AudioDataLoadState.Loaded)
+            entry.Clip.LoadAudioData();
+    }
+
     private BgmTrack[] _playlistTracks;
     private int _playlistIndex;
 

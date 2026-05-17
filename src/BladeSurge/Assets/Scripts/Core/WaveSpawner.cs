@@ -51,6 +51,8 @@ public class WaveSpawner : MonoBehaviour
     private bool _inTransition;
     private float _transitionTimer;
     private bool _bossSpawned;
+    private GameObject _bossInstance;
+    private static readonly Vector3 PrewarmPosition = new Vector3(-9999f, -9999f, -9999f);
 
     /// <summary>Start 이전(Awake)에 호출해 보스 프리팹을 외부에서 교체. DebugStageSelector 용.</summary>
     public void SetBossPrefab(GameObject prefab)
@@ -68,8 +70,23 @@ public class WaveSpawner : MonoBehaviour
             return;
         }
 
+        PrewarmBoss();
+
         GameManager.OnGameStateChanged += OnGameStateChanged;
         StartWave(0);
+    }
+
+    // 보스 등장 시 hitch 방지: 프리팹을 화면 밖에 비활성 상태로 미리 Instantiate하고
+    // BGM AudioClip도 사전 로드해 메시/머티리얼/애니메이터/오디오를 GPU·메모리에 워밍.
+    private void PrewarmBoss()
+    {
+        if (_bossPrefab == null) return;
+
+        _bossInstance = Instantiate(_bossPrefab, PrewarmPosition, Quaternion.identity);
+        _bossInstance.SetActive(false);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PreloadBgm(BgmTrack.BossBattle);
     }
 
     private void OnDestroy()
@@ -178,7 +195,19 @@ public class WaveSpawner : MonoBehaviour
         Vector3 spawnPos = _playerTransform.position + offset;
         spawnPos.y = Mathf.Max(spawnPos.y, 1f);
 
-        GameObject obj = Instantiate(_bossPrefab, spawnPos, Quaternion.identity);
+        // Prewarmed 인스턴스 사용. 누락 시(SetBossPrefab이 Start 이후 호출된 경우 등) 즉시 Instantiate 폴백.
+        GameObject obj = _bossInstance;
+        if (obj == null)
+        {
+            obj = Instantiate(_bossPrefab, spawnPos, Quaternion.identity);
+        }
+        else
+        {
+            obj.transform.SetPositionAndRotation(spawnPos, Quaternion.identity);
+            obj.SetActive(true);
+            _bossInstance = null;
+        }
+
         var boss = obj.GetComponent<BossEnemy>();
         if (boss == null)
         {
