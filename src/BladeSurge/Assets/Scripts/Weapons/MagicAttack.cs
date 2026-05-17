@@ -18,6 +18,8 @@ public class MagicAttack : MonoBehaviour
             : nearest.transform.position;
         Vector3 dir = (targetPoint - _playerTransform.position).normalized;
 
+        AudioManager.Instance?.Play(SfxEvent.PlayerAttackMagic);
+
         int count = stats.ProjectileCount;
         float spreadAngle = 8f;
 

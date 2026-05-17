@@ -96,6 +96,7 @@ public class Chest : MonoBehaviour
 
         if (!system.TryPurchase()) return;
         _opened = true;
+        AudioManager.Instance?.Play(SfxEvent.ChestOpen);
 
         // 닫힘 자식 비활성, 그 외(Opened/Gold) 활성 — 시각 전환
         var visual = transform.Find("Visual");

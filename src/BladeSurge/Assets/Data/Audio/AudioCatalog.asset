@@ -12,7 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d730fbc3cf8ba74c9d74e0688e36c40, type: 3}
   m_Name: AudioCatalog
   m_EditorClassIdentifier: Assembly-CSharp::AudioCatalogSO
-  _sfxEntries: []
+  _sfxEntries:
+  - Event: 203
+    Clips:
+    - {fileID: 8300000, guid: 16ebded8e39ba7942a5e24ddab2317c0, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0.05
+  - Event: 300
+    Clips:
+    - {fileID: 8300000, guid: d52614cdfc227044db1eb2746fc42f9f, type: 3}
+    VolumeScale: 0.7
+    PitchVariance: 0.1
+  - Event: 301
+    Clips:
+    - {fileID: 8300000, guid: 7122928629001fe47bdd66f97f09088e, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0.05
+  - Event: 400
+    Clips:
+    - {fileID: 8300000, guid: 237ca58154f6f564cab11c0e2e7771ce, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0.05
+  - Event: 500
+    Clips:
+    - {fileID: 8300000, guid: 1e68dffb535b5594a8076744234e5688, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0
+  - Event: 600
+    Clips:
+    - {fileID: 8300000, guid: bede6a0e1ef502745a9ed50ae6702dc3, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0
+  - Event: 602
+    Clips:
+    - {fileID: 8300000, guid: 9c6787f9a5548f1479d9bd8182d4a23a, type: 3}
+    VolumeScale: 1
+    PitchVariance: 0
   _bgmEntries:
   - Track: 1
     Clip: {fileID: 8300000, guid: c6bb7025a3790734eba8bea3b3fbc475, type: 3}
@@ -20,10 +55,6 @@ MonoBehaviour:
     Loop: 1
   - Track: 2
     Clip: {fileID: 8300000, guid: fbbf429fbbea7104db0d7d91397ba6ba, type: 3}
-    VolumeScale: 1
-    Loop: 1
-  - Track: 3
-    Clip: {fileID: 8300000, guid: 1285a181ca485fb4289de26385ba7f09, type: 3}
     VolumeScale: 1
     Loop: 1
   - Track: 5

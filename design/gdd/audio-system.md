@@ -13,8 +13,7 @@ BGM/SFX/UI 3채널 오디오 시스템. AudioManager 싱글턴이 AudioCatalogSO
 | 트랙 enum | 파일명 | 사용처 | 후킹 |
 |---|---|---|---|
 | `MainMenu` | `BGM_MainMenu.mp3` (메인-판타지+신비로운) | 메인 메뉴 화면 | ❌ (메뉴 Canvas 미빌드) |
-| `GameplayStage1` | `BGM_Stage1.mp3` (배경1) | Stage 1 일반 진행 | ✅ 플레이리스트 [Stage1, Stage2] |
-| `GameplayStage2` | `BGM_Stage2.mp3` (배경2) | Stage 2 일반 진행 (현재 Stage1과 순환) | ✅ 동상 |
+| `GameplayStage1` | `BGM_Stage1.mp3` (배경1_join — 두 트랙 통합 단일) | Stage 1/2 일반 진행 (루프) | ✅ 단일 재생 |
 | `BossBattle` | `BGM_Boss.mp3` (보스전-빠른비트) | Stage 1/2 보스 등장 시 | ✅ WaveSpawner.SpawnBoss |
 | `BossBattleFinal` | `BGM_Boss_Final.mp3` (보스전-웅장) | Stage 3 진입 시 (보스만 등장) | ❌ Stage 시스템 미도입 |
 | `GameOver` | (미수신) | 사망 화면 | ❌ |
@@ -29,8 +28,7 @@ BGM/SFX/UI 3채널 오디오 시스템. AudioManager 싱글턴이 AudioCatalogSO
 `AudioManager.Instance.PlayBgmPlaylist(BgmTrack.A, BgmTrack.B, ...)` — 첫 트랙 재생 후 끝나면 다음 트랙, 끝까지 가면 첫 트랙으로 순환. 개별 클립의 `Loop` 플래그 무시하고 강제로 끝까지 재생 후 다음으로 넘어감.
 
 ### Stage별 BGM 정책
-- **Stage 1**: 플레이리스트 [배경1, 배경2] 순환. 보스 등장 시 → 보스전-빠른비트
-- **Stage 2**: 동일 플레이리스트 (현재 구현 단계에서). 보스 등장 시 → 보스전-빠른비트
+- **Stage 1/2**: `GameplayStage1` (배경1_join) 단일 루프. 보스 등장 시 → 보스전-빠른비트
 - **Stage 3**: ★처음부터 보스 등장★ → 보스전-웅장만 재생. 일반 BGM 없음
 - 클리어 시 → (GameClear 트랙 미수신, 일단 무음 또는 BGM 페이드아웃)
 - 게임오버 시 → (GameOver 트랙 미수신, 일단 무음)
@@ -77,16 +75,37 @@ pitch = 1 + Random.Range(-PitchVariance, +PitchVariance)
 
 ## Acceptance Criteria
 1. Play ▶ 시 BGM_Stage1 자동 재생
-2. BGM_Stage1 끝나면(약 97.6초 후) 자동으로 BGM_Stage2 재생, 그 후 BGM_Stage1로 순환
+2. BGM_Stage1 끝나면 자동으로 루프 (단일 트랙, 끊김 없음)
 3. 보스 스폰 시 BGM_Boss로 즉시 전환
 4. 동일 BGM 재호출 시 처음부터 다시 재생되지 않음
 5. SettingsService 볼륨 변경 → `AudioManager.ApplyVolumes()` 호출 시 즉시 반영
 
 ## 변경 이력
 - 2026-05-11: 초안 작성. BGM 5트랙 매핑, 플레이리스트 기능 추가, Stage3=BossFinal 전용 정책 확정 (김가연 기획).
+- 2026-05-17: 배경 트랙 join 단일본(`배경1_join.mp3`)으로 통합. `BgmTrack.GameplayStage2` 폐기, 플레이리스트 → 단일 재생으로 단순화. `BGM_Stage2.mp3` 삭제, `GameManager`는 `PlayBgm(GameplayStage1)` 단일 호출.
+- 2026-05-17: SFX 1차 통합 — 14 클립(검/총x2/마법x4/점프/적피격/적사망/코인/상자/레벨업/카드선택) 임포트, 10 이벤트 카탈로그 매핑, 호출부 10곳 후킹. `PlayerJump` enum 신규 추가.
+- 2026-05-17: 무기 공격 SFX 3종(Sword/Gun/Magic) 카탈로그에서 일시 비활성 — 시끄럽다는 피드백. 코드 후킹은 유지, 클립 파일도 보존. 톤/볼륨 조정 후 재활성 예정.
+
+## SFX 매핑 (2026-05-17 1차 통합)
+
+| SfxEvent | 채널 | 파일(들) | 후킹 위치 |
+|---|---|---|---|
+| `PlayerAttackSword` | SFX | (비활성) Player/Attack_Sword.mp3 | SwordAttack.Execute — 호출은 유지, 카탈로그 매핑 일시 제거 |
+| `PlayerAttackGun` | SFX | (비활성) Player/Attack_Gun_01~02.mp3 | GunAttack.Execute — 동일 |
+| `PlayerAttackMagic` | SFX | (비활성) Player/Attack_Magic_01~04.mp3 | MagicAttack.Execute — 동일 |
+| `PlayerJump` | SFX | Player/Jump.mp3 | PlayerController 점프 트리거 |
+| `EnemyHit` | SFX | Enemy/Hit.mp3 | HealthComponent.TakeDamage (태그 "Enemy") |
+| `EnemyDeath` | SFX | Enemy/Death.mp3 | HealthComponent.Die (태그 "Enemy") |
+| `PickupGold` | SFX | Pickup/Gold.mp3 | GoldOrb.Collect |
+| `ChestOpen` | SFX | UI/ChestOpen.mp3 | Chest.TryOpen |
+| `LevelUp` | UI | UI/LevelUp.mp3 | LevelupWeaponSelection.TryStartNext |
+| `CardSelect` | UI | UI/CardSelect.mp3 | WeaponSelectionUI.SelectIndex |
 
 ## 미수신 / 향후 추가 예정
-- 레벨업 SFX (`SfxEvent.LevelUp`) — 김가연 "다시 찾을 거에요"
-- 카드/선택지 SFX (`SfxEvent.CardAppear/CardSelect`) — 동상
-- 공격/피격/사망/픽업 등 27개 SFX 이벤트 — 미수신
-- `GameOver` / `GameClear` BGM — 미수신
+- **Player State**: PlayerHit / PlayerDeath / PlayerFootstep
+- **Boss**: BossHit / BossDeath / BossSpawn (현재 일반 적 SFX와 공유)
+- **Pickups**: PickupXp / PickupMagnet / PickupSpeed / PickupTimeStop
+- **Containers**: ChestLocked / JarBreak
+- **UI**: CardAppear / UiClick / UiHover
+- **Misc**: WeaponLevelUp
+- **BGM**: `GameOver` / `GameClear`

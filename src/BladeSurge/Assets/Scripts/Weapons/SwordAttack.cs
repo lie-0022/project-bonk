@@ -42,6 +42,7 @@ public class SwordAttack : MonoBehaviour
     {
         if (_isSweeping) return;
         Debug.Log($"[SwordAttack] Execute mode={_hitMode} lvl={slot.Level} swingCount={stats.ProjectileCount} sweepAngle={slot.FinalSweepAngle} dmg={slot.FinalDamage:F1} dur={slot.Data.SweepDuration / stats.ProjectileSpeed:F2}s");
+        AudioManager.Instance?.Play(SfxEvent.PlayerAttackSword);
         StartCoroutine(SwingSequence(slot, stats));
     }
 

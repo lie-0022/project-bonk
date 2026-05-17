@@ -15,6 +15,7 @@ public enum SfxEvent
     PlayerHit = 200,
     PlayerDeath,
     PlayerFootstep,
+    PlayerJump,
 
     // Enemy
     EnemyHit = 300,
@@ -52,8 +53,7 @@ public enum BgmTrack
     None = 0,
     MainMenu,
     GameplayStage1,
-    GameplayStage2,
-    GameplayStage3,
+    GameplayStage3 = 4,
     BossBattle,
     BossBattleFinal,
     GameOver,

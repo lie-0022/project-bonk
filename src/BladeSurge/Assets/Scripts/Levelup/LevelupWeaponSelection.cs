@@ -140,6 +140,7 @@ public class LevelupWeaponSelection : MonoBehaviour
         _previousTimeScale = Time.timeScale;
         Time.timeScale = 0f;
 
+        AudioManager.Instance?.PlayUi(SfxEvent.LevelUp);
         OnSelectionRequired.Invoke(choices);
     }
 

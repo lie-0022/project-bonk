@@ -63,6 +63,7 @@ public class GoldOrb : MonoBehaviour, IPoolable
     private void Collect()
     {
         GoldSystem.Instance.AddGold(_goldAmount);
+        AudioManager.Instance?.Play(SfxEvent.PickupGold);
         PickupPool.Instance.ReturnGoldOrb(gameObject);
     }
 }

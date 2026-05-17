@@ -51,6 +51,10 @@ public class HealthComponent : MonoBehaviour, IDamageable
         OnDamaged?.Invoke(amount, CurrentHp);
         OnHealthChanged?.Invoke();
 
+        // 적만 EnemyHit 재생 — 플레이어는 PlayerHit SFX 미수신 상태
+        if (CompareTag("Enemy"))
+            AudioManager.Instance?.Play(SfxEvent.EnemyHit);
+
         if (CurrentHp <= 0f)
             Die();
     }
@@ -109,6 +113,8 @@ public class HealthComponent : MonoBehaviour, IDamageable
     private void Die()
     {
         IsAlive = false;
+        if (CompareTag("Enemy"))
+            AudioManager.Instance?.Play(SfxEvent.EnemyDeath);
         OnDeath?.Invoke(_xpReward);
     }
 }

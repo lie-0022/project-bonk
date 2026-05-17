@@ -121,8 +121,14 @@ public abstract class EnemyBase : MonoBehaviour, IPoolable, IEnemyController
     private void OnGameStateChanged(GameState state)
     {
         _isActive = state == GameState.Playing;
-        if (!_isActive)
+        if (!_isActive && _rb != null)
             _rb.linearVelocity = Vector3.zero;
+    }
+
+    private void OnDisable()
+    {
+        // 풀 미사용 destroy 경로에서도 dangling delegate 방지
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
     }
 
     /// <summary>

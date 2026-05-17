@@ -167,6 +167,7 @@ public class WeaponSelectionUI : MonoBehaviour
         }
 
         var chosen = _currentChoices[index];
+        AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
         Hide();
         LevelupWeaponSelection.Instance?.Choose(chosen);
     }

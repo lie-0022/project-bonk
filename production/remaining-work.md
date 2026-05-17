@@ -1,7 +1,7 @@
 # 남은 작업 정리 (Remaining Work)
 
 > **Status**: Active
-> **Last Updated**: 2026-05-08
+> **Last Updated**: 2026-05-17
 > **Workflow**: B타입 (continuous flow, sprint X)
 
 본 문서는 **Bonk(BladeSurge) MVP → Vertical Slice → 출시까지** 남은 작업을 우선순위별로 정리한다.
@@ -28,9 +28,9 @@
 
 | ⏸️ | 항목 | 출처 |
 |---|---|---|
-| ⏸️ | Player 캐릭터 FBX 재수정 (피벗 발바닥, Height 2m, +Z forward) | 팀원 |
 | ⏸️ | 맵 FBX (숲 + 건물) | 팀원 |
-| ⏸️ | Goblin 적 FBX | 팀원 |
+| [x] | ~~Player 캐릭터 FBX 재수정~~ | 2026-05 통합 완료 (Idle/Run 애니 포함) |
+| [x] | ~~Goblin 적 FBX~~ | 2026-05-13 통합 완료 (모델·애니·프리팹·머티리얼) |
 
 ---
 
@@ -63,8 +63,8 @@
 
 | 상태 | 항목 | 비고 |
 |---|---|---|
-| [ ] | **미니맵 구현** | 씬에 Minimap 자리만 있음. 카메라 + 플레이어 점 + 적 점 + 상자/드롭 |
-| [ ] | **보스 체력바 구현** | BossBar GameObject 있음. 보스 등장 시 활성화 + HP 바인딩 |
+| [x] | **미니맵 구현** | UI 마커 기반 (2026-05-12). 정식 기능 유지 |
+| [x] | **보스 체력바 구현** | BossHpBar UI 씬 구성 + 표시 버그 3종 수정 완료 (2026-05) |
 
 ---
 
@@ -73,10 +73,13 @@
 | 상태 | 항목 | 비고 |
 |---|---|---|
 | [ ] | **맵 모델링 적용** | 받은 FBX import + 배치. 현재는 빈 평면 |
-| [ ] | **플레이어 모델링 적용** | 검사 1차 도입 시작됨 (피벗·크기 재수정 대기). 추후 거너/마법사 |
+| [~] | **플레이어 모델링 적용** | 검사 모델 + Idle/Run 애니 통합 완료 (2026-05-12). 거너/마법사 미도입 |
 | [ ] | **캐릭터 적용 (3종 분기)** | 시작 캐릭터 선택 → 해당 모델 활성. 옵션 A (3 프리팹 분리) 결정됨 |
-| [ ] | **보스 모델링** | 보스 자산 + AI |
-| [ ] | **드롭 아이템 시각** | 자석/이속/타임스톱 — 큐브 placeholder → 모델 |
+| [~] | **보스 모델링** | SlimeKing 모델 + Boss_Slime 프리팹 + 텔레그래프 AOE 공격 Phase A+B 완료. 추가 보스/패턴 확장은 미정 |
+| [~] | **드롭 아이템 시각** | 코인 에셋(TwoUncleVFX GoldenCoin) + VFX Graph 도입 완료. 자석/이속/타임스톱은 큐브 placeholder |
+| [x] | **잡몹 다양성** | 종족별 폴더 분리 + 스켈레톤 애니 + 무기 드롭 + Goblin (2026-05) |
+| [x] | **상자 시각** | POLY STYLE 보물상자 에셋 + 닫힘→열림 전환 완료 |
+| [x] | **항아리(Jar) 시스템** | 깨지는 항아리 + Breakable Containers 에셋 (2026-05) |
 | [~] | **무기 아이콘** | `WeaponDataSO.Icon` Sprite 필드 추가 완료 (2026-05-08). HUD/카드/슬롯 측 placeholder 표시 로직은 미구현 — Sprite 도착 후 슬롯/카드 UI 갱신 필요 |
 | [ ] | **패시브 아이콘** | PassiveType별 아이콘 매핑 (ScriptableObject 또는 dict) |
 
@@ -86,7 +89,8 @@
 
 | 상태 | 항목 | 비고 |
 |---|---|---|
-| [~] | **오디오 인프라** | `AudioManager.cs` 골격 완료 (BGM/SFX/UI 3채널, SettingsService 연동) — 클립 카탈로그 SO 필요 |
+| [x] | **오디오 인프라** | `AudioManager.cs` + BGM 시스템 + 플레이리스트 기능 완료 (2026-05-13) |
+| [x] | **BGM** | 김가연 5트랙 매핑 완료 — Stage3은 BossFinal 전용. 상세 `design/gdd/audio-system.md` |
 | [ ] | **공격 SFX** | 검 휘두르기 / 총 발사 / 마법 캐스트 |
 | [ ] | **적 사망 SFX** | 슬라임 / 스켈레톤 / 보스 |
 | [ ] | **피격 SFX** | 플레이어 피격 / 적 피격 |
@@ -94,7 +98,6 @@
 | [ ] | **상자 SFX** | 열기 / 골드 부족 |
 | [ ] | **드롭 아이템 SFX** | 자석·이속·타임스톱 발동 |
 | [ ] | **UI SFX** | 버튼 hover/click |
-| [ ] | **BGM** | 메인 메뉴 / 게임플레이 / 보스전 / 결과 |
 | [~] | **오디오 믹스** | 채널 분리(BGM/SFX/UI) 완료 — AudioMixer 도입 + 페이드인/아웃은 추후 |
 
 ---
@@ -116,9 +119,9 @@
 | 상태 | 항목 | 비고 |
 |---|---|---|
 | [ ] | **무기 추가 (5~7종)** | 현재 3종 — 빌드 다양성 |
-| [ ] | **적 추가** | Goblin + 보스 외 추가 적 |
+| [ ] | **적 추가** | 현재 슬라임/스켈레톤/Goblin/SlimeKing — 추가 다양성 |
 | [ ] | **Stage 2 / Stage 3** | 5분 / 7분, 난이도 ↑ |
-| [ ] | **보스 몬스터** | 모델링 + AI + 등장 트리거 + 체력바 연결 |
+| [~] | **보스 몬스터** | SlimeKing 모델·프리팹·BossHpBar·텔레그래프 AOE Phase A+B 완료. Phase C 이후 패턴 / 추가 보스는 미정 |
 
 ---
 
@@ -177,3 +180,4 @@
 
 - 2026-05-02: 초안 작성 (B타입 워크플로우, MVP 18 시스템 구현 완료 후 시점)
 - 2026-05-08: GameOver UI + RunStats + SettingsService + AudioManager(스켈레톤) + 빌드 설정 등록 + 디버그 코드 정리 + PlayModeStartScene Editor 자동화 + 카메라 감도 영속화. MainMenu Canvas 미빌드 (스크립트만).
+- 2026-05-17: 다수 진전 반영 — Player 모델/Idle/Run 애니, Goblin 적 통합, 스켈레톤 애니+무기 드롭, 종족별 폴더 분리(Chaser/Rusher 폐기), 코인/항아리/보물상자 에셋, VFX Graph 도입, SlimeKing 보스 모델+프리팹+텔레그래프 AOE Phase A/B, BossHpBar UI 버그 수정, 미니맵 구현(UI 마커 기반), DebugStageSelector, BGM 시스템(김가연 5트랙 매핑+플레이리스트).

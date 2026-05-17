@@ -19,6 +19,8 @@ public class GunAttack : MonoBehaviour
             : nearest.transform.position;
         Vector3 dir = (targetPoint - _playerTransform.position).normalized;
 
+        AudioManager.Instance?.Play(SfxEvent.PlayerAttackGun);
+
         int count = stats.ProjectileCount;
         float spreadAngle = 10f; // 발사체 수 > 1일 때 퍼짐 각도
 
