@@ -6351,7 +6351,7 @@ MonoBehaviour:
   _waveDuration: 10
   _waveTransitionDelay: 1
   _bossSpawnAfterWave: 1
-  _bossPrefab: {fileID: 6329516999241024568, guid: 4bc2cb8726ed6dc439a031e28c42de73, type: 3}
+  _bossPrefab: {fileID: 6130103464460540998, guid: 84108085a4d28a31b8f53150ac5010dc, type: 3}
   _bossSpawnRadius: 15
   _waves:
   - SpawnInterval: 2
@@ -7851,7 +7851,7 @@ MonoBehaviour:
   _skeletonBoss: {fileID: 6329516999241024568, guid: 4e55f21a535c0cf42a599351408ef9c5, type: 3}
   _goblinMobs:
   - {fileID: 5487335593461023878, guid: e4a4c77618c317f4cbfa949319d4f2ed, type: 3}
-  _goblinBoss: {fileID: 6329516999241024568, guid: 892b9db1a45e89c4f9b50f180751dbf6, type: 3}
+  _goblinBoss: {fileID: 6130103464460540998, guid: 84108085a4d28a31b8f53150ac5010dc, type: 3}
   _objectPool: {fileID: 115576364}
   _waveSpawner: {fileID: 1653113460}
 --- !u!4 &2038637588
