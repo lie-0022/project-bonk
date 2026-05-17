@@ -2689,6 +2689,7 @@ Transform:
   - {fileID: 2048207732}
   - {fileID: 410087041}
   - {fileID: 832575519}
+  - {fileID: 9200000002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &817262116
@@ -6462,7 +6463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1705837240
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8121,13 +8122,96 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChestSystem
   _baseCost: 50
   _costMultiplier: 1.5
+--- !u!1 &9200000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9200000002}
+  m_Layer: 0
+  m_Name: Stage1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9200000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -500, y: 0, z: -500}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9100000002}
+  - {fileID: 9200000004}
+  m_Father: {fileID: 783643342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &9200000003
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9200000002}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 462
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.868612
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 662
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+      propertyPath: m_Name
+      value: Map_Village
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+--- !u!4 &9200000004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2b1d2a3ef7bcdeb4ca8da4aba03497b4, type: 3}
+  m_PrefabInstance: {fileID: 9200000003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9100000001
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 9200000002}
     m_Modifications:
     - target: {fileID: 7069923643337193578, guid: 4f8b47eb5218b3946b127d8a0c66d559, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8181,4 +8265,3 @@ SceneRoots:
   - {fileID: 1009488520}
   - {fileID: 266082303}
   - {fileID: 314040035}
-  - {fileID: 9100000002}
