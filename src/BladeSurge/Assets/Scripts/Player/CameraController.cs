@@ -11,6 +11,18 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _pitchMin = -20f;
     [SerializeField] private float _pitchMax = 70f;
 
+    [Header("Collision (벽 통과 방지)")]
+    [Tooltip("카메라가 충돌 판정할 레이어(맵 벽/바닥 = Environment). 플레이어/적은 제외.")]
+    [SerializeField] private LayerMask _collisionMask = 0;
+    [Tooltip("충돌 판정 구체 반경(m). 카메라가 벽에 살짝 못 미치게 한다.")]
+    [SerializeField] private float _collisionRadius = 0.3f;
+    [Tooltip("벽에 부딪혔을 때 유지할 최소 거리(m).")]
+    [SerializeField] private float _minDistance = 1.5f;
+    [Tooltip("충돌 지점에서 추가로 당길 여유(m).")]
+    [SerializeField] private float _collisionBuffer = 0.2f;
+    [Tooltip("플레이어 발 기준 시점 피벗 높이(m). 바닥 자가충돌 방지 + 자연스러운 프레이밍.")]
+    [SerializeField] private float _pivotHeight = 1.2f;
+
     /// <summary>현재 적용된 마우스 감도. SettingsService(PlayerPrefs)에서 동적으로 읽는다.</summary>
     private float Sensitivity => SettingsService.MouseSensitivity;
 
@@ -80,7 +92,21 @@ public class CameraController : MonoBehaviour
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0f);
         transform.rotation = rotation;
-        transform.position = _target.position + rotation * new Vector3(0f, 0f, -_distance);
+
+        // 시점 피벗(머리 높이 부근)에서 원하는 카메라 위치 방향으로 SphereCast.
+        // 벽(Environment)에 막히면 충돌 지점 앞으로 당겨 카메라가 맵을 통과하지 않게 한다.
+        Vector3 pivot = _target.position + Vector3.up * _pivotHeight;
+        Vector3 dir = rotation * Vector3.back; // 피벗 -> 카메라 방향
+        float distance = _distance;
+
+        if (_collisionMask != 0 && Physics.SphereCast(
+                pivot, _collisionRadius, dir, out RaycastHit hit,
+                _distance, _collisionMask, QueryTriggerInteraction.Ignore))
+        {
+            distance = Mathf.Max(_minDistance, hit.distance - _collisionBuffer);
+        }
+
+        transform.position = pivot + dir * distance;
     }
 
     private void OnGameStateChanged(GameState newState)

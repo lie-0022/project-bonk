@@ -20,6 +20,8 @@ public class ChestSpawner : MonoBehaviour
     [SerializeField] private float _minDistance = 5f;
     [SerializeField] private int _maxAttemptsPerChest = 30;
 
+    private StageSpawnArea _spawnArea;
+
     private void Start()
     {
         if (_chestPrefab == null)
@@ -27,6 +29,9 @@ public class ChestSpawner : MonoBehaviour
             Debug.LogWarning("[ChestSpawner] Chest prefab 미할당");
             return;
         }
+        // 활성 스테이지에 스폰 영역이 있으면 그 안쪽·바닥 위로 배치(맵 밖/바닥 아래 방지).
+        // 없으면 직렬화된 사각 영역(_areaCenter/_areaSize/_spawnY) 폴백.
+        _spawnArea = FindFirstObjectByType<StageSpawnArea>();
         SpawnChests();
     }
 
@@ -51,9 +56,17 @@ public class ChestSpawner : MonoBehaviour
     {
         for (int attempt = 0; attempt < _maxAttemptsPerChest; attempt++)
         {
-            float x = _areaCenter.x + Random.Range(-_areaSize.x * 0.5f, _areaSize.x * 0.5f);
-            float z = _areaCenter.y + Random.Range(-_areaSize.y * 0.5f, _areaSize.y * 0.5f);
-            var candidate = new Vector3(x, _spawnY, z);
+            Vector3 candidate;
+            if (_spawnArea != null)
+            {
+                candidate = _spawnArea.RandomPoint(_spawnY);
+            }
+            else
+            {
+                float x = _areaCenter.x + Random.Range(-_areaSize.x * 0.5f, _areaSize.x * 0.5f);
+                float z = _areaCenter.y + Random.Range(-_areaSize.y * 0.5f, _areaSize.y * 0.5f);
+                candidate = new Vector3(x, _spawnY, z);
+            }
 
             bool ok = true;
             foreach (var existing in placed)

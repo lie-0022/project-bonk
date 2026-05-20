@@ -45,6 +45,7 @@ public class WaveSpawner : MonoBehaviour
     public float WaveTimeRemaining { get; private set; }
 
     private Transform _playerTransform;
+    private StageSpawnArea _spawnArea;
     private bool _isSpawning;
     private float _spawnTimer;
     private float _waveTimer;
@@ -69,6 +70,9 @@ public class WaveSpawner : MonoBehaviour
             Debug.LogError("[WaveSpawner] Player 태그 오브젝트를 찾을 수 없음");
             return;
         }
+
+        // 활성 스테이지의 스폰 영역을 집는다. 비활성 맵의 영역은 제외된다.
+        _spawnArea = FindFirstObjectByType<StageSpawnArea>();
 
         PrewarmBoss();
 
@@ -135,6 +139,10 @@ public class WaveSpawner : MonoBehaviour
         Vector3 offset = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * _spawnRadius;
         Vector3 spawnPos = _playerTransform.position + offset;
 
+        // 스폰 영역이 있으면 맵 안쪽으로 제한 + 바닥 높이 스냅 (맵 밖 스폰 방지)
+        if (_spawnArea != null)
+            spawnPos = _spawnArea.Clamp(spawnPos);
+
         WaveData wave = _waves[CurrentWave - 1];
 
         GameObject obj = ObjectPool.Instance.GetFromPool(EnemyType.Mob);
@@ -193,7 +201,12 @@ public class WaveSpawner : MonoBehaviour
         float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         Vector3 offset = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * _bossSpawnRadius;
         Vector3 spawnPos = _playerTransform.position + offset;
-        spawnPos.y = Mathf.Max(spawnPos.y, 1f);
+
+        // 스폰 영역이 있으면 맵 안쪽으로 제한 + 바닥 높이 스냅, 없으면 기존 폴백(최소 y=1)
+        if (_spawnArea != null)
+            spawnPos = _spawnArea.Clamp(spawnPos);
+        else
+            spawnPos.y = Mathf.Max(spawnPos.y, 1f);
 
         // Prewarmed 인스턴스 사용. 누락 시(SetBossPrefab이 Start 이후 호출된 경우 등) 즉시 Instantiate 폴백.
         GameObject obj = _bossInstance;
