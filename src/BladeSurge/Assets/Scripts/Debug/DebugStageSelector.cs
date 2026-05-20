@@ -21,12 +21,20 @@ public class DebugStageSelector : MonoBehaviour
     [SerializeField] private GameObject[] _goblinMobs;
     [SerializeField] private GameObject _goblinBoss;
 
+    [Header("Race 맵 매핑")]
+    [Tooltip("선택한 종족에 해당하는 맵 루트만 활성화되고 나머지는 비활성화된다. 미설정 시 맵 전환 생략.")]
+    [SerializeField] private GameObject _slimeMap;
+    [SerializeField] private GameObject _skeletonMap;
+    [SerializeField] private GameObject _goblinMap;
+
     [Header("타깃 컴포넌트")]
     [SerializeField] private ObjectPool _objectPool;
     [SerializeField] private WaveSpawner _waveSpawner;
 
     private void Awake()
     {
+        ApplyMap();
+
         if (_objectPool == null || _waveSpawner == null)
         {
             Debug.LogWarning("[DebugStageSelector] ObjectPool 또는 WaveSpawner 참조 누락 — 적용 생략");
@@ -51,5 +59,46 @@ public class DebugStageSelector : MonoBehaviour
         _objectPool.SetMobPrefabs(mobs);
         _waveSpawner.SetBossPrefab(boss);
         Debug.Log($"[DebugStageSelector] Race={_race} mobs={mobs.Length}종 boss={boss.name}");
+    }
+
+    /// <summary>
+    /// 선택한 종족에 해당하는 맵만 활성화하고 나머지 맵 루트는 비활성화한다.
+    /// 맵 루트가 하나도 설정되지 않았으면 아무것도 하지 않는다(기존 씬 구성 유지).
+    /// </summary>
+    private void ApplyMap()
+    {
+        if (_slimeMap == null && _skeletonMap == null && _goblinMap == null)
+        {
+            return;
+        }
+
+        GameObject selected;
+        switch (_race)
+        {
+            case EnemyRace.Skeleton: selected = _skeletonMap; break;
+            case EnemyRace.Goblin:   selected = _goblinMap;   break;
+            default:                 selected = _slimeMap;    break;
+        }
+
+        SetMapActive(_slimeMap, ReferenceEquals(_slimeMap, selected));
+        SetMapActive(_skeletonMap, ReferenceEquals(_skeletonMap, selected));
+        SetMapActive(_goblinMap, ReferenceEquals(_goblinMap, selected));
+
+        if (selected == null)
+        {
+            Debug.LogWarning($"[DebugStageSelector] {_race} 맵 미설정 — 맵 비활성 상태일 수 있음");
+        }
+        else
+        {
+            Debug.Log($"[DebugStageSelector] 맵 활성화: {selected.name}");
+        }
+    }
+
+    private static void SetMapActive(GameObject map, bool active)
+    {
+        if (map != null && map.activeSelf != active)
+        {
+            map.SetActive(active);
+        }
     }
 }
