@@ -20,6 +20,10 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _waveDuration = 60f;
     [SerializeField] private float _waveTransitionDelay = 1f;
 
+    [Header("Encounter Gating")]
+    [Tooltip("true면 게임 시작 시 즉시 웨이브 시작(기존 동작). false면 BeginEncounter() 호출 전까지 스폰 안 함 (투기장 봉인 트리거 등).")]
+    [SerializeField] private bool _autoStartOnPlay = true;
+
     [Header("Boss")]
     [Tooltip("이 웨이브가 종료된 직후 보스를 스폰한다. 1-based. 0 또는 음수면 비활성.")]
     [SerializeField] private int _bossSpawnAfterWave = 1;
@@ -46,6 +50,7 @@ public class WaveSpawner : MonoBehaviour
 
     private Transform _playerTransform;
     private StageSpawnArea _spawnArea;
+    private bool _encounterStarted;
     private bool _isSpawning;
     private float _spawnTimer;
     private float _waveTimer;
@@ -77,7 +82,21 @@ public class WaveSpawner : MonoBehaviour
         PrewarmBoss();
 
         GameManager.OnGameStateChanged += OnGameStateChanged;
+
+        if (_autoStartOnPlay)
+            BeginEncounter();
+    }
+
+    /// <summary>
+    /// 인카운터(웨이브 스폰)를 시작한다. 봉인 트리거(ArenaEncounterTrigger) 등이 호출.
+    /// _autoStartOnPlay=false일 때 이 호출 전까지는 몬스터가 스폰되지 않는다. 중복 호출은 무시.
+    /// </summary>
+    public void BeginEncounter()
+    {
+        if (_encounterStarted) return;
+        _encounterStarted = true;
         StartWave(0);
+        Debug.Log("[WaveSpawner] 인카운터 시작");
     }
 
     // 보스 등장 시 hitch 방지: 프리팹을 화면 밖에 비활성 상태로 미리 Instantiate하고
@@ -101,6 +120,7 @@ public class WaveSpawner : MonoBehaviour
     private void Update()
     {
         if (_playerTransform == null) return;
+        if (!_encounterStarted) return;
 
         if (_inTransition)
         {
@@ -253,6 +273,6 @@ public class WaveSpawner : MonoBehaviour
 
     private void OnGameStateChanged(GameState state)
     {
-        _isSpawning = state == GameState.Playing && !_inTransition;
+        _isSpawning = _encounterStarted && state == GameState.Playing && !_inTransition;
     }
 }
