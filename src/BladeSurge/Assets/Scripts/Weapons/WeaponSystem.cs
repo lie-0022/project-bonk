@@ -55,6 +55,9 @@ public class WeaponSystem : MonoBehaviour
         // 이미 Playing 상태일 수 있으므로 즉시 동기화 (Start 호출 순서 race 방지)
         if (GameManager.Instance != null)
             OnGameStateChanged(GameManager.Instance.CurrentState);
+
+        // 캐릭터 선택 화면에서 고른 무기를 시작 무기로 지급 (단독 실행 시 기본 전사→Sword)
+        AddWeapon(GameSession.SelectedWeapon);
     }
 
     private void InitializeProjectilePool()

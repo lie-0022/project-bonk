@@ -4,17 +4,17 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
-/// 어떤 씬에 있어도 Play ▶ 누르면 GamePlay 씬에서 시작하도록 강제.
+/// 어떤 씬에 있어도 Play ▶ 누르면 MainMenu 씬(처음)에서 시작하도록 강제.
 /// Edit > Project Settings > Editor > Play Mode Start Scene 을 코드로 설정.
 ///
 /// 끄려면: 메뉴 BladeSurge > Play Mode Start Scene > Disable
-/// 다시 켜려면: BladeSurge > Play Mode Start Scene > Enable (GamePlay)
+/// 다시 켜려면: BladeSurge > Play Mode Start Scene > Enable (MainMenu)
 /// </summary>
 [InitializeOnLoad]
 public static class PlayModeStartScene
 {
-    private const string GameplayScenePath = "Assets/Scenes/GamePlay.unity";
-    private const string MenuEnable  = "BladeSurge/Play Mode Start Scene/Enable (GamePlay)";
+    private const string StartScenePath = "Assets/Scenes/MainMenu.unity";
+    private const string MenuEnable  = "BladeSurge/Play Mode Start Scene/Enable (MainMenu)";
     private const string MenuDisable = "BladeSurge/Play Mode Start Scene/Disable";
     private const string PrefKey = "BladeSurge.PlayModeStartScene.Enabled";
 
@@ -30,7 +30,7 @@ public static class PlayModeStartScene
     {
         EditorPrefs.SetBool(PrefKey, true);
         ApplyStartScene();
-        Debug.Log($"[PlayModeStartScene] 활성화 — Play 누르면 항상 {GameplayScenePath}에서 시작");
+        Debug.Log($"[PlayModeStartScene] 활성화 — Play 누르면 항상 {StartScenePath}에서 시작");
     }
 
     [MenuItem(MenuDisable)]
@@ -51,10 +51,10 @@ public static class PlayModeStartScene
 
     private static void ApplyStartScene()
     {
-        var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(GameplayScenePath);
+        var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(StartScenePath);
         if (sceneAsset == null)
         {
-            Debug.LogWarning($"[PlayModeStartScene] {GameplayScenePath} 씬을 찾을 수 없음");
+            Debug.LogWarning($"[PlayModeStartScene] {StartScenePath} 씬을 찾을 수 없음");
             return;
         }
         EditorSceneManager.playModeStartScene = sceneAsset;

@@ -392,6 +392,13 @@ MonoBehaviour:
   _distance: 50
   _pitchMin: -20
   _pitchMax: 70
+  _collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _collisionRadius: 0.3
+  _minDistance: 1.5
+  _collisionBuffer: 0.2
+  _pivotHeight: 1.2
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,10 +714,12 @@ MonoBehaviour:
   m_text: "\uAC80\uB098\uC384\uC9D0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5ad69e45c7e4e9a479e753a92452c1ab, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 189f881053429dc4ebb057fa77357815, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 1376376826}
-  m_fontMaterials: []
+  m_sharedMaterial: {fileID: 1605882315}
+  m_fontSharedMaterials:
+  - {fileID: 1605882315}
+  m_fontMaterial: {fileID: 1605882315}
+  m_fontMaterials:
+  - {fileID: 1605882315}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -820,7 +829,7 @@ MonoBehaviour:
   _optionsButton: {fileID: 0}
   _creditsButton: {fileID: 0}
   _quitButton: {fileID: 299051131}
-  _gameplaySceneName: GamePlay
+  _nextSceneName: CharacterSelect
   _optionsSceneName: Options
   _creditsSceneName: Credits
 --- !u!114 &892801959
@@ -985,18 +994,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067903563}
   m_CullTransparentMesh: 1
---- !u!21 &1376376826
+--- !u!21 &1605882315
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pretendard - Bold Material (Instance)
+  m_Name: Pretendard-Bold SDF (Outline) (Instance)
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -1016,16 +1027,16 @@ Material:
     m_Floats:
     - _ColorMask: 15
     - _CullMode: 0
-    - _FaceDilate: 0
+    - _FaceDilate: 0.05
     - _GradientScale: 10
     - _MaskSoftnessX: 0
     - _MaskSoftnessY: 0
     - _OutlineSoftness: 0
-    - _OutlineWidth: 0.4
+    - _OutlineWidth: 0.25
     - _PerspectiveFilter: 0.875
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 1
-    - _ScaleRatioC: 0.73125
+    - _ScaleRatioC: 0.34312502
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -1037,10 +1048,10 @@ Material:
     - _StencilWriteMask: 255
     - _TextureHeight: 8192
     - _TextureWidth: 8192
-    - _UnderlayDilate: 0
-    - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
-    - _UnderlaySoftness: 0
+    - _UnderlayDilate: 0.3
+    - _UnderlayOffsetX: 1.5
+    - _UnderlayOffsetY: -1.5
+    - _UnderlaySoftness: 0.2
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
     - _WeightBold: 0.75
@@ -1049,7 +1060,7 @@ Material:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.78431374}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!1 &1641163970
@@ -1372,10 +1383,12 @@ MonoBehaviour:
     \uC808\uB9DD\uC801 \uB85C\uADF8\uB77C\uC774\uD06C \uC77C\uB300\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5ad69e45c7e4e9a479e753a92452c1ab, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 189f881053429dc4ebb057fa77357815, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
+  m_sharedMaterial: {fileID: 2043220121}
+  m_fontSharedMaterials:
+  - {fileID: 2043220121}
+  m_fontMaterial: {fileID: 2043220121}
+  m_fontMaterials:
+  - {fileID: 2043220121}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -1565,6 +1578,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &2043220121
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Pretendard-Bold SDF (Outline) (Instance)
+  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - UNDERLAY_ON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: -6127718363143395396, guid: 5ad69e45c7e4e9a479e753a92452c1ab, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _CullMode: 0
+    - _FaceDilate: 0.05
+    - _GradientScale: 10
+    - _MaskSoftnessX: 0
+    - _MaskSoftnessY: 0
+    - _OutlineSoftness: 0
+    - _OutlineWidth: 0.25
+    - _PerspectiveFilter: 0.875
+    - _ScaleRatioA: 0.9
+    - _ScaleRatioB: 1
+    - _ScaleRatioC: 0.34312502
+    - _ScaleX: 1
+    - _ScaleY: 1
+    - _ShaderFlags: 0
+    - _Sharpness: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _TextureHeight: 8192
+    - _TextureWidth: 8192
+    - _UnderlayDilate: 0.3
+    - _UnderlayOffsetX: 1.5
+    - _UnderlayOffsetY: -1.5
+    - _UnderlaySoftness: 0.2
+    - _VertexOffsetX: 0
+    - _VertexOffsetY: 0
+    - _WeightBold: 0.75
+    - _WeightNormal: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.78431374}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

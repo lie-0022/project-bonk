@@ -16,7 +16,7 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button _quitButton;
 
     [Header("Scene Names")]
-    [SerializeField] private string _gameplaySceneName = "GamePlay";
+    [SerializeField] private string _nextSceneName = "CharacterSelect";
     [SerializeField] private string _optionsSceneName = "Options";
     [SerializeField] private string _creditsSceneName = "Credits";
 
@@ -32,13 +32,21 @@ public class MainMenuUI : MonoBehaviour
     private void WireButtons()
     {
         if (_startButton != null)
-            _startButton.onClick.AddListener(() => SceneManager.LoadScene(_gameplaySceneName));
+            _startButton.onClick.AddListener(OnStartClicked);
         if (_optionsButton != null)
             _optionsButton.onClick.AddListener(OnOptionsClicked);
         if (_creditsButton != null)
             _creditsButton.onClick.AddListener(OnCreditsClicked);
         if (_quitButton != null)
             _quitButton.onClick.AddListener(QuitApplication);
+    }
+
+    private void OnStartClicked()
+    {
+        if (SceneExistsInBuild(_nextSceneName))
+            SceneManager.LoadScene(_nextSceneName);
+        else
+            Debug.Log($"[MainMenu] '{_nextSceneName}' 씬이 아직 Build Settings에 없음. 다음 화면 구성 후 연결 예정.");
     }
 
     private void OnOptionsClicked()

@@ -1,7 +1,7 @@
 # 남은 작업 정리 (Remaining Work)
 
 > **Status**: Active
-> **Last Updated**: 2026-05-17
+> **Last Updated**: 2026-05-29
 > **Workflow**: B타입 (continuous flow, sprint X)
 
 본 문서는 **Bonk(BladeSurge) MVP → Vertical Slice → 출시까지** 남은 작업을 우선순위별로 정리한다.
@@ -40,7 +40,7 @@
 
 | 상태 | 항목 | 비고 |
 |---|---|---|
-| [~] | **홈 화면 (메인 메뉴)** | `MainMenuUI.cs` 스크립트만 작성됨 (시작/옵션/크레딧/종료 핸들러). Canvas/UI 미빌드 |
+| [~] | **홈 화면 (메인 메뉴)** | Canvas 빌드됨: Background(손그림 틀)/Title("검나쎄짐")/Subtitle(농담 문단 유지) + 디자인 버튼 2개(게임 시작·게임 종료, 텍스트 아트에 포함). 기능: 게임 시작→`CharacterSelect` 씬(미존재 시 graceful 로그), 게임 종료→앱 종료. **남은 것**: `CharacterSelect`(다음 화면) 씬 제작 + Build Settings 등록 → 시작 버튼 실제 전환 |
 | [ ] | **맵 선택 화면** | Stage 1 (현재) + Stage 2/3 placeholder |
 | [ ] | **캐릭터 선택 화면** | 검사/거너/마법사 3택 (= 시작 무기) |
 | [ ] | **일시정지 UI** | Esc — 재개/옵션/메인복귀. Tab 스탯창과 관계 정리 필요. (현재 Esc 토글 기능만 GameManager에 있음) |
@@ -120,8 +120,8 @@
 |---|---|---|
 | [ ] | **무기 추가 (5~7종)** | 현재 3종 — 빌드 다양성 |
 | [ ] | **적 추가** | 현재 슬라임/스켈레톤/Goblin/SlimeKing — 추가 다양성 |
-| [ ] | **Stage 2 / Stage 3** | 5분 / 7분, 난이도 ↑ |
-| [~] | **보스 몬스터** | SlimeKing 모델·프리팹·BossHpBar·텔레그래프 AOE Phase A+B 완료. Phase C 이후 패턴 / 추가 보스는 미정 |
+| [~] | **Stage 2 / Stage 3** | Stage3 보스 아레나(MAP3_1) 통합 완료 — 텍스처·콜라이더·스폰 영역 제한·카메라 벽 통과 방지·투기장 봉인 인카운터(통로 시작+진입 봉인+게이트 스폰) (2026-05). Stage2 미착수 |
+| [~] | **보스 몬스터** | SlimeKing 모델·프리팹·BossHpBar·텔레그래프 AOE Phase A+B 완료. Stage3 전용 보스 아레나 인카운터 구성됨. Phase C 이후 패턴 / 추가 보스는 미정 |
 
 ---
 
@@ -181,3 +181,4 @@
 - 2026-05-02: 초안 작성 (B타입 워크플로우, MVP 18 시스템 구현 완료 후 시점)
 - 2026-05-08: GameOver UI + RunStats + SettingsService + AudioManager(스켈레톤) + 빌드 설정 등록 + 디버그 코드 정리 + PlayModeStartScene Editor 자동화 + 카메라 감도 영속화. MainMenu Canvas 미빌드 (스크립트만).
 - 2026-05-17: 다수 진전 반영 — Player 모델/Idle/Run 애니, Goblin 적 통합, 스켈레톤 애니+무기 드롭, 종족별 폴더 분리(Chaser/Rusher 폐기), 코인/항아리/보물상자 에셋, VFX Graph 도입, SlimeKing 보스 모델+프리팹+텔레그래프 AOE Phase A/B, BossHpBar UI 버그 수정, 미니맵 구현(UI 마커 기반), DebugStageSelector, BGM 시스템(김가연 5트랙 매핑+플레이리스트).
+- 2026-05-29: Stage3 보스 아레나(MAP3_1) 통합 — 임포트·텍스처·콜라이더·배치·전환, 스폰 영역 제한+카메라 벽 통과 방지, 투기장 봉인 인카운터(통로 시작+진입 봉인+게이트 스폰). MainMenu 실제 상태 정정(Canvas 부분 빌드됨 — 라벨/Options/Credits/폴리싱 미완). 홈 화면 UI 완성 작업 착수.

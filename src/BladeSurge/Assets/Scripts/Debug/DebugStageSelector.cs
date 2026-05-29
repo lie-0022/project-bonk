@@ -33,6 +33,9 @@ public class DebugStageSelector : MonoBehaviour
 
     private void Awake()
     {
+        // CharacterSelect 화면의 맵 선택을 반영 (단독 실행 시 GameSession 기본값 → Slime)
+        _race = GameSession.SelectedRace;
+
         ApplyMap();
 
         if (_objectPool == null || _waveSpawner == null)
