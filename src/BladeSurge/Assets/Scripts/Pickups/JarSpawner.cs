@@ -21,6 +21,7 @@ public class JarSpawner : MonoBehaviour
     [SerializeField] private int _maxAttemptsPerJar = 30;
 
     private StageSpawnArea _spawnArea;
+    private Terrain _terrain;
 
     private void Start()
     {
@@ -32,6 +33,8 @@ public class JarSpawner : MonoBehaviour
         // 활성 스테이지에 스폰 영역이 있으면 그 안쪽·바닥 위로 배치(맵 밖/바닥 아래 방지).
         // 없으면 직렬화된 사각 영역(_areaCenter/_areaSize/_spawnY) 폴백.
         _spawnArea = FindFirstObjectByType<StageSpawnArea>();
+        // 사각 영역 폴백을 맵 전체로 넓혀도 지형 높이에 맞춰 배치되도록 활성 Terrain을 캐싱.
+        _terrain = FindFirstObjectByType<Terrain>();
         SpawnJars();
     }
 
@@ -61,7 +64,11 @@ public class JarSpawner : MonoBehaviour
             {
                 float x = _areaCenter.x + Random.Range(-_areaSize.x * 0.5f, _areaSize.x * 0.5f);
                 float z = _areaCenter.y + Random.Range(-_areaSize.y * 0.5f, _areaSize.y * 0.5f);
-                candidate = new Vector3(x, _spawnY, z);
+                // Terrain이 있으면 해당 지점의 지형 높이에 _spawnY를 더해 바닥 위에 배치(공중/지하 방지).
+                float y = _terrain != null
+                    ? _terrain.SampleHeight(new Vector3(x, 0f, z)) + _terrain.transform.position.y + _spawnY
+                    : _spawnY;
+                candidate = new Vector3(x, y, z);
             }
 
             bool ok = true;

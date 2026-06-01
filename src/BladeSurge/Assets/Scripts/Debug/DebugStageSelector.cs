@@ -87,6 +87,14 @@ public class DebugStageSelector : MonoBehaviour
         SetMapActive(_skeletonMap, ReferenceEquals(_skeletonMap, selected));
         SetMapActive(_goblinMap, ReferenceEquals(_goblinMap, selected));
 
+        // 선택된 맵에 봉인 트리거(ArenaEncounterTrigger)가 있으면 그 트리거가 인카운터를 시작하므로
+        // WaveSpawner 자동 시작을 끄고, 없으면(마을 등 일반 스테이지) 진입 즉시 자동 시작하게 한다.
+        if (_waveSpawner != null && selected != null)
+        {
+            bool hasSealTrigger = selected.GetComponentInChildren<ArenaEncounterTrigger>(true) != null;
+            _waveSpawner.SetAutoStart(!hasSealTrigger);
+        }
+
         if (selected == null)
         {
             Debug.LogWarning($"[DebugStageSelector] {_race} 맵 미설정 — 맵 비활성 상태일 수 있음");

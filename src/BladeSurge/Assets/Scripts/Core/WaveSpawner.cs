@@ -67,6 +67,15 @@ public class WaveSpawner : MonoBehaviour
         _bossPrefab = prefab;
     }
 
+    /// <summary>
+    /// Start 이전(Awake)에 호출해 자동 시작 여부를 외부에서 설정. DebugStageSelector 용.
+    /// 봉인 트리거(ArenaEncounterTrigger)가 있는 스테이지는 false, 없는 스테이지는 true로 지정한다.
+    /// </summary>
+    public void SetAutoStart(bool autoStart)
+    {
+        _autoStartOnPlay = autoStart;
+    }
+
     private void Start()
     {
         _playerTransform = GameObject.FindWithTag("Player")?.transform;
