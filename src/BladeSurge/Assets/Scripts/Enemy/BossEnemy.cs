@@ -78,7 +78,9 @@ public class BossEnemy : EnemyBase
         // 사망 연출 시간 — VFX/사운드 후속 시 여기에 추가
         yield return new WaitForSecondsRealtime(_deathDelay);
 
-        if (GameManager.Instance != null)
+        // 활성 스테이지에 게이트(StageGate)가 있으면 게이트가 다음 맵 전환을 담당하므로 Win을 생략한다.
+        // 게이트가 없는 맵(최종 맵 등)은 기존대로 즉시 Win.
+        if (FindFirstObjectByType<StageGate>() == null && GameManager.Instance != null)
             GameManager.Instance.ChangeState(GameState.Win);
 
         // GameManager.LoadResultsAfterDelay 코루틴이 GameOver 씬 로드 → 그때 본 GameObject도 정리됨

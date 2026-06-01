@@ -23,6 +23,14 @@ public class JarSpawner : MonoBehaviour
     private StageSpawnArea _spawnArea;
     private Terrain _terrain;
 
+    /// <summary>
+    /// Start 이전(Awake)에 호출해 스폰할 항아리 수를 외부에서 설정. DebugStageSelector가 맵별로 지정.
+    /// </summary>
+    public void SetJarCount(int count)
+    {
+        _jarCount = Mathf.Max(0, count);
+    }
+
     private void Start()
     {
         if (_jarPrefab == null)

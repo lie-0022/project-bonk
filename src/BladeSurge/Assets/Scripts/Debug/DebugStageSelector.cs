@@ -30,6 +30,13 @@ public class DebugStageSelector : MonoBehaviour
     [Header("타깃 컴포넌트")]
     [SerializeField] private ObjectPool _objectPool;
     [SerializeField] private WaveSpawner _waveSpawner;
+    [SerializeField] private JarSpawner _jarSpawner;
+
+    [Header("맵별 항아리 수")]
+    [Tooltip("선택한 종족(맵)에 따라 JarSpawner의 항아리 수를 덮어쓴다.")]
+    [SerializeField] private int _slimeJarCount = 500;
+    [SerializeField] private int _goblinJarCount = 300;
+    [SerializeField] private int _skeletonJarCount = 300;
 
     private void Awake()
     {
@@ -37,6 +44,7 @@ public class DebugStageSelector : MonoBehaviour
         _race = GameSession.SelectedRace;
 
         ApplyMap();
+        ApplyJarCount();
 
         if (_objectPool == null || _waveSpawner == null)
         {
@@ -95,6 +103,8 @@ public class DebugStageSelector : MonoBehaviour
             _waveSpawner.SetAutoStart(!hasSealTrigger);
         }
 
+        MovePlayerToSpawn(selected);
+
         if (selected == null)
         {
             Debug.LogWarning($"[DebugStageSelector] {_race} 맵 미설정 — 맵 비활성 상태일 수 있음");
@@ -103,6 +113,40 @@ public class DebugStageSelector : MonoBehaviour
         {
             Debug.Log($"[DebugStageSelector] 맵 활성화: {selected.name}");
         }
+    }
+
+    /// <summary>
+    /// 선택한 종족(맵)에 맞는 항아리 수를 JarSpawner에 적용한다. JarSpawner.Start 이전(Awake)에 호출.
+    /// </summary>
+    private void ApplyJarCount()
+    {
+        if (_jarSpawner == null) return;
+        int count = _race switch
+        {
+            EnemyRace.Goblin => _goblinJarCount,
+            EnemyRace.Skeleton => _skeletonJarCount,
+            _ => _slimeJarCount
+        };
+        _jarSpawner.SetJarCount(count);
+    }
+
+    /// <summary>
+    /// 선택한 맵의 "PlayerSpawn" 자식 위치로 플레이어를 이동한다(맵마다 시작 지점이 다르므로).
+    /// PlayerSpawn이 없으면 이동하지 않는다(기존 위치 유지). CharacterController는 이동 전 비활성화.
+    /// </summary>
+    private void MovePlayerToSpawn(GameObject selected)
+    {
+        if (selected == null) return;
+        Transform spawn = selected.transform.Find("PlayerSpawn");
+        if (spawn == null) return;
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player == null) return;
+
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+        player.transform.SetPositionAndRotation(spawn.position, spawn.rotation);
+        if (cc != null) cc.enabled = true;
     }
 
     private static void SetMapActive(GameObject map, bool active)
