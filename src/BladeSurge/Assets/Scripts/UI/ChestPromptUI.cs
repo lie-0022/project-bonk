@@ -44,7 +44,7 @@ public class ChestPromptUI : MonoBehaviour
     private void UpdateLabel(int cost)
     {
         if (_label == null) return;
-        _label.text = $"E 로 열기 ({cost} G)";
+        _label.text = $"{cost}G";
     }
 
     private void SetVisible(bool visible)

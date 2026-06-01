@@ -17,6 +17,12 @@ public class StageGate : MonoBehaviour
     [Tooltip("전환할 게임플레이 씬 이름.")]
     [SerializeField] private string _gamePlaySceneName = "GamePlay";
 
+    [Tooltip("true면 통과 시 다음 맵 대신 게임 클리어(Win)로 처리한다. 최종 스테이지 게이트용.")]
+    [SerializeField] private bool _isFinalStage = false;
+
+    [Tooltip("보스 처치(게이트 열림) 시 비활성화할 오브젝트들. 게이트 앞 해골 더미 등 장애물.")]
+    [SerializeField] private GameObject[] _obstaclesOnClear;
+
     private bool _opened;
 
     private void OnEnable() { BossEnemy.OnBossDied += HandleBossDied; }
@@ -25,13 +31,31 @@ public class StageGate : MonoBehaviour
     private void HandleBossDied(BossEnemy boss)
     {
         _opened = true;
-        Debug.Log("[StageGate] 보스 처치 — 게이트 열림. 통과하면 다음 맵으로 이동한다.");
+
+        // 게이트 앞 장애물(해골 더미 등) 제거
+        if (_obstaclesOnClear != null)
+        {
+            foreach (var obstacle in _obstaclesOnClear)
+                if (obstacle != null) obstacle.SetActive(false);
+        }
+
+        Debug.Log(_isFinalStage
+            ? "[StageGate] 보스 처치 — 게이트 열림. 통과하면 게임 클리어."
+            : "[StageGate] 보스 처치 — 게이트 열림. 통과하면 다음 맵으로 이동한다.");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!_opened) return;
         if (!other.CompareTag("Player")) return;
+
+        // 최종 스테이지면 다음 맵 대신 게임 클리어(Win) 처리.
+        if (_isFinalStage)
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.ChangeState(GameState.Win);
+            return;
+        }
 
         GameSession.SelectedMapIndex = _nextMapIndex;
         SceneManager.LoadScene(_gamePlaySceneName);
