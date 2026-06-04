@@ -9,6 +9,12 @@ using UnityEngine;
 /// </summary>
 public class Projectile : MonoBehaviour, IPoolable
 {
+    [Header("Impact VFX")]
+    [Tooltip("명중/폭발 시 스폰할 임팩트 이펙트. 프리팹별로 다르게 설정 가능. URP 호환 에셋만.")]
+    [SerializeField] private GameObject _impactVfxPrefab;
+    [Tooltip("임팩트 이펙트 크기 배율.")]
+    [SerializeField] private float _impactVfxScale = 1f;
+
     private float _damage;
     private float _speed;
     private float _maxRange;
@@ -21,6 +27,12 @@ public class Projectile : MonoBehaviour, IPoolable
     private Transform _playerTransform;
     private readonly HashSet<HealthComponent> _alreadyHit = new();
     private bool _isActive;
+    private TrailRenderer[] _trails; // 트레일 (풀 재사용 시 Clear로 잔상 제거)
+
+    private void Awake()
+    {
+        _trails = GetComponentsInChildren<TrailRenderer>(true);
+    }
 
     public void Setup(float damage, float speed, float maxRange,
                       float critChance, float critMultiplier, float lifesteal,
@@ -40,10 +52,42 @@ public class Projectile : MonoBehaviour, IPoolable
         _alreadyHit.Clear();
         _startPosition = transform.position;
         _isActive = true;
+        PlayTrails(); // 발사 위치 확정 후 트레일 시작 (이전 잔상 제거)
     }
 
     public void OnSpawn() { _isActive = false; _alreadyHit.Clear(); }
-    public void OnDespawn() { _isActive = false; _alreadyHit.Clear(); }
+    public void OnDespawn() { _isActive = false; _alreadyHit.Clear(); StopTrails(); }
+
+    /// <summary>트레일 재시작. Clear로 풀 재사용 시 이전 위치→새 위치 잔상선을 제거한다.</summary>
+    private void PlayTrails()
+    {
+        if (_trails == null) return;
+        foreach (var t in _trails)
+        {
+            if (t == null) continue;
+            t.Clear();
+            t.emitting = true;
+        }
+    }
+
+    /// <summary>트레일 방출 중단 (풀 반환 시).</summary>
+    private void StopTrails()
+    {
+        if (_trails == null) return;
+        foreach (var t in _trails)
+            if (t != null) t.emitting = false;
+    }
+
+    /// <summary>명중/폭발 지점에 임팩트 이펙트 스폰. 파티클 강제 재생 후 자동 소멸.</summary>
+    private void SpawnImpact(Vector3 pos)
+    {
+        if (_impactVfxPrefab == null) return;
+        GameObject fx = Instantiate(_impactVfxPrefab, pos, Quaternion.identity);
+        if (_impactVfxScale > 0f) fx.transform.localScale *= _impactVfxScale;
+        foreach (var ps in fx.GetComponentsInChildren<ParticleSystem>())
+            ps.Play();
+        Destroy(fx, 2f);
+    }
 
     private void Update()
     {
@@ -84,9 +128,11 @@ public class Projectile : MonoBehaviour, IPoolable
         _pierceRemaining--;
     }
 
-    /// <summary>폭발 시 반경 내 모든 Enemy에게 광역 피해.</summary>
+    /// <summary>폭발 시 반경 내 모든 Enemy에게 광역 피해 + 폭발 이펙트.</summary>
     private void DetonateExplosion(Vector3 origin)
     {
+        SpawnImpact(origin);
+
         Collider[] hits = Physics.OverlapSphere(origin, _explosionRadius);
         int count = 0;
 
