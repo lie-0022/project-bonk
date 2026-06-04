@@ -170,3 +170,8 @@ src/BladeSurge/Assets/Art/Pickups/Chest/Art/Meshes/Chest/Meshes.fbx.meta
 # === Logs ===
 .claude/logs/
 *.log
+
+# 대용량 스카이박스 큐브맵 (170MB, 로컬 전용 — 하늘 적용 시 사용)
+src/BladeSurge/Assets/item_sky_vfx/Sky/
+# MCP 캡처
+src/BladeSurge/Assets/Screenshots/
