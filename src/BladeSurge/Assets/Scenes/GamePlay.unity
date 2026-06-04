@@ -3813,6 +3813,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 759393428}
+  - component: {fileID: 759393429}
   m_Layer: 0
   m_Name: Visual_Root
   m_TagString: Untagged
@@ -3838,6 +3839,21 @@ Transform:
   - {fileID: 1098271609}
   m_Father: {fileID: 1890822707}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &759393429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759393427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 998688b6cd7990447aaab63964feb5f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponVisual
+  _visualSword: {fileID: 1164995972}
+  _visualGun: {fileID: 845804407}
+  _visualMagic: {fileID: 1098271610}
 --- !u!1 &761218775
 GameObject:
   m_ObjectHideFlags: 0
