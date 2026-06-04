@@ -25,8 +25,30 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] private Transform _pivotPoint;      // 회전 중심 (플레이어)
     [SerializeField] private Collider _sweepCollider;    // 부채꼴 콜라이더
 
+    [Header("Slash VFX")]
+    [Tooltip("휘두를 때 플레이어 전방에 스폰할 슬래시 이펙트. facing 방향으로 회전.")]
+    [SerializeField] private GameObject _slashVfxPrefab;
+    [Tooltip("슬래시 VFX 스폰 위치 오프셋(플레이어 전방/높이).")]
+    [SerializeField] private Vector3 _slashVfxOffset = new Vector3(0f, 1f, 1.5f);
+    [Tooltip("슬래시 VFX 자동 소멸 시간(초).")]
+    [SerializeField] private float _slashVfxLifetime = 1.5f;
+    [Tooltip("슬래시 VFX 회전 오프셋(Euler). facing 기준 추가 회전. Y+ = 오른쪽으로 틀기.")]
+    [SerializeField] private Vector3 _slashVfxRotationOffset = Vector3.zero;
+    [Tooltip("슬래시 1개가 덮는다고 보는 각도(도). 타격 각도가 이보다 넓으면 여러 개로 나눠 부채꼴 배치. 작을수록 더 많이 생성.")]
+    [SerializeField] private float _slashVfxCoverageAngle = 180f;
+    [Tooltip("슬래시 VFX 크기 배율 (Lv1 기본 범위 기준). 레벨업으로 범위가 커지면 자동으로 같은 비율로 따라감.")]
+    [SerializeField] private Vector3 _slashVfxScale = Vector3.one;
+
+    [Header("Debug Gizmo")]
+    [Tooltip("Scene 뷰에 검 공격 사거리(reach)를 빨간 원으로 표시. VFX 크기 맞춤용.")]
+    [SerializeField] private bool _drawRangeGizmo = true;
+    [Tooltip("Play 중 검 휘두를 때 실제 타격 콜라이더(빨간 막대)를 표시. 범위 체크용.")]
+    [SerializeField] private bool _showSweepCollider = false;
+
     private MeshRenderer _sweepRenderer; // 디버그 시각화용 (있을 때만)
     private bool _isSweeping;
+    private float _rangeScaleRatio = 1f; // 이펙트 범위 비례 추종 계수 (Lv1 BaseRange 대비 현재 FinalRange 비율)
+    private float _lastSweepAngle = 180f; // Gizmo 부채꼴 각도 (마지막 공격의 FinalSweepAngle, 비Play 기본 180°)
 
     private void Awake()
     {
@@ -51,9 +73,14 @@ public class SwordAttack : MonoBehaviour
         _isSweeping = true;
         int swingCount = stats.ProjectileCount;
         float sweepDuration = slot.Data.SweepDuration / stats.ProjectileSpeed;
-        // 검 각도·데미지는 무기 레벨 + 등급 누적 결과 (slot에서 캐싱).
+        // 검 각도·데미지·사거리는 무기 레벨 + 등급 누적 결과 (slot에서 캐싱).
         float sweepAngle = slot.FinalSweepAngle;
         float damage = slot.FinalDamage;
+        // 사거리를 데이터 기반으로 콜라이더에 반영 (검 FinalRange = 최대 도달 반경).
+        ApplySweepRange(slot.FinalRange);
+        // 이펙트 크기를 범위에 비례 추종시키기 위한 계수 (Lv1 BaseRange 대비 현재 범위).
+        _rangeScaleRatio = slot.Data.BaseRange > 0f ? slot.FinalRange / slot.Data.BaseRange : 1f;
+        _lastSweepAngle = sweepAngle; // Gizmo 부채꼴 각도 갱신 (레벨업 시 넓어짐)
 
         for (int i = 0; i < swingCount; i++)
         {
@@ -73,8 +100,24 @@ public class SwordAttack : MonoBehaviour
         float startAngle = facing - sweepAngle * 0.5f;
         float endAngle = facing + sweepAngle * 0.5f;
 
+        // 슬래시 VFX 스폰. 타격 각도(sweepAngle)가 넓으면 여러 개를 부채꼴로 분산 배치.
+        if (_slashVfxPrefab != null)
+        {
+            float coverage = _slashVfxCoverageAngle > 1f ? _slashVfxCoverageAngle : 180f;
+            int count = Mathf.Max(1, Mathf.CeilToInt(sweepAngle / coverage));
+            for (int i = 0; i < count; i++)
+            {
+                // 각 슬래시 yaw: sweepAngle 범위를 count등분한 구간 중앙 (count=1이면 facing 중앙).
+                float slashYaw = count == 1
+                    ? facing
+                    : facing - sweepAngle * 0.5f + sweepAngle * (i + 0.5f) / count;
+                SpawnSlashVfx(slashYaw);
+            }
+        }
+
         _sweepCollider.enabled = true;
-        if (_sweepRenderer != null) _sweepRenderer.enabled = true;
+        // 디버그: 빨간 막대(콜라이더 메시) 표시 토글 — 실제 타격 범위 확인용
+        if (_showSweepCollider && _sweepRenderer != null) _sweepRenderer.enabled = true;
 
         // BurstAreaOnce: 시각 sweep 시작 시점에 한 번에 부채꼴 영역 데미지
         if (_hitMode == SwordHitMode.BurstAreaOnce)
@@ -183,5 +226,77 @@ public class SwordAttack : MonoBehaviour
         if (stats.Lifesteal <= 0f) return;
         var playerHealth = _playerTransform.GetComponent<HealthComponent>();
         playerHealth?.Heal(damage * stats.Lifesteal);
+    }
+
+    /// <summary>슬래시 VFX 1개를 지정 yaw 방향으로 스폰. 위치·회전 오프셋·범위 비례 크기 적용 후 자동 재생.</summary>
+    private void SpawnSlashVfx(float yaw)
+    {
+        Quaternion yawRot = Quaternion.Euler(0f, yaw, 0f);
+        Vector3 pos = _playerTransform.position + yawRot * _slashVfxOffset;
+        Quaternion rot = yawRot * Quaternion.Euler(_slashVfxRotationOffset);
+        GameObject vfx = Instantiate(_slashVfxPrefab, pos, rot);
+        // 실제 공격 범위에 맞춰 크기 조정 (_slashVfxScale × 범위 비례 계수).
+        vfx.transform.localScale = Vector3.Scale(vfx.transform.localScale, _slashVfxScale * _rangeScaleRatio);
+        // 프리팹 파티클이 Play On Awake=false라 명시적으로 재생해야 화면에 보인다.
+        foreach (var ps in vfx.GetComponentsInChildren<ParticleSystem>())
+            ps.Play();
+        Destroy(vfx, _slashVfxLifetime);
+    }
+
+    /// <summary>
+    /// 검 사거리(FinalRange = 최대 도달 반경)를 sweep 콜라이더에 반영한다.
+    /// 콜라이더 박스의 월드 z 길이(bounds.size.z)가 finalRange가 되도록 localScale.z를 조정.
+    /// (sweep 로직상 콜라이더 중심거리 reach = z길이의 절반, 박스 절반도 reach → 최대 도달 = z길이)
+    /// </summary>
+    private void ApplySweepRange(float finalRange)
+    {
+        if (_sweepCollider == null || finalRange <= 0f) return;
+        Transform t = _sweepCollider.transform;
+        var box = _sweepCollider as BoxCollider;
+        float boxSizeZ = box != null ? box.size.z : 1f;
+        float parentScaleZ = t.parent != null ? t.parent.lossyScale.z : 1f;
+        if (boxSizeZ <= 0f || parentScaleZ <= 0f) return;
+
+        Vector3 ls = t.localScale;
+        ls.z = finalRange / (boxSizeZ * parentScaleZ);
+        t.localScale = ls;
+    }
+
+    /// <summary>
+    /// Scene 뷰에 실제 타격 영역(전방 부채꼴)을 표시. BurstAreaOnce 판정 범위와 동일.
+    /// 반경 = 콜라이더 z 길이(=FinalRange), 각도 = 마지막 공격의 FinalSweepAngle(비Play 기본 180°).
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!_drawRangeGizmo || _sweepCollider == null) return;
+
+        Transform center = _pivotPoint != null ? _pivotPoint
+            : (_playerTransform != null ? _playerTransform : transform);
+
+        // 타격 반경 = 콜라이더 박스의 월드 z 전체 길이(bounds.size.z = BurstArea range).
+        float reach;
+        var box = _sweepCollider as BoxCollider;
+        if (box != null)
+            reach = box.size.z * _sweepCollider.transform.lossyScale.z;
+        else
+            reach = _sweepCollider.bounds.size.z;
+
+        Vector3 c = center.position;
+        float facing = _playerTransform != null ? _playerTransform.eulerAngles.y : 0f;
+        float half = _lastSweepAngle * 0.5f;
+
+        // 전방 부채꼴: 좌측 변 → 호 → 우측 변
+        Gizmos.color = new Color(1f, 0.25f, 0.25f, 0.9f);
+        const int seg = 40;
+        Vector3 prevPoint = c + (Quaternion.Euler(0f, facing - half, 0f) * Vector3.forward) * reach;
+        Gizmos.DrawLine(c, prevPoint); // 좌측 변
+        for (int i = 1; i <= seg; i++)
+        {
+            float a = facing - half + _lastSweepAngle * (i / (float)seg);
+            Vector3 cur = c + (Quaternion.Euler(0f, a, 0f) * Vector3.forward) * reach;
+            Gizmos.DrawLine(prevPoint, cur);
+            prevPoint = cur;
+        }
+        Gizmos.DrawLine(prevPoint, c); // 우측 변
     }
 }
