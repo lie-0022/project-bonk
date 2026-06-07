@@ -66,16 +66,7 @@ public class CameraController : MonoBehaviour
             LockCursor();
     }
 
-    private void Update()
-    {
-        // 일시정지 중 좌클릭으로 재개
-        if (GameManager.Instance != null
-            && GameManager.Instance.CurrentState == GameState.Paused
-            && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            GameManager.Instance.ChangeState(GameState.Playing);
-        }
-    }
+    // (일시정지 재개는 PauseUI의 '이어하기' 버튼이 담당 — 좌클릭 재개 제거)
 
     private void LateUpdate()
     {
