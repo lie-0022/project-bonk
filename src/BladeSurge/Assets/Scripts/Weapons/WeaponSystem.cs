@@ -187,6 +187,9 @@ public class WeaponSystem : MonoBehaviour
     private WeaponSlot GetSlot(WeaponType type) =>
         _slots.Find(s => s.Data.WeaponType == type);
 
+    /// <summary>무기 데이터 조회 (UI 아이콘 등 외부 참조용).</summary>
+    public WeaponDataSO GetWeaponData(WeaponType type) => GetData(type);
+
     private WeaponDataSO GetData(WeaponType type) => type switch
     {
         WeaponType.Sword => _swordData,

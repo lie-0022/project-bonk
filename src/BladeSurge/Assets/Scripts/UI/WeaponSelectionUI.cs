@@ -18,6 +18,7 @@ public class WeaponSelectionUI : MonoBehaviour
         public GameObject Root;
         public Button Button;
         public Image GradeFrame;
+        public Image Icon;
         public TextMeshProUGUI WeaponNameText;
         public TextMeshProUGUI DescriptionText;
         public TextMeshProUGUI GradeText;
@@ -42,6 +43,9 @@ public class WeaponSelectionUI : MonoBehaviour
 
     [Header("Grade Frames (등급 틀 스프라이트: Common, Epic, Unique, Legend 순)")]
     [SerializeField] private Sprite[] _gradeFrames;
+
+    [Header("Passive Icons (PassiveType enum 순서)")]
+    [SerializeField] private Sprite[] _passiveIcons;
 
     private readonly List<LevelupChoice> _currentChoices = new();
     private bool _isOpen;
@@ -147,6 +151,7 @@ public class WeaponSelectionUI : MonoBehaviour
             if (frame != null) { view.GradeFrame.sprite = frame; view.GradeFrame.color = Color.white; }
             else view.GradeFrame.color = gradeColor;
         }
+        if (view.Icon != null) view.Icon.sprite = GetCardIcon(choice);
         if (view.WeaponNameText != null) view.WeaponNameText.text = GetCardName(choice);
         if (view.DescriptionText != null) view.DescriptionText.text = GetCardDescription(choice);
         if (view.GradeText != null)
@@ -199,6 +204,23 @@ public class WeaponSelectionUI : MonoBehaviour
         AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
         Hide();
         LevelupWeaponSelection.Instance?.Choose(chosen);
+    }
+
+    private Sprite GetCardIcon(LevelupChoice c)
+    {
+        if (c.Kind == LevelupChoiceKind.Weapon)
+        {
+            var data = WeaponSystem.Instance != null ? WeaponSystem.Instance.GetWeaponData(c.WeaponType) : null;
+            int gi = (int)c.Grade;
+            if (data != null && data.GradeIcons != null && gi >= 0 && gi < data.GradeIcons.Length)
+                return data.GradeIcons[gi];
+        }
+        else
+        {
+            int idx = (int)c.PassiveType;
+            if (_passiveIcons != null && idx >= 0 && idx < _passiveIcons.Length) return _passiveIcons[idx];
+        }
+        return null;
     }
 
     private Sprite GetGradeFrame(CardGrade grade)
