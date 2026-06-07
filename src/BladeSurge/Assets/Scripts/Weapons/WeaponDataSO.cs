@@ -14,8 +14,10 @@ public class WeaponDataSO : ScriptableObject
     [Header("Identity")]
     public WeaponType WeaponType;
     public string WeaponName;
-    [Tooltip("UI 아이콘 (HUD/카드/슬롯 표시용). null이면 등급 색 박스 표시.")]
+    [Tooltip("UI 아이콘 (기본/폴백용). null이면 등급 색 박스 표시.")]
     public Sprite Icon;
+    [Tooltip("등급별 슬롯 아이콘 [Common, Epic, Unique, Legend]. 레벨 구간(1-4/5-9/10-14/15+)에 따라 표시.")]
+    public Sprite[] GradeIcons = new Sprite[4];
     [Tooltip("UI 카드 설명 텍스트. 한 줄 권장.")]
     [TextArea(1, 3)] public string Description;
 

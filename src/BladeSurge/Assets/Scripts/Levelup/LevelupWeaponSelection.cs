@@ -166,6 +166,25 @@ public class LevelupWeaponSelection : MonoBehaviour
         TryStartNext();
     }
 
+    /// <summary>현재 선택지를 새로 뽑아 UI를 다시 그린다 (리롤 버튼).</summary>
+    public void Reroll()
+    {
+        if (!_isSelecting) return;
+        var choices = BuildChoices();
+        if (choices.Count == 0) { Skip(); return; }
+        OnSelectionRequired?.Invoke(choices);
+    }
+
+    /// <summary>아무것도 선택하지 않고 닫는다 (건너뛰기 버튼).</summary>
+    public void Skip()
+    {
+        if (!_isSelecting) return;
+        Time.timeScale = _previousTimeScale;
+        _isSelecting = false;
+        OnSelectionComplete?.Invoke();
+        TryStartNext();
+    }
+
     private void ApplyWeapon(LevelupChoice choice)
     {
         var ws = WeaponSystem.Instance;

@@ -30,11 +30,18 @@ public class WeaponSelectionUI : MonoBehaviour
     [Header("Cards (max 3)")]
     [SerializeField] private CardView[] _cards = new CardView[3];
 
-    [Header("Grade Colors")]
+    [Header("Buttons")]
+    [SerializeField] private Button _rerollButton;
+    [SerializeField] private Button _skipButton;
+
+    [Header("Grade Colors (스프라이트 없을 때 폴백)")]
     [SerializeField] private Color _commonColor = new(0.7f, 0.7f, 0.7f);
     [SerializeField] private Color _epicColor   = new(0.6f, 0.3f, 0.9f);
     [SerializeField] private Color _uniqueColor = new(1.0f, 0.85f, 0.2f);
     [SerializeField] private Color _legendColor = new(0.95f, 0.25f, 0.25f);
+
+    [Header("Grade Frames (등급 틀 스프라이트: Common, Epic, Unique, Legend 순)")]
+    [SerializeField] private Sprite[] _gradeFrames;
 
     private readonly List<LevelupChoice> _currentChoices = new();
     private bool _isOpen;
@@ -47,6 +54,8 @@ public class WeaponSelectionUI : MonoBehaviour
     {
         // 구독은 Awake에서 (GameObject 비활성화 후에도 이벤트 받을 수 있도록)
         LevelupWeaponSelection.OnSelectionRequired += Show;
+        if (_rerollButton != null) _rerollButton.onClick.AddListener(OnRerollClicked);
+        if (_skipButton != null) _skipButton.onClick.AddListener(OnSkipClicked);
         Debug.Log($"[WeaponSelectionUI] Awake 완료. 구독 등록. panelRoot={(_panelRoot != null ? _panelRoot.name : "NULL")}");
         Hide();
     }
@@ -132,7 +141,12 @@ public class WeaponSelectionUI : MonoBehaviour
     {
         Color gradeColor = GetGradeColor(choice.Grade);
 
-        if (view.GradeFrame != null) view.GradeFrame.color = gradeColor;
+        if (view.GradeFrame != null)
+        {
+            var frame = GetGradeFrame(choice.Grade);
+            if (frame != null) { view.GradeFrame.sprite = frame; view.GradeFrame.color = Color.white; }
+            else view.GradeFrame.color = gradeColor;
+        }
         if (view.WeaponNameText != null) view.WeaponNameText.text = GetCardName(choice);
         if (view.DescriptionText != null) view.DescriptionText.text = GetCardDescription(choice);
         if (view.GradeText != null)
@@ -156,6 +170,21 @@ public class WeaponSelectionUI : MonoBehaviour
         }
     }
 
+    private void OnRerollClicked()
+    {
+        if (!_isOpen) return;
+        AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
+        LevelupWeaponSelection.Instance?.Reroll();
+    }
+
+    private void OnSkipClicked()
+    {
+        if (!_isOpen) return;
+        AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
+        Hide();
+        LevelupWeaponSelection.Instance?.Skip();
+    }
+
     private void TrySelect(int index)
     {
         if (!_isOpen) return;
@@ -170,6 +199,12 @@ public class WeaponSelectionUI : MonoBehaviour
         AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
         Hide();
         LevelupWeaponSelection.Instance?.Choose(chosen);
+    }
+
+    private Sprite GetGradeFrame(CardGrade grade)
+    {
+        int idx = (int)grade;
+        return (_gradeFrames != null && idx >= 0 && idx < _gradeFrames.Length) ? _gradeFrames[idx] : null;
     }
 
     private Color GetGradeColor(CardGrade grade) => grade switch

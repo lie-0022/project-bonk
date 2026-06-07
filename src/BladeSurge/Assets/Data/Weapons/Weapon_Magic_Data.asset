@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   WeaponType: 3
   WeaponName: Magic
+  Icon: {fileID: 21300000, guid: 495bcbfb0e73b504c8fe8cd618af25db, type: 3}
+  GradeIcons:
+  - {fileID: 21300000, guid: 495bcbfb0e73b504c8fe8cd618af25db, type: 3}
+  - {fileID: 21300000, guid: 8b8074abaf13c254bb2ebe144e9609fe, type: 3}
+  - {fileID: 21300000, guid: f7716c0d882765142a8055df3265cc16, type: 3}
+  - {fileID: 21300000, guid: c88e8ae285269b0409d2c3c8533614d5, type: 3}
+  Description: 
   BaseDamage: 30
   BaseAttackInterval: 1.5
   BaseRange: 12
@@ -21,9 +28,21 @@ MonoBehaviour:
   SweepDuration: 0.2
   SweepSpeed: 360
   SwingInterval: 0.3
-  MilestoneSweepAngles: [180, 240, 300, 360]
+  MilestoneSweepAngles:
+  - 180
+  - 240
+  - 300
+  - 360
   ProjectileSpeed: 8
   ProjectilePrefab: {fileID: 0}
-  MilestoneRangeMultipliers: [1.0, 1.17, 1.33, 1.67]
-  MilestonePierceCounts: [0, 1, 2, -1]
-  MilestoneExplosionRadii: [2.0, 3.0, 4.5, 7.0]
+  MilestoneRangeMultipliers:
+  - 1
+  - 1.17
+  - 1.33
+  - 1.67
+  MilestonePierceCounts: 000000000100000002000000ffffffff
+  MilestoneExplosionRadii:
+  - 2
+  - 3
+  - 4.5
+  - 7
