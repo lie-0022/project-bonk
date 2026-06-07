@@ -10034,6 +10034,7 @@ GameObject:
   - component: {fileID: 1108500484}
   - component: {fileID: 1108500483}
   - component: {fileID: 1108500482}
+  - component: {fileID: 1108500485}
   m_Layer: 0
   m_Name: QuestPanel
   m_TagString: Untagged
@@ -10119,6 +10120,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108500480}
   m_CullTransparentMesh: 1
+--- !u!114 &1108500485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108500480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7edf87866ce2b534d86e9959877b8a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestUI
+  _label: {fileID: 1539460509}
+  _beforeBoss: "\uBCF4\uC2A4\uAC00 \uB098\uC62C \uB54C\uAE4C\uC9C0 \uC0B4\uC544\uB0A8\uC73C\uC138\uC694!"
+  _afterBoss: "\uC774\uB3D9\uD558\uC138\uC694!"
 --- !u!1 &1109266946
 GameObject:
   m_ObjectHideFlags: 0

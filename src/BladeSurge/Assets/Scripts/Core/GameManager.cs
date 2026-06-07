@@ -68,11 +68,13 @@ public class GameManager : MonoBehaviour
 
     [Header("Scene Transitions")]
     [SerializeField] private string _gameOverSceneName = "GameOver";
+    [Tooltip("최종 스테이지 클리어(Win) 시 이동할 씬.")]
+    [SerializeField] private string _gameClearSceneName = "GameClear";
     [SerializeField] private float _gameOverTransitionDelay = 1.5f;
 
     /// <summary>
     /// 게임 상태를 전환한다. 동일 상태로의 중복 전환은 무시한다.
-    /// GameOver/Win 상태로 전환되면 결과 화면 씬으로 자동 이동한다.
+    /// GameOver → 결과 화면, Win → 게임 클리어 화면으로 자동 이동한다.
     /// </summary>
     public void ChangeState(GameState newState)
     {
@@ -100,7 +102,8 @@ public class GameManager : MonoBehaviour
         // 사망/클리어 연출 시간 확보
         yield return new WaitForSecondsRealtime(_gameOverTransitionDelay);
         Time.timeScale = 1f;
-        SceneManager.LoadScene(_gameOverSceneName);
+        string target = (CurrentState == GameState.Win) ? _gameClearSceneName : _gameOverSceneName;
+        SceneManager.LoadScene(target);
     }
 
     private void RestartGame()
