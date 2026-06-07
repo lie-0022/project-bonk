@@ -25,9 +25,12 @@ public class PassiveSlotsHUD : MonoBehaviour
 
     private static readonly PassiveType[] s_passiveOrder = (PassiveType[])Enum.GetValues(typeof(PassiveType));
 
-    private void OnEnable() => PlayerStats.OnStatsChanged += Refresh;
+    private void OnEnable()
+    {
+        PlayerStats.OnStatsChanged += Refresh;
+        Refresh(); // 활성화 시(레벨업 창 열림 등)마다 현재 상태로 갱신
+    }
     private void OnDisable() => PlayerStats.OnStatsChanged -= Refresh;
-    private void Start() => Refresh();
 
     private void Refresh()
     {

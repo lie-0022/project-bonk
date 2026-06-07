@@ -34,7 +34,7 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] private float _slashVfxLifetime = 1.5f;
     [Tooltip("슬래시 VFX 회전 오프셋(Euler). facing 기준 추가 회전. Y+ = 오른쪽으로 틀기.")]
     [SerializeField] private Vector3 _slashVfxRotationOffset = Vector3.zero;
-    [Tooltip("슬래시 1개가 덮는다고 보는 각도(도). 타격 각도가 이보다 넓으면 여러 개로 나눠 부채꼴 배치. 작을수록 더 많이 생성.")]
+    [Tooltip("슬래시 1개의 시각 각도(도). 슬래시 양 끝이 타격 각도(sweepAngle) 경계에 맞도록 겹쳐 배치하는 기준. 보면서 슬래시 실제 폭에 맞춰 조정.")]
     [SerializeField] private float _slashVfxCoverageAngle = 180f;
     [Tooltip("슬래시 VFX 크기 배율 (Lv1 기본 범위 기준). 레벨업으로 범위가 커지면 자동으로 같은 비율로 따라감.")]
     [SerializeField] private Vector3 _slashVfxScale = Vector3.one;
@@ -103,14 +103,16 @@ public class SwordAttack : MonoBehaviour
         // 슬래시 VFX 스폰. 타격 각도(sweepAngle)가 넓으면 여러 개를 부채꼴로 분산 배치.
         if (_slashVfxPrefab != null)
         {
+            // 슬래시 1개의 시각 각도(coverage) 기준, 슬래시 양 끝이 sweepAngle 경계에 맞도록 겹쳐 배치.
+            // centerSpan = 슬래시 '중심'이 놓일 한쪽 범위 = sweepAngle 절반 - 슬래시 반각.
             float coverage = _slashVfxCoverageAngle > 1f ? _slashVfxCoverageAngle : 180f;
-            int count = Mathf.Max(1, Mathf.CeilToInt(sweepAngle / coverage));
+            float centerSpan = Mathf.Max(0f, sweepAngle * 0.5f - coverage * 0.5f);
+            int count = centerSpan <= 0.01f ? 1 : Mathf.CeilToInt(2f * centerSpan / coverage) + 1;
             for (int i = 0; i < count; i++)
             {
-                // 각 슬래시 yaw: sweepAngle 범위를 count등분한 구간 중앙 (count=1이면 facing 중앙).
                 float slashYaw = count == 1
                     ? facing
-                    : facing - sweepAngle * 0.5f + sweepAngle * (i + 0.5f) / count;
+                    : facing - centerSpan + (2f * centerSpan) * i / (count - 1);
                 SpawnSlashVfx(slashYaw);
             }
         }

@@ -29,6 +29,16 @@ public class MainMenuUI : MonoBehaviour
         WireButtons();
     }
 
+    private void Update()
+    {
+        // 메인메뉴 씬에서는 어떤 상황이든 커서 표시 유지 (다른 시스템이 잠가도 즉시 복구)
+        if (Cursor.lockState != CursorLockMode.None)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
     private void WireButtons()
     {
         if (_startButton != null)

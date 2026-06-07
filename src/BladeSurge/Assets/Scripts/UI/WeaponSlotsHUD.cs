@@ -19,9 +19,12 @@ public class WeaponSlotsHUD : MonoBehaviour
 
     [SerializeField] private SlotEntry[] _slots = new SlotEntry[3];
 
-    private void OnEnable() => WeaponSystem.OnWeaponsChanged += Refresh;
+    private void OnEnable()
+    {
+        WeaponSystem.OnWeaponsChanged += Refresh;
+        Refresh(); // 활성화 시(레벨업 창 열림 등)마다 현재 상태로 갱신
+    }
     private void OnDisable() => WeaponSystem.OnWeaponsChanged -= Refresh;
-    private void Start() => Refresh();
 
     private void Refresh()
     {

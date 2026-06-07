@@ -84,6 +84,9 @@ public class CameraController : MonoBehaviour
         // timeScale=0 (레벨업 선택 등) 동안 카메라 회전 입력 차단
         if (Time.timeScale == 0f) return;
 
+        // 게임플레이 중에는 커서 잠금 보장 (다른 UI가 풀어놓고 복구 못 한 경우 자동 복구)
+        if (Cursor.lockState != CursorLockMode.Locked) LockCursor();
+
         float mouseX = Mouse.current.delta.x.ReadValue();
         float mouseY = Mouse.current.delta.y.ReadValue();
         _yaw   += mouseX * Sensitivity;

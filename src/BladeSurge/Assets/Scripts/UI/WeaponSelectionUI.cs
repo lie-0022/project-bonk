@@ -73,6 +73,13 @@ public class WeaponSelectionUI : MonoBehaviour
     {
         if (!_isOpen) return;
 
+        // 선택창이 열려있는 동안 커서 잠금 방지 (어떤 시스템이 잠가도 즉시 복구)
+        if (Cursor.lockState != CursorLockMode.None)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
         var kb = Keyboard.current;
         if (kb == null) return;
 
