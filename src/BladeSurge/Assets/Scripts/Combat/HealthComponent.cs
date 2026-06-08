@@ -9,6 +9,10 @@ public class HealthComponent : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _maxHp = 100f;
     [SerializeField] private float _xpReward = 10f;
+    [Tooltip("피격 후 무적 시간(초). 0이면 없음(적 기본). 플레이어에 0.4 정도 설정 — 여러 적이 동시에 때려도 한 번만 들어가게 해 떼 즉사 방지.")]
+    [SerializeField] private float _hitInvincibilityDuration = 0f;
+
+    private float _hitInvincTimer;
 
     public float CurrentHp { get; private set; }
     public float MaxHp => _maxHp;
@@ -32,13 +36,18 @@ public class HealthComponent : MonoBehaviour, IDamageable
         CurrentHp = _maxHp;
     }
 
+    private void Update()
+    {
+        if (_hitInvincTimer > 0f) _hitInvincTimer -= Time.deltaTime;
+    }
+
     /// <summary>
     /// 피해를 적용한다. 무적 상태이거나 이미 사망한 경우 무시한다.
     /// 음수 피해(힐)는 MVP에서 지원하지 않으므로 무시한다.
     /// </summary>
     public void TakeDamage(float amount)
     {
-        if (!IsAlive || IsInvincible || amount <= 0f) return;
+        if (!IsAlive || IsInvincible || _hitInvincTimer > 0f || amount <= 0f) return;
 
         if (DodgeChance > 0f && UnityEngine.Random.value < DodgeChance)
         {
@@ -50,6 +59,9 @@ public class HealthComponent : MonoBehaviour, IDamageable
         Debug.Log($"[Health] {gameObject.name} HP: {CurrentHp:F1} / {_maxHp:F1} (피해: {amount})");
         OnDamaged?.Invoke(amount, CurrentHp);
         OnHealthChanged?.Invoke();
+
+        // 피격 무적 발동 (설정된 경우 — 주로 플레이어). 여러 적의 동시타 누적 방지.
+        if (_hitInvincibilityDuration > 0f) _hitInvincTimer = _hitInvincibilityDuration;
 
         // 적만 EnemyHit 재생 — 플레이어는 PlayerHit SFX 미수신 상태
         if (CompareTag("Enemy"))
@@ -67,6 +79,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
         CurrentHp = _maxHp;
         IsAlive = true;
         IsInvincible = false;
+        _hitInvincTimer = 0f;
         OnHealthChanged?.Invoke();
     }
 

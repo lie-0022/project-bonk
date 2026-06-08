@@ -20,7 +20,7 @@ public class TelegraphIndicator : MonoBehaviour
     /// <summary>radius(월드 m), duration(초) 로 표시 시작.</summary>
     public void Setup(Vector3 worldPos, float radius, float duration)
     {
-        transform.position = new Vector3(worldPos.x, 0.02f, worldPos.z); // 바닥 살짝 위
+        transform.position = new Vector3(worldPos.x, worldPos.y + 0.02f, worldPos.z); // 바닥(worldPos.y는 SnapToGround로 보정됨) 살짝 위. 멀티레벨 상층 대응
         transform.rotation = Quaternion.Euler(90f, 0f, 0f);              // Quad가 위로 보도록
         transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
         _duration = duration;

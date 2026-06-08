@@ -20,7 +20,7 @@ public class ImpactBurst : MonoBehaviour
 
     public void Setup(Vector3 worldPos, float radius)
     {
-        transform.position = new Vector3(worldPos.x, 0.5f, worldPos.z);
+        transform.position = new Vector3(worldPos.x, worldPos.y + 0.5f, worldPos.z); // worldPos.y(SnapToGround 보정) 기준으로 띄움. 멀티레벨 상층 대응
         transform.rotation = Quaternion.identity;
         _maxScale = radius * 2f;
         transform.localScale = Vector3.zero;

@@ -20,8 +20,8 @@ GameObject:
   - component: {fileID: 7688850845347570580}
   - component: {fileID: 1899711132927789749}
   - component: {fileID: 5251465253696480052}
-  - component: {fileID: 7754751914707339189}
   - component: {fileID: 4437283516026516001}
+  - component: {fileID: 7754751914707339189}
   m_Layer: 9
   m_Name: Boss_Skeleton
   m_TagString: Enemy
@@ -154,6 +154,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAI
   _moveSpeed: 2
+  _jumpMovement: 0
+  _jumpInterval: 1.5
+  _jumpWalkSpeed: 1.2
+  _maxHopDistance: 10
+  _jumpHeight: 5
+  _jumpDuration: 0.8
+  _slamRadius: 4
+  _slamDamage: 30
+  _slamTelegraphPrefab: {fileID: 0}
+  _slamImpactPrefab: {fileID: 0}
   _contactDamage: 25
   _contactInterval: 0.8
   _contactRadius: 2.5
@@ -215,8 +225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d450df4be6b1984b94ea6efbe61f1be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAttackOrchestrator
-  _initialDelay: 3
-  _intervalBetweenAttacks: 1
+  _initialDelay: 1.5
+  _intervalBetweenAttacks: 0.8
 --- !u!114 &5251465253696480052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,35 +239,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e8d2e9c8596fe489f273636660b50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundSlamAttack
-  _cooldown: 5
+  _cooldown: 4
   _windupDuration: 1.5
   _damage: 50
   _radius: 4
   _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
   _impactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
   _targetPlayer: 1
---- !u!114 &7754751914707339189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6329516999241024568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0522b05c42fb89447b263a3ef052b8a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SummonAttack
-  _cooldown: 9
-  _windupDuration: 1.3
-  _damage: 50
-  _radius: 4
-  _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
-  _impactPrefab: {fileID: 0}
-  _summonCount: 4
-  _summonRadius: 4
-  _summonHpScale: 1
-  _summonSpeedScale: 1
 --- !u!114 &4437283516026516001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd40858aca06cd449618fa504f5e144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AreaBarrageAttack
-  _cooldown: 7
+  _cooldown: 4
   _windupDuration: 1.4
   _damage: 35
   _radius: 3.5
@@ -279,6 +267,28 @@ MonoBehaviour:
   _circleCount: 4
   _spread: 8
   _aroundPlayer: 1
+--- !u!114 &7754751914707339189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0522b05c42fb89447b263a3ef052b8a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SummonAttack
+  _cooldown: 6
+  _windupDuration: 1.3
+  _damage: 50
+  _radius: 4
+  _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _impactPrefab: {fileID: 0}
+  _summonCount: 4
+  _summonRadius: 4
+  _summonHpScale: 1
+  _summonSpeedScale: 1
 --- !u!1001 &285046948659275734
 PrefabInstance:
   m_ObjectHideFlags: 0

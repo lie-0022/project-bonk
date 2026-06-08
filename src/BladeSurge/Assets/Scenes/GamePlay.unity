@@ -19734,8 +19734,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61ae890bb506844d8bcb7182b1ac04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
-  _maxHp: 100
+  _maxHp: 150
   _xpReward: 0
+  _hitInvincibilityDuration: 0.4
 --- !u!114 &1890822710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19765,7 +19766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   _baseMoveSpeed: 6
   _baseExtraJumps: 0
-  _baseMaxHp: 100
+  _baseMaxHp: 150
   _baseHpRegen: 0
   _baseCritMultiplier: 1.5
   _baseProjectileCount: 1
@@ -21226,8 +21227,8 @@ MonoBehaviour:
   _goblinHpMult: 1.35
   _skeletonHpMult: 1.7
   _slimeDamageMult: 1
-  _goblinDamageMult: 1.2
-  _skeletonDamageMult: 1.4
+  _goblinDamageMult: 1.1
+  _skeletonDamageMult: 1
   _slimeRewardMult: 1
   _goblinRewardMult: 1.25
   _skeletonRewardMult: 1.5
