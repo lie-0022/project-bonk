@@ -44,7 +44,7 @@ public class GoldSystem : MonoBehaviour, IInitializable
         float rewardMult = PlayerStats.Instance != null
             ? PlayerStats.Instance.DifficultyRewardMultiplier
             : 1f;
-        int reward = Mathf.RoundToInt(baseReward * rewardMult);
+        int reward = Mathf.RoundToInt(baseReward * rewardMult * StageDifficulty.RewardMultiplier);
         SpawnGoldOrb(reward, position);
     }
 

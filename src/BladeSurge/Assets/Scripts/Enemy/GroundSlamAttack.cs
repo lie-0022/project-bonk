@@ -11,8 +11,8 @@ public class GroundSlamAttack : BossAttackBase
 
     protected override System.Collections.IEnumerator FireRoutine(BossEnemy boss, Transform player)
     {
+        // y는 그대로 두고 TelegraphAndImpact 내부 SnapToGround가 바닥 높이로 보정한다(멀티레벨 대응).
         Vector3 origin = _targetPlayer && player != null ? player.position : transform.position;
-        origin.y = 0f;
         yield return TelegraphAndImpact(origin, _radius, boss);
     }
 }

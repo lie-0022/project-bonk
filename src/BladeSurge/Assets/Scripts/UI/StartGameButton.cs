@@ -34,6 +34,9 @@ public class StartGameButton : MonoBehaviour
         if (_mapSelect != null)
             GameSession.SelectedMapIndex = _mapSelect.Selected;
 
+        // 새 런 시작 — 누적 랭킹 통계 초기화.
+        RunTotals.Reset();
+
         SceneManager.LoadScene(_gamePlaySceneName);
     }
 }

@@ -33,8 +33,18 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private Color _coinColor   = new Color(1f, 0.95f, 0.4f);
     [SerializeField] private Color _jarColor    = new Color(0.3f, 0.6f, 1f);
 
+    [Header("Objective (보스 후 이동 유도)")]
+    [SerializeField] private Color _gateColor = new Color(0.3f, 1f, 0.45f);
+    [SerializeField] private float _gateSize = 13f;
+    [SerializeField] private Color _arrowColor = new Color(0.3f, 1f, 0.45f);
+    [Tooltip("플레이어 중심 유도 화살표 크기(가로,세로).")]
+    [SerializeField] private Vector2 _arrowSize = new Vector2(9f, 26f);
+
     [Tooltip("마커가 사용할 단색 흰 sprite. 비우면 Default-UI 사각형 사용.")]
     [SerializeField] private Sprite _markerSprite;
+
+    [Tooltip("유도 화살표 전용 sprite(위를 향한 화살표 권장). 비우면 _markerSprite(막대) 사용 — PM이 교체 가능.")]
+    [SerializeField] private Sprite _arrowSprite;
 
     public static MinimapManager Instance { get; private set; }
     private static readonly List<MinimapTracker> s_pending = new();
@@ -42,11 +52,46 @@ public class MinimapManager : MonoBehaviour
     private readonly Dictionary<MinimapTracker, Image> _markers = new();
     private MinimapTracker _player;
 
+    private Image _objMarker;       // 게이트(목표) 마커 — 가장자리 클램프
+    private RectTransform _objMarkerRT;
+    private Image _objArrow;        // 플레이어 중심 유도 화살표
+    private RectTransform _objArrowRT;
+
     private void Awake()
     {
         Instance = this;
         for (int i = 0; i < s_pending.Count; i++) AddInternal(s_pending[i]);
         s_pending.Clear();
+        CreateObjectiveUI();
+    }
+
+    private void CreateObjectiveUI()
+    {
+        if (_markerLayer == null) return;
+
+        var m = new GameObject("Marker_Objective", typeof(RectTransform));
+        m.transform.SetParent(_markerLayer, false);
+        _objMarker = m.AddComponent<Image>();
+        _objMarker.sprite = _markerSprite;
+        _objMarker.color = _gateColor;
+        _objMarker.raycastTarget = false;
+        _objMarkerRT = (RectTransform)m.transform;
+        _objMarkerRT.sizeDelta = new Vector2(_gateSize, _gateSize);
+        _objMarkerRT.anchorMin = _objMarkerRT.anchorMax = new Vector2(0.5f, 0.5f);
+        _objMarkerRT.pivot = new Vector2(0.5f, 0.5f);
+        _objMarker.enabled = false;
+
+        var a = new GameObject("Objective_Arrow", typeof(RectTransform));
+        a.transform.SetParent(_markerLayer, false);
+        _objArrow = a.AddComponent<Image>();
+        _objArrow.sprite = _arrowSprite != null ? _arrowSprite : _markerSprite;
+        _objArrow.color = _arrowColor;
+        _objArrow.raycastTarget = false;
+        _objArrowRT = (RectTransform)a.transform;
+        _objArrowRT.sizeDelta = _arrowSize;
+        _objArrowRT.anchorMin = _objArrowRT.anchorMax = new Vector2(0.5f, 0.5f);
+        _objArrowRT.pivot = new Vector2(0.5f, 0f); // 바닥 피벗 — 플레이어 중심에서 바깥으로 뻗음
+        _objArrow.enabled = false;
     }
 
     private void OnDestroy()
@@ -136,6 +181,37 @@ public class MinimapManager : MonoBehaviour
                 ui.y = Mathf.Clamp(ui.y, -halfY, halfY);
             }
             rt.anchoredPosition = ui;
+        }
+
+        UpdateObjective(center, radiusToPixels, halfX, halfY);
+    }
+
+    // 보스 후 유도: 게이트 마커(가장자리 클램프) + 플레이어 중심 화살표(목표 방향 회전).
+    private void UpdateObjective(Vector3 center, float radiusToPixels, float halfX, float halfY)
+    {
+        var tgt = MinimapObjective.Target;
+        bool show = tgt != null;
+        if (_objMarker != null) _objMarker.enabled = show;
+        if (_objArrow != null) _objArrow.enabled = show;
+        if (!show) return;
+
+        Vector3 d = tgt.position - center;
+        Vector2 ui = new Vector2(d.x, d.z) * radiusToPixels;
+
+        if (_objMarkerRT != null)
+            _objMarkerRT.anchoredPosition = new Vector2(
+                Mathf.Clamp(ui.x, -halfX, halfX),
+                Mathf.Clamp(ui.y, -halfY, halfY));
+
+        if (_objArrowRT != null)
+        {
+            _objArrowRT.anchoredPosition = Vector2.zero;
+            if (ui.sqrMagnitude > 0.0001f)
+            {
+                // 위(+Y)를 향한 화살표를 목표 방향으로 회전 (북쪽 위 고정 미니맵)
+                float z = Mathf.Atan2(ui.y, ui.x) * Mathf.Rad2Deg - 90f;
+                _objArrowRT.localRotation = Quaternion.Euler(0f, 0f, z);
+            }
         }
     }
 

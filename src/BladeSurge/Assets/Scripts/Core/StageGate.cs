@@ -23,13 +23,26 @@ public class StageGate : MonoBehaviour
     [Tooltip("보스 처치(게이트 열림) 시 비활성화할 오브젝트들. 게이트 앞 해골 더미 등 장애물.")]
     [SerializeField] private GameObject[] _obstaclesOnClear;
 
-    private bool _opened;
+    [Tooltip("보스 처치(게이트 열림) 시 켤 빛기둥(클리어 마커). 평소엔 비활성, 보스 사망 후 등장.")]
+    [SerializeField] private GameObject _pillarOnClear;
 
-    private void OnEnable() { BossEnemy.OnBossDied += HandleBossDied; }
+    [Tooltip("true면 보스 사망(BossEnemy.OnBossDied) 시 자동으로 열린다. 2단 보스처럼 외부(ArenaPhaseManager)가 Open()을 호출하는 경우 false로 둔다.")]
+    [SerializeField] private bool _autoOpenOnBossDied = true;
+
+    private bool _opened;
+    private bool _passed;
+
+    private void OnEnable() { if (_autoOpenOnBossDied) BossEnemy.OnBossDied += HandleBossDied; }
     private void OnDisable() { BossEnemy.OnBossDied -= HandleBossDied; }
 
-    private void HandleBossDied(BossEnemy boss)
+    private void HandleBossDied(BossEnemy boss) => Open();
+
+    /// <summary>
+    /// 게이트를 연다. 자동(보스 사망 구독) 또는 외부(ArenaPhaseManager 등)에서 호출한다. 중복 호출은 무시.
+    /// </summary>
+    public void Open()
     {
+        if (_opened) return;
         _opened = true;
 
         // 게이트 앞 장애물(해골 더미 등) 제거
@@ -39,15 +52,26 @@ public class StageGate : MonoBehaviour
                 if (obstacle != null) obstacle.SetActive(false);
         }
 
+        // 빛기둥(클리어 마커) 등장 — 보스 사망 후에만 켜진다.
+        if (_pillarOnClear != null) _pillarOnClear.SetActive(true);
+
+        // 미니맵 유도: 이 게이트로 안내
+        MinimapObjective.Set(transform);
+
         Debug.Log(_isFinalStage
-            ? "[StageGate] 보스 처치 — 게이트 열림. 통과하면 게임 클리어."
-            : "[StageGate] 보스 처치 — 게이트 열림. 통과하면 다음 맵으로 이동한다.");
+            ? "[StageGate] 게이트 열림 — 통과하면 게임 클리어."
+            : "[StageGate] 게이트 열림 — 통과하면 다음 맵으로 이동한다.");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!_opened) return;
+        if (!_opened || _passed) return;
         if (!other.CompareTag("Player")) return;
+        _passed = true;
+
+        // 이 스테이지 클리어 통계를 누적(랭킹). 다음 맵 로드/Win 전환 전에 캡처한다.
+        if (RunStats.Instance != null)
+            RunTotals.AddStage(RunStats.Instance.CaptureCurrent(true));
 
         // 최종 스테이지면 다음 맵 대신 게임 클리어(Win) 처리.
         if (_isFinalStage)

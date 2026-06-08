@@ -31,12 +31,33 @@ public class DebugStageSelector : MonoBehaviour
     [SerializeField] private ObjectPool _objectPool;
     [SerializeField] private WaveSpawner _waveSpawner;
     [SerializeField] private JarSpawner _jarSpawner;
+    [SerializeField] private ChestSpawner _chestSpawner;
 
-    [Header("맵별 항아리 수")]
+    [Header("맵별 항아리 수 (맵 크기/밀도 고려 — 과밀 방지)")]
     [Tooltip("선택한 종족(맵)에 따라 JarSpawner의 항아리 수를 덮어쓴다.")]
-    [SerializeField] private int _slimeJarCount = 500;
-    [SerializeField] private int _goblinJarCount = 300;
-    [SerializeField] private int _skeletonJarCount = 300;
+    [SerializeField] private int _slimeJarCount = 150;
+    [SerializeField] private int _goblinJarCount = 120;
+    [SerializeField] private int _skeletonJarCount = 120;
+
+    [Header("맵별 상자 수 (과밀 방지)")]
+    [Tooltip("선택한 종족(맵)에 따라 ChestSpawner의 상자 수를 덮어쓴다.")]
+    [SerializeField] private int _slimeChestCount = 12;
+    [SerializeField] private int _goblinChestCount = 10;
+    [SerializeField] private int _skeletonChestCount = 10;
+
+    [Header("맵별 난이도 배율 (1=기본 — PM 플레이테스트로 튜닝)")]
+    [Tooltip("잡몹·보스 체력 배율.")]
+    [SerializeField] private float _slimeHpMult = 1f;
+    [SerializeField] private float _goblinHpMult = 1f;
+    [SerializeField] private float _skeletonHpMult = 1f;
+    [Tooltip("적이 주는 데미지 배율.")]
+    [SerializeField] private float _slimeDamageMult = 1f;
+    [SerializeField] private float _goblinDamageMult = 1f;
+    [SerializeField] private float _skeletonDamageMult = 1f;
+    [Tooltip("코인·경험치 보상 배율.")]
+    [SerializeField] private float _slimeRewardMult = 1f;
+    [SerializeField] private float _goblinRewardMult = 1f;
+    [SerializeField] private float _skeletonRewardMult = 1f;
 
     private void Awake()
     {
@@ -45,6 +66,8 @@ public class DebugStageSelector : MonoBehaviour
 
         ApplyMap();
         ApplyJarCount();
+        ApplyChestCount();
+        ApplyDifficulty();
 
         if (_objectPool == null || _waveSpawner == null)
         {
@@ -128,6 +151,42 @@ public class DebugStageSelector : MonoBehaviour
             _ => _slimeJarCount
         };
         _jarSpawner.SetJarCount(count);
+    }
+
+    /// <summary>선택한 종족(맵)에 맞는 상자 수를 ChestSpawner에 적용한다. ChestSpawner.Start 이전(Awake)에 호출.</summary>
+    private void ApplyChestCount()
+    {
+        if (_chestSpawner == null) return;
+        int count = _race switch
+        {
+            EnemyRace.Goblin => _goblinChestCount,
+            EnemyRace.Skeleton => _skeletonChestCount,
+            _ => _slimeChestCount
+        };
+        _chestSpawner.SetChestCount(count);
+    }
+
+    /// <summary>선택한 종족(맵)에 맞는 난이도 배율(체력/보상)을 StageDifficulty에 적용한다. WaveSpawner/Gold/XP가 읽기 전(Awake)에 설정.</summary>
+    private void ApplyDifficulty()
+    {
+        StageDifficulty.EnemyHpMultiplier = _race switch
+        {
+            EnemyRace.Goblin => _goblinHpMult,
+            EnemyRace.Skeleton => _skeletonHpMult,
+            _ => _slimeHpMult
+        };
+        StageDifficulty.EnemyDamageMultiplier = _race switch
+        {
+            EnemyRace.Goblin => _goblinDamageMult,
+            EnemyRace.Skeleton => _skeletonDamageMult,
+            _ => _slimeDamageMult
+        };
+        StageDifficulty.RewardMultiplier = _race switch
+        {
+            EnemyRace.Goblin => _goblinRewardMult,
+            EnemyRace.Skeleton => _skeletonRewardMult,
+            _ => _slimeRewardMult
+        };
     }
 
     /// <summary>

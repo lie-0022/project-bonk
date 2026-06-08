@@ -15,6 +15,9 @@ public struct WaveData
 /// </summary>
 public class WaveSpawner : MonoBehaviour
 {
+    /// <summary>인카운터(웨이브) 시작 시 브로드캐스트. QuestUI 등이 구독해 안내 문구를 초기화한다.</summary>
+    public static event System.Action OnEncounterStarted;
+
     [Header("Spawn Settings")]
     [SerializeField] private float _spawnRadius = 15f;
     [SerializeField] private float _waveDuration = 60f;
@@ -58,6 +61,8 @@ public class WaveSpawner : MonoBehaviour
     private float _transitionTimer;
     private bool _bossSpawned;
     private GameObject _bossInstance;
+    private float _pendingBossHpScale = 1f;
+    private float _pendingBossSpeedScale = 1f;
     private static readonly Vector3 PrewarmPosition = new Vector3(-9999f, -9999f, -9999f);
 
     /// <summary>Start 이전(Awake)에 호출해 보스 프리팹을 외부에서 교체. DebugStageSelector 용.</summary>
@@ -98,14 +103,32 @@ public class WaveSpawner : MonoBehaviour
 
     /// <summary>
     /// 인카운터(웨이브 스폰)를 시작한다. 봉인 트리거(ArenaEncounterTrigger) 등이 호출.
-    /// _autoStartOnPlay=false일 때 이 호출 전까지는 몬스터가 스폰되지 않는다. 중복 호출은 무시.
+    /// _autoStartOnPlay=false일 때 이 호출 전까지는 몬스터가 스폰되지 않는다.
     /// </summary>
-    public void BeginEncounter()
+    public void BeginEncounter() => BeginEncounter(null, 1f, 1f);
+
+    /// <summary>
+    /// 인카운터를 (재)시작한다. 2단 보스처럼 한 스테이지에서 여러 번 호출될 수 있다(재무장).
+    /// 진행 중(스폰/전환 중)이면 무시한다. areaOverride가 있으면 이번 인카운터의 스폰 영역을
+    /// 교체하고, bossHpScale/bossSpeedScale로 이번 인카운터 보스를 강화한다(기본 1).
+    /// </summary>
+    public void BeginEncounter(StageSpawnArea areaOverride, float bossHpScale, float bossSpeedScale)
     {
-        if (_encounterStarted) return;
+        // 가드 없음: 각 ArenaEncounterTrigger는 1회만 발동(_fired)하고, 2단 보스는 UpperSeal로
+        // 물리 게이팅되므로 호출은 인카운터별 1회씩 순차적이다. 보스1을 웨이브 도중 처치한 경우에도
+        // 이전 인카운터 상태를 덮어쓰고 새 인카운터(위층)를 깨끗이 시작해야 한다.
         _encounterStarted = true;
+        _bossSpawned = false;
+        _pendingBossHpScale = bossHpScale;
+        _pendingBossSpeedScale = bossSpeedScale;
+        if (areaOverride != null) _spawnArea = areaOverride;
+
         StartWave(0);
-        Debug.Log("[WaveSpawner] 인카운터 시작");
+        MinimapObjective.Clear(); // 전투 시작 — 유도 목표 해제
+        OnEncounterStarted?.Invoke();
+        Debug.Log(areaOverride != null
+            ? $"[WaveSpawner] 인카운터 시작 (area={areaOverride.name}, bossHp×{bossHpScale}, bossSpd×{bossSpeedScale})"
+            : "[WaveSpawner] 인카운터 시작");
     }
 
     // 보스 등장 시 hitch 방지: 프리팹을 화면 밖에 비활성 상태로 미리 Instantiate하고
@@ -183,7 +206,7 @@ public class WaveSpawner : MonoBehaviour
         EnemyBase enemy = obj.GetComponent<EnemyBase>();
         if (enemy == null) return;
 
-        enemy.ApplyWaveScale(wave.HpMultiplier, wave.SpeedMultiplier);
+        enemy.ApplyWaveScale(wave.HpMultiplier * StageDifficulty.EnemyHpMultiplier, wave.SpeedMultiplier);
         enemy.Activate(_playerTransform);
     }
 
@@ -259,6 +282,7 @@ public class WaveSpawner : MonoBehaviour
         }
 
         boss.OnSpawn();
+        boss.ApplyWaveScale(_pendingBossHpScale * StageDifficulty.EnemyHpMultiplier, _pendingBossSpeedScale);
         boss.Activate(_playerTransform);
         _bossSpawned = true;
 

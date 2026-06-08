@@ -86,9 +86,12 @@ public class RunStats : MonoBehaviour
         }
     }
 
-    private void FreezeSnapshot(bool cleared)
+    private void FreezeSnapshot(bool cleared) => LastRun = CaptureCurrent(cleared);
+
+    /// <summary>현재 값으로 스냅샷을 만든다(LastRun에 저장하지 않음). 스테이지 클리어 누적(RunTotals) 등에 사용.</summary>
+    public Snapshot CaptureCurrent(bool cleared)
     {
-        LastRun = new Snapshot
+        return new Snapshot
         {
             KillCount = KillCount,
             SurvivalTime = SurvivalTime,

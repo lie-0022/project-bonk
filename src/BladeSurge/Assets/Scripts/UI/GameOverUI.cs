@@ -60,7 +60,11 @@ public class GameOverUI : MonoBehaviour
     private void WireButtons()
     {
         if (_restartButton != null)
-            _restartButton.onClick.AddListener(() => SceneManager.LoadScene(_gameplaySceneName));
+            _restartButton.onClick.AddListener(() =>
+            {
+                RunTotals.Reset(); // 재시작 = 새 런
+                SceneManager.LoadScene(_gameplaySceneName);
+            });
         if (_mainMenuButton != null)
             _mainMenuButton.onClick.AddListener(() => SceneManager.LoadScene(_mainMenuSceneName));
     }

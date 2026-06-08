@@ -65,7 +65,7 @@ public class XPSystem : MonoBehaviour, IInitializable
         float rewardMult = PlayerStats.Instance != null
             ? PlayerStats.Instance.DifficultyRewardMultiplier
             : 1f;
-        SpawnXPOrb(xpReward * rewardMult, position);
+        SpawnXPOrb(xpReward * rewardMult * StageDifficulty.RewardMultiplier, position);
     }
 
     private void SpawnXPOrb(float xpReward, Vector3 position)

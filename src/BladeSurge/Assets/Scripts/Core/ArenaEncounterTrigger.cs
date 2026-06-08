@@ -27,6 +27,16 @@ public class ArenaEncounterTrigger : MonoBehaviour
     [Tooltip("이 높이(y) 이상으로 올라오면 '홀 바닥 도달'로 판정. 홀 바닥 높이 부근.")]
     [SerializeField] private float _enterHeight = 13f;
 
+    [Header("인카운터 파라미터 (2단 보스 등 — 미설정 시 기본)")]
+    [Tooltip("이번 인카운터의 스폰 영역. 미설정 시 활성 StageSpawnArea를 자동 탐색한다.")]
+    [SerializeField] private StageSpawnArea _spawnAreaOverride;
+
+    [Tooltip("이번 인카운터 보스 체력 배율. 1=기본.")]
+    [SerializeField] private float _bossHpScale = 1f;
+
+    [Tooltip("이번 인카운터 보스 속도 배율. 1=기본.")]
+    [SerializeField] private float _bossSpeedScale = 1f;
+
     private Transform _player;
     private bool _fired;
 
@@ -61,8 +71,10 @@ public class ArenaEncounterTrigger : MonoBehaviour
         _axis = extX <= extZ ? 0 : 2;
         float ext = _axis == 0 ? extX : extZ;
 
-        // 홀 중심 기준점: StageSpawnArea가 있으면 그 중심, 없으면 벽에서 살짝 안쪽 추정 불가 → false
-        var area = FindFirstObjectByType<StageSpawnArea>(FindObjectsInactive.Include);
+        // 홀 중심 기준점: override가 있으면 그것을, 없으면 활성 StageSpawnArea를 사용.
+        var area = _spawnAreaOverride != null
+            ? _spawnAreaOverride
+            : FindFirstObjectByType<StageSpawnArea>(FindObjectsInactive.Include);
         if (area == null) return false;
         Vector3 hall = area.Center;
 
@@ -93,7 +105,7 @@ public class ArenaEncounterTrigger : MonoBehaviour
             _barrier.SetActive(true);
 
         if (_waveSpawner != null)
-            _waveSpawner.BeginEncounter();
+            _waveSpawner.BeginEncounter(_spawnAreaOverride, _bossHpScale, _bossSpeedScale);
         else
             Debug.LogWarning("[ArenaEncounterTrigger] WaveSpawner 미할당 — 인카운터 시작 생략");
 

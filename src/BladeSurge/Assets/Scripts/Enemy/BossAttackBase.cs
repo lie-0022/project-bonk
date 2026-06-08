@@ -23,7 +23,7 @@ public abstract class BossAttackBase : MonoBehaviour
 
     public float Cooldown => _cooldown;
 
-    private bool _firing;
+    protected bool _firing;
     public bool IsFiring => _firing;
 
     /// <summary>Orchestrator에서 호출. 이미 발동 중이면 false.</summary>
@@ -41,9 +41,22 @@ public abstract class BossAttackBase : MonoBehaviour
     /// 텔레그래프 표시 + windup 대기 후 worldPos 위치에 OverlapSphere로 플레이어 데미지.
     /// 서브클래스 공통 헬퍼.
     /// </summary>
+    /// <summary>
+    /// XZ 위치의 실제 바닥(Environment 레이어) 높이로 y를 보정한다. 멀티레벨 맵에서
+    /// 텔레그래프/임팩트가 바닥 아래(y=0 등)에 깔려 안 보이는 문제를 막는다. 바닥 못 찾으면 원래 y 유지.
+    /// </summary>
+    protected static Vector3 SnapToGround(Vector3 pos)
+    {
+        var origin = new Vector3(pos.x, pos.y + 12f, pos.z);
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 80f, 1 << 8)) // Environment=8
+            pos.y = hit.point.y + 0.05f;
+        return pos;
+    }
+
     protected System.Collections.IEnumerator TelegraphAndImpact(Vector3 worldPos, float radius, BossEnemy boss)
     {
         _firing = true;
+        worldPos = SnapToGround(worldPos); // 바닥 높이로 보정 (멀티레벨 대응)
         // 텔레그래프 표시
         TelegraphIndicator indicator = null;
         if (_telegraphPrefab != null)
@@ -63,8 +76,8 @@ public abstract class BossAttackBase : MonoBehaviour
             if (burst != null) burst.Setup(worldPos, radius);
         }
 
-        // 임팩트: OverlapSphere로 플레이어 검출
-        var hits = Physics.OverlapSphere(worldPos, radius);
+        // 임팩트: OverlapSphere로 플레이어 검출 (바닥에서 살짝 띄워 플레이어 캡슐 포함)
+        var hits = Physics.OverlapSphere(worldPos + Vector3.up * 1.5f, radius);
         for (int i = 0; i < hits.Length; i++)
         {
             if (!hits[i].CompareTag("Player")) continue;

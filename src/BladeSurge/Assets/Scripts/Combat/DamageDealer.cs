@@ -36,6 +36,11 @@ public static class DamageDealer
         if (info.Source == DamageSource.Player && !target.CompareTag("Enemy")) return;
         if (info.Source == DamageSource.Enemy  && !target.CompareTag("Player")) return;
 
-        target.TakeDamage(info.Amount);
+        // 적 데미지는 스테이지 난이도 배율을 곱한다(맵별 튜닝). 플레이어 데미지는 그대로.
+        float amount = info.Source == DamageSource.Enemy
+            ? info.Amount * StageDifficulty.EnemyDamageMultiplier
+            : info.Amount;
+
+        target.TakeDamage(amount);
     }
 }

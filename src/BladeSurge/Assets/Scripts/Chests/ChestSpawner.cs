@@ -20,8 +20,17 @@ public class ChestSpawner : MonoBehaviour
     [SerializeField] private float _minDistance = 5f;
     [SerializeField] private int _maxAttemptsPerChest = 30;
 
+    [Tooltip("이 영역을 우선 사용한다. 미설정 시 활성 StageSpawnArea를 자동 탐색. 한 맵에 여러 스폰 영역(2단 보스 위층 등)이 있을 때 지정.")]
+    [SerializeField] private StageSpawnArea _spawnAreaOverride;
+
     private StageSpawnArea _spawnArea;
     private Terrain _terrain;
+
+    /// <summary>Start 이전(Awake)에 호출해 상자 수를 외부에서 설정. DebugStageSelector가 맵별로 지정.</summary>
+    public void SetChestCount(int count)
+    {
+        _chestCount = Mathf.Max(0, count);
+    }
 
     private void Start()
     {
@@ -32,7 +41,7 @@ public class ChestSpawner : MonoBehaviour
         }
         // 활성 스테이지에 스폰 영역이 있으면 그 안쪽·바닥 위로 배치(맵 밖/바닥 아래 방지).
         // 없으면 직렬화된 사각 영역(_areaCenter/_areaSize/_spawnY) 폴백.
-        _spawnArea = FindFirstObjectByType<StageSpawnArea>();
+        _spawnArea = _spawnAreaOverride != null ? _spawnAreaOverride : FindFirstObjectByType<StageSpawnArea>();
         // 사각 영역 폴백을 맵 전체로 넓혀도 지형 높이에 맞춰 배치되도록 활성 Terrain을 캐싱.
         _terrain = FindFirstObjectByType<Terrain>();
         SpawnChests();

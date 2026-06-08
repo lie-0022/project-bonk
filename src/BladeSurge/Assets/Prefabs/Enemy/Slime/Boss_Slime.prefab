@@ -125,6 +125,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAI
   _moveSpeed: 2
+  _jumpMovement: 1
+  _jumpInterval: 0.9
+  _maxHopDistance: 10
+  _jumpHeight: 9
+  _jumpDuration: 0.8
+  _slamRadius: 7.5
+  _slamDamage: 30
+  _slamTelegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _slamImpactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
   _contactDamage: 25
   _contactInterval: 0.8
   _contactRadius: 2.5

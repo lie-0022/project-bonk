@@ -121,6 +121,15 @@ MonoBehaviour:
   _contactDamage: 8
   _contactInterval: 0.5
   _contactRadius: 1.2
+  _canJumpSlam: 1
+  _jumpInterval: 5
+  _jumpRange: 9
+  _jumpHeight: 4
+  _jumpDuration: 0.9
+  _slamRadius: 3
+  _slamDamage: 20
+  _slamTelegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _slamImpactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
 --- !u!114 &1664601698569914598
 MonoBehaviour:
   m_ObjectHideFlags: 0
