@@ -2023,7 +2023,7 @@ MonoBehaviour:
   _panelRoot: {fileID: 1203333465}
   _resumeButton: {fileID: 114506671}
   _mainMenuButton: {fileID: 1282208558}
-  _mainMenuScene: CharacterSelect
+  _mainMenuScene: MainMenu
 --- !u!1 &210942943
 GameObject:
   m_ObjectHideFlags: 0
