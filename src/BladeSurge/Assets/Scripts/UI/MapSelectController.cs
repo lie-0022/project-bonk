@@ -45,8 +45,8 @@ public class MapSelectController : MonoBehaviour
         {
             if (map == null) continue;
 
-            // 잠긴 맵은 미개방 이미지 고정 + 클릭 불가
-            if (!map.Unlocked)
+            // 해금 여부는 진행도(StageProgress)로 결정. 잠긴 맵은 미개방 이미지 + 클릭 불가.
+            if (!StageProgress.IsUnlocked(map.Index))
             {
                 if (map.Thumbnail != null && map.LockedSprite != null)
                     map.Thumbnail.sprite = map.LockedSprite;
@@ -61,20 +61,23 @@ public class MapSelectController : MonoBehaviour
             }
         }
 
-        Select(_defaultMapIndex);
+        // 기본 선택: 진행도에 맞는 최고 해금 스테이지(없으면 첫 스테이지). 선택 화면에서 더 낮은 스테이지도 고를 수 있음.
+        int def = Mathf.Clamp(StageProgress.HighestUnlocked, 0, _maps.Length - 1);
+        if (StageProgress.IsUnlocked(_defaultMapIndex)) def = _defaultMapIndex < def ? def : _defaultMapIndex;
+        Select(def);
     }
 
-    /// <summary>지정 맵을 선택. 잠긴 맵이면 무시.</summary>
+    /// <summary>지정 맵을 선택. 잠긴(미해금) 맵이면 무시.</summary>
     public void Select(int index)
     {
         MapEntry chosen = FindMap(index);
-        if (chosen == null || !chosen.Unlocked) return;
+        if (chosen == null || !StageProgress.IsUnlocked(chosen.Index)) return;
 
         Selected = index;
 
         foreach (MapEntry map in _maps)
         {
-            if (map == null || !map.Unlocked || map.Thumbnail == null) continue;
+            if (map == null || !StageProgress.IsUnlocked(map.Index) || map.Thumbnail == null) continue;
             Sprite target = map.Index == index ? map.SelectedSprite : map.DefaultSprite;
             if (target != null) map.Thumbnail.sprite = target;
         }

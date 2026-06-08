@@ -73,6 +73,9 @@ public class StageGate : MonoBehaviour
         if (RunStats.Instance != null)
             RunTotals.AddStage(RunStats.Instance.CaptureCurrent(true));
 
+        // 스테이지 클리어 → 다음 스테이지 해금(로컬 진행도 저장).
+        StageProgress.MarkCleared(GameSession.SelectedMapIndex);
+
         // 최종 스테이지면 다음 맵 대신 게임 클리어(Win) 처리.
         if (_isFinalStage)
         {
