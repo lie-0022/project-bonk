@@ -2,7 +2,7 @@
 
 > **Status**: MVP 18 시스템 구현 완료 — 자산 통합/폴리싱 단계
 > **Created**: 2026-03-26
-> **Last Updated**: 2026-05-08
+> **Last Updated**: 2026-06-09 (신규 시스템 GDD 7종 작성: 스테이지 진행/보스/랭킹/온라인/캐릭터선택/미니맵/컷신)
 > **Source Concept**: design/gdd/game-concept.md
 
 ---
@@ -49,12 +49,15 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 | 18 | HUD 시스템 | UI | MVP 🟡 | Implemented | design/gdd/hud-system.md | HpBarUI/XpBarUI/TopBarUI/DashCooldownUI/WeaponSlotsHUD/PassiveSlotsHUD/StatsPanelUI/ChestPromptUI.cs | 체력, XP, 무기, 골드, 게임 상태 |
 | 19 | 피격 피드백 | UI | MVP 🟡 | Implemented | design/gdd/hit-feedback.md | HitFlash.cs, IHitFeedback.cs | 데미지 시스템 |
 | 20 | 상자 기본 | Gameplay | MVP 🟡 | Implemented | design/gdd/chest-system.md | ChestSystem.cs, ChestSpawner.cs, Chest.cs | 골드, 등급 시스템 |
-| 21 | 캐릭터 선택 | UI | Vertical 🔵 | 신규 필요 | — | — | 게임 상태 관리 |
+| 21 | 캐릭터 선택 | UI | Vertical 🔵 | Implemented | design/gdd/character-select.md | CharacterSelectController.cs, CharacterSelectPreview.cs, MapSelectController.cs, GameSession.cs | 게임 상태 관리, 스테이지 진행 |
 | 22 | 상인 시스템 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 골드, 등급 시스템 |
 | 23 | 스테이지 진행 | Core | Vertical 🔵 | Implemented | design/gdd/stage-progression.md | StageGate.cs, StageProgress.cs, StageDifficulty.cs, ArenaPhaseManager.cs, ArenaEncounterTrigger.cs, DebugStageSelector.cs | 게임 상태, 웨이브 스폰, 보스 몬스터, 랭킹, 미니맵 |
-| 24 | 보스 몬스터 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 적 AI, 체력 시스템 |
-| 25 | 랭킹 시스템 | Meta | Alpha 🟣 | 신규 필요 | — | — | 게임 상태 관리 |
-| 26 | 외부 재화·해금 | Meta | Alpha 🟣 | 신규 필요 | — | — | 랭킹, 게임 상태 |
+| 24 | 보스 몬스터 | Gameplay | Vertical 🔵 | Implemented | design/gdd/boss-monster.md | BossEnemy.cs, BossAI.cs, BossAttackBase.cs, BossAttackOrchestrator.cs, GroundSlamAttack/AreaBarrageAttack/SummonAttack/ChargeAttack.cs, TelegraphIndicator.cs, ImpactBurst.cs, BossHpBarUI.cs, BossBanner.cs | 적 AI, 체력 시스템, 웨이브 스폰, 미니맵 |
+| 25 | 랭킹 시스템 | Meta | Alpha 🟣 | Implemented | design/gdd/ranking-scoring.md | RunStats.cs, RunTotals.cs, GameClearUI.cs | 게임 상태 관리, 스테이지 진행 |
+| 26 | 외부 재화·해금 | Meta | Alpha 🟣 | 부분 (해금만) | design/gdd/stage-progression.md (해금) | StageProgress.cs | 랭킹, 게임 상태 — 외부 재화는 미구현 |
+| 32 | 온라인 리더보드 | Infra | Alpha 🟣 | Implemented | design/gdd/online-leaderboard.md | OnlineLeaderboard.cs, LeaderboardPanelUI.cs | 랭킹 시스템 (점수), 게임 상태 |
+| 33 | 미니맵 | UI | Alpha 🟣 | Implemented | design/gdd/minimap.md | MinimapManager.cs, MinimapTracker.cs, MinimapObjective.cs | 스테이지 진행, 보스, 적 AI |
+| 34 | 인트로 컷신 | UI | Vertical 🔵 | Implemented | design/gdd/intro-cutscene.md | IntroCutscene.cs | 게임 상태 관리, 스테이지 진행 |
 | 27 | 결과 화면 (GameOver/Win) | UI | MVP 🔴 | Implemented (no doc) | — | GameOverUI.cs, RunStats.cs | 게임 상태 관리, 경험치/골드, 적 AI |
 | 28 | 메인 메뉴 | UI | MVP 🔴 | In Progress | — | MainMenuUI.cs | 게임 상태 관리 |
 | 29 | 옵션 영속화 | Infra | MVP 🟡 | Implemented (no doc) | — | SettingsService.cs | 없음 (PlayerPrefs 래퍼) |
