@@ -53,6 +53,15 @@ public class LevelupWeaponSelection : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int _choiceCount = 3;
 
+    [Tooltip("스테이지당 리롤 가능 횟수. 씬(스테이지) 리로드 시 0으로 초기화된다.")]
+    [SerializeField] private int _maxRerollsPerStage = 3;
+
+    /// <summary>이번 스테이지에서 사용한 리롤 횟수.</summary>
+    private int _rerollsUsed;
+
+    /// <summary>이번 스테이지 남은 리롤 횟수. UI 버튼 활성/표시에 사용.</summary>
+    public int RerollsRemaining => Mathf.Max(0, _maxRerollsPerStage - _rerollsUsed);
+
     /// <summary>패시브 슬롯 상한. spec-system.md:21,87,159 — 3종 빌드 정체성.</summary>
     private const int MaxPassiveSlots = 3;
 
@@ -166,10 +175,12 @@ public class LevelupWeaponSelection : MonoBehaviour
         TryStartNext();
     }
 
-    /// <summary>현재 선택지를 새로 뽑아 UI를 다시 그린다 (리롤 버튼).</summary>
+    /// <summary>현재 선택지를 새로 뽑아 UI를 다시 그린다 (리롤 버튼). 스테이지당 _maxRerollsPerStage회로 제한.</summary>
     public void Reroll()
     {
         if (!_isSelecting) return;
+        if (_rerollsUsed >= _maxRerollsPerStage) return; // 이번 스테이지 리롤 횟수 소진 — 무시
+        _rerollsUsed++;
         var choices = BuildChoices();
         if (choices.Count == 0) { Skip(); return; }
         OnSelectionRequired?.Invoke(choices);

@@ -50,7 +50,7 @@ MonoBehaviour:
     PitchVariance: 0
   _bgmEntries:
   - Track: 1
-    Clip: {fileID: 8300000, guid: c6bb7025a3790734eba8bea3b3fbc475, type: 3}
+    Clip: {fileID: 8300000, guid: ba8edaa1c15b5e74d99f175733e1aa07, type: 3}
     VolumeScale: 1
     Loop: 1
   - Track: 2

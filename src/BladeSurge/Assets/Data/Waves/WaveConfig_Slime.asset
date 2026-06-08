@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdeebb9715ba4374bba759173d739836, type: 3}
+  m_Name: WaveConfig_Slime
+  m_EditorClassIdentifier: Assembly-CSharp::StageWaveConfig
+  WaveDuration: 30
+  BossSpawnAfterWave: 5
+  WaveTransitionDelay: 1
+  Waves:
+  - SpawnInterval: 2
+    HpMultiplier: 1
+    SpeedMultiplier: 1
+  - SpawnInterval: 1.7
+    HpMultiplier: 1.15
+    SpeedMultiplier: 1.05
+  - SpawnInterval: 1.4
+    HpMultiplier: 1.3
+    SpeedMultiplier: 1.1
+  - SpawnInterval: 1.2
+    HpMultiplier: 1.45
+    SpeedMultiplier: 1.15
+  - SpawnInterval: 1
+    HpMultiplier: 1.6
+    SpeedMultiplier: 1.2

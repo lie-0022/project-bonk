@@ -27,6 +27,12 @@ public class DebugStageSelector : MonoBehaviour
     [SerializeField] private GameObject _skeletonMap;
     [SerializeField] private GameObject _goblinMap;
 
+    [Header("Race 웨이브 구성 (스테이지별 페이싱)")]
+    [Tooltip("선택한 종족(맵)에 맞는 웨이브 구성을 WaveSpawner에 주입한다. 미설정 시 WaveSpawner 기본값 유지.")]
+    [SerializeField] private StageWaveConfig _slimeWaveConfig;
+    [SerializeField] private StageWaveConfig _goblinWaveConfig;
+    [SerializeField] private StageWaveConfig _skeletonWaveConfig;
+
     [Header("타깃 컴포넌트")]
     [SerializeField] private ObjectPool _objectPool;
     [SerializeField] private WaveSpawner _waveSpawner;
@@ -68,6 +74,7 @@ public class DebugStageSelector : MonoBehaviour
         ApplyJarCount();
         ApplyChestCount();
         ApplyDifficulty();
+        ApplyWaveConfig();
 
         if (_objectPool == null || _waveSpawner == null)
         {
@@ -164,6 +171,19 @@ public class DebugStageSelector : MonoBehaviour
             _ => _slimeChestCount
         };
         _chestSpawner.SetChestCount(count);
+    }
+
+    /// <summary>선택한 종족(맵)에 맞는 웨이브 구성을 WaveSpawner에 주입한다. WaveSpawner.Start 이전(Awake)에 호출.</summary>
+    private void ApplyWaveConfig()
+    {
+        if (_waveSpawner == null) return;
+        StageWaveConfig config = _race switch
+        {
+            EnemyRace.Goblin => _goblinWaveConfig,
+            EnemyRace.Skeleton => _skeletonWaveConfig,
+            _ => _slimeWaveConfig
+        };
+        if (config != null) _waveSpawner.SetWaveConfig(config);
     }
 
     /// <summary>선택한 종족(맵)에 맞는 난이도 배율(체력/보상)을 StageDifficulty에 적용한다. WaveSpawner/Gold/XP가 읽기 전(Awake)에 설정.</summary>

@@ -73,6 +73,20 @@ public class WaveSpawner : MonoBehaviour
     }
 
     /// <summary>
+    /// Start 이전(Awake)에 호출해 스테이지별 웨이브 구성을 주입. DebugStageSelector 용.
+    /// 웨이브 배열·웨이브 길이·보스 등장 웨이브·전환 딜레이를 config 값으로 덮어쓴다.
+    /// 미호출 시 인스펙터 기본값 유지.
+    /// </summary>
+    public void SetWaveConfig(StageWaveConfig config)
+    {
+        if (config == null) return;
+        if (config.Waves != null && config.Waves.Length > 0) _waves = config.Waves;
+        _waveDuration = config.WaveDuration;
+        _bossSpawnAfterWave = config.BossSpawnAfterWave;
+        _waveTransitionDelay = config.WaveTransitionDelay;
+    }
+
+    /// <summary>
     /// Start 이전(Awake)에 호출해 자동 시작 여부를 외부에서 설정. DebugStageSelector 용.
     /// 봉인 트리거(ArenaEncounterTrigger)가 있는 스테이지는 false, 없는 스테이지는 true로 지정한다.
     /// </summary>

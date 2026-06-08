@@ -50,6 +50,9 @@ public class WeaponSelectionUI : MonoBehaviour
     private readonly List<LevelupChoice> _currentChoices = new();
     private bool _isOpen;
 
+    // 리롤 버튼 라벨(잔여 횟수 표시용). Awake에서 버튼 자식 TMP를 자동 캐싱.
+    private TextMeshProUGUI _rerollLabel;
+
     // 커서 상태 백업 (Show 시 잠금 해제, Hide 시 복원)
     private CursorLockMode _previousLockState;
     private bool _previousCursorVisible;
@@ -58,7 +61,11 @@ public class WeaponSelectionUI : MonoBehaviour
     {
         // 구독은 Awake에서 (GameObject 비활성화 후에도 이벤트 받을 수 있도록)
         LevelupWeaponSelection.OnSelectionRequired += Show;
-        if (_rerollButton != null) _rerollButton.onClick.AddListener(OnRerollClicked);
+        if (_rerollButton != null)
+        {
+            _rerollButton.onClick.AddListener(OnRerollClicked);
+            _rerollLabel = _rerollButton.GetComponentInChildren<TextMeshProUGUI>(true);
+        }
         if (_skipButton != null) _skipButton.onClick.AddListener(OnSkipClicked);
         Debug.Log($"[WeaponSelectionUI] Awake 완료. 구독 등록. panelRoot={(_panelRoot != null ? _panelRoot.name : "NULL")}");
         Hide();
@@ -125,6 +132,8 @@ public class WeaponSelectionUI : MonoBehaviour
             Debug.LogWarning("[WeaponSelectionUI] _panelRoot 가 매핑 안됨. Inspector 확인 필요.");
         }
 
+        UpdateRerollButton();
+
         // 커서 잠금 해제 (현재 상태 백업 후 마우스 활성화)
         _previousLockState = Cursor.lockState;
         _previousCursorVisible = Cursor.visible;
@@ -185,8 +194,24 @@ public class WeaponSelectionUI : MonoBehaviour
     private void OnRerollClicked()
     {
         if (!_isOpen) return;
+        var sel = LevelupWeaponSelection.Instance;
+        if (sel == null || sel.RerollsRemaining <= 0) return; // 잔여 리롤 없음 — 무시
         AudioManager.Instance?.PlayUi(SfxEvent.CardSelect);
-        LevelupWeaponSelection.Instance?.Reroll();
+        sel.Reroll();
+        // Reroll 성공 시 OnSelectionRequired→Show가 다시 호출되어 버튼이 갱신되지만,
+        // 선택지가 없어 Skip된 경우를 대비해 한 번 더 갱신.
+        UpdateRerollButton();
+    }
+
+    /// <summary>남은 리롤 횟수에 따라 리롤 버튼 활성/라벨을 갱신한다.</summary>
+    private void UpdateRerollButton()
+    {
+        if (_rerollButton == null) return;
+        int remaining = LevelupWeaponSelection.Instance != null
+            ? LevelupWeaponSelection.Instance.RerollsRemaining
+            : 0;
+        _rerollButton.interactable = remaining > 0;
+        if (_rerollLabel != null) _rerollLabel.text = $"리롤 ({remaining})";
     }
 
     private void OnSkipClicked()
