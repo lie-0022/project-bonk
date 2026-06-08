@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: warrior_Atlas
+  m_EditorClassIdentifier: spine-unity::Spine.Unity.SpineAtlasAsset
+  textureLoadingMode: 0
+  onDemandTextureLoader: {fileID: 0}
+  atlasFile: {fileID: 4900000, guid: 99ba38bd8fc801243a460d5e32b3a667, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 122722084c0ca7b43903024771a8a719, type: 2}
+  - {fileID: 2100000, guid: c66647f81c46a8d4ebfa686bbcaf5859, type: 2}
+  - {fileID: 2100000, guid: f49ecdc685e588540893719db98177f4, type: 2}
+  - {fileID: 2100000, guid: c5bb3bc3f69b7be45a1dbfc5b0c1fa5d, type: 2}
+  - {fileID: 2100000, guid: cba4b3ffd68fe74468bf3238c2b68b21, type: 2}
+  - {fileID: 2100000, guid: ff62f6ef20454a743943b43a123a749c, type: 2}
+  - {fileID: 2100000, guid: 203719ee03a8c6945a8ea09ff405cea4, type: 2}
+  - {fileID: 2100000, guid: 886cc1512231ac94c83b930e748eccc8, type: 2}

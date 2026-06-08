@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: magician_Atlas
+  m_EditorClassIdentifier: spine-unity::Spine.Unity.SpineAtlasAsset
+  textureLoadingMode: 0
+  onDemandTextureLoader: {fileID: 0}
+  atlasFile: {fileID: 4900000, guid: 8a4f2ca92fa38954da0ea3733d5c656d, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 48a6f1278650d90479ea613df9e47066, type: 2}
+  - {fileID: 2100000, guid: 76e35ff6a5f8cc04fbca1112184d224a, type: 2}
+  - {fileID: 2100000, guid: ee94e4c386401664c9c080e3070758e2, type: 2}
+  - {fileID: 2100000, guid: 3cc03e37918b319468ed3af75d462491, type: 2}
+  - {fileID: 2100000, guid: 7778de91d1c6d9a469b00788fa9dd9d4, type: 2}
+  - {fileID: 2100000, guid: d6bad99647d96dd45a4abbb1e2a9b4ab, type: 2}
+  - {fileID: 2100000, guid: 6d13e3843dd948241ab1fdb576205e69, type: 2}
