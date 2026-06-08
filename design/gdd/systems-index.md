@@ -51,7 +51,7 @@ MVP는 검사 1캐릭터 + Stage 1 로직 완성을 목표로 했고, 2026-05-02
 | 20 | 상자 기본 | Gameplay | MVP 🟡 | Implemented | design/gdd/chest-system.md | ChestSystem.cs, ChestSpawner.cs, Chest.cs | 골드, 등급 시스템 |
 | 21 | 캐릭터 선택 | UI | Vertical 🔵 | 신규 필요 | — | — | 게임 상태 관리 |
 | 22 | 상인 시스템 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 골드, 등급 시스템 |
-| 23 | 스테이지 진행 | Core | Vertical 🔵 | 신규 필요 | — | — | 게임 상태, 웨이브 스폰 |
+| 23 | 스테이지 진행 | Core | Vertical 🔵 | Implemented | design/gdd/stage-progression.md | StageGate.cs, StageProgress.cs, StageDifficulty.cs, ArenaPhaseManager.cs, ArenaEncounterTrigger.cs, DebugStageSelector.cs | 게임 상태, 웨이브 스폰, 보스 몬스터, 랭킹, 미니맵 |
 | 24 | 보스 몬스터 | Gameplay | Vertical 🔵 | 신규 필요 | — | — | 적 AI, 체력 시스템 |
 | 25 | 랭킹 시스템 | Meta | Alpha 🟣 | 신규 필요 | — | — | 게임 상태 관리 |
 | 26 | 외부 재화·해금 | Meta | Alpha 🟣 | 신규 필요 | — | — | 랭킹, 게임 상태 |
