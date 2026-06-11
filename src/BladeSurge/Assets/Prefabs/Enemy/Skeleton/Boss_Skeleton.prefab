@@ -22,6 +22,9 @@ GameObject:
   - component: {fileID: 5251465253696480052}
   - component: {fileID: 4437283516026516001}
   - component: {fileID: 7754751914707339189}
+  - component: {fileID: 5700395591244479697}
+  - component: {fileID: 952844832025861834}
+  - component: {fileID: 1981943845285724728}
   m_Layer: 9
   m_Name: Boss_Skeleton
   m_TagString: Enemy
@@ -109,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
   _maxHp: 1000
   _xpReward: 0
+  _hitInvincibilityDuration: 0
 --- !u!114 &1633094041069799001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26a091d648c7aa479928e4d13cec119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAI
-  _moveSpeed: 2
+  _moveSpeed: 4
   _jumpMovement: 0
   _jumpInterval: 1.5
   _jumpWalkSpeed: 1.2
@@ -166,7 +170,7 @@ MonoBehaviour:
   _slamImpactPrefab: {fileID: 0}
   _contactDamage: 25
   _contactInterval: 0.8
-  _contactRadius: 2.5
+  _contactRadius: 5.5
 --- !u!114 &8683379108056361020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
   _movingThreshold: 0.1
   _hitAnimCooldown: 1.5
+  _playHitAnim: 0
 --- !u!114 &646954511087159141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAttackOrchestrator
   _initialDelay: 1.5
-  _intervalBetweenAttacks: 0.8
+  _intervalBetweenAttacks: 0.6
 --- !u!114 &5251465253696480052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +294,68 @@ MonoBehaviour:
   _summonRadius: 4
   _summonHpScale: 1
   _summonSpeedScale: 1
+--- !u!114 &5700395591244479697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a10868b97217eb41af0a5db9cda148d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrossSlashAttack
+  _cooldown: 6
+  _windupDuration: 1.2
+  _damage: 40
+  _radius: 4
+  _telegraphPrefab: {fileID: 0}
+  _impactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
+  _lineCount: 4
+  _lineLength: 18
+  _lineWidth: 4
+  _rectTelegraphPrefab: {fileID: 90983848533297536, guid: cf6fb9991f916494f9c8744b1a5da2bf, type: 3}
+  _randomizeAngle: 1
+--- !u!114 &952844832025861834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5901ececed40f304e9021dce36395f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TeleportStrikeAttack
+  _cooldown: 7
+  _windupDuration: 0.9
+  _damage: 45
+  _radius: 7
+  _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _impactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
+--- !u!114 &1981943845285724728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329516999241024568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9652dcb0f7d8c294184ab490320ff764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChasingZoneAttack
+  _cooldown: 7
+  _windupDuration: 1.5
+  _damage: 35
+  _radius: 4.5
+  _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _impactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
+  _chaseDuration: 1.4
+  _followSpeed: 4.5
+  _lockDelay: 0.35
 --- !u!1001 &285046948659275734
 PrefabInstance:
   m_ObjectHideFlags: 0

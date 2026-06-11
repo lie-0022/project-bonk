@@ -46,7 +46,7 @@ public class GameClearUI : MonoBehaviour
                 $"처치 수   {RunTotals.TotalKills}\n" +
                 $"획득 골드   {RunTotals.TotalGold}\n" +
                 $"최고 레벨   {RunTotals.HighestLevel}\n" +
-                $"총 시간   {RunTotals.FormattedTotalTime}";
+                $"총 시간   {RunTotals.FormattedTotalTime} (보너스 +{RunTotals.TimeBonus})";
 
         if (_bestText != null)
             _bestText.text = isNewBest

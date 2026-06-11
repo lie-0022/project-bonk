@@ -76,15 +76,21 @@ public abstract class BossAttackBase : MonoBehaviour
             if (burst != null) burst.Setup(worldPos, radius);
         }
 
-        // 임팩트: OverlapSphere로 플레이어 검출 (바닥에서 살짝 띄워 플레이어 캡슐 포함)
-        var hits = Physics.OverlapSphere(worldPos + Vector3.up * 1.5f, radius);
-        for (int i = 0; i < hits.Length; i++)
+        // windup 도중 보스가 죽었으면 데미지는 적용하지 않는다(사후 피격으로 플레이어가 억울하게 죽는 버그 방지).
+        // AreaBarrageAttack과 동일 처리. 시각 임팩트는 위에서 이미 표시했다.
+        bool bossAlive = boss != null && boss.Health != null && boss.Health.IsAlive;
+        if (bossAlive)
         {
-            if (!hits[i].CompareTag("Player")) continue;
-            var hp = hits[i].GetComponent<HealthComponent>();
-            if (hp == null) continue;
-            DamageDealer.Deal(new DamageInfo(_damage, DamageSource.Enemy, gameObject), hp);
-            break; // 플레이어 1명 가정
+            // 임팩트: OverlapSphere로 플레이어 검출 (바닥에서 살짝 띄워 플레이어 캡슐 포함)
+            var hits = Physics.OverlapSphere(worldPos + Vector3.up * 1.5f, radius);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (!hits[i].CompareTag("Player")) continue;
+                var hp = hits[i].GetComponent<HealthComponent>();
+                if (hp == null) continue;
+                DamageDealer.Deal(new DamageInfo(_damage, DamageSource.Enemy, gameObject), hp);
+                break; // 플레이어 1명 가정
+            }
         }
 
         _firing = false;

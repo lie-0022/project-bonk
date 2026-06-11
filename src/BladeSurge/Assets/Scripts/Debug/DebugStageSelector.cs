@@ -102,6 +102,17 @@ public class DebugStageSelector : MonoBehaviour
         Debug.Log($"[DebugStageSelector] Race={_race} mobs={mobs.Length}종 boss={boss.name}");
     }
 
+    private void Update()
+    {
+        // [디버그] F9: 웨이브를 기다리지 않고 즉시 보스 스폰 (보스 테스트 단축용)
+        if (_waveSpawner != null
+            && UnityEngine.InputSystem.Keyboard.current != null
+            && UnityEngine.InputSystem.Keyboard.current.f9Key.wasPressedThisFrame)
+        {
+            _waveSpawner.DebugSpawnBossNow();
+        }
+    }
+
     /// <summary>
     /// 선택한 종족에 해당하는 맵만 활성화하고 나머지 맵 루트는 비활성화한다.
     /// 맵 루트가 하나도 설정되지 않았으면 아무것도 하지 않는다(기존 씬 구성 유지).

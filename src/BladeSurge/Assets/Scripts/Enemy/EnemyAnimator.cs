@@ -15,6 +15,8 @@ public class EnemyAnimator : MonoBehaviour
     [SerializeField] private float _movingThreshold = 0.1f;
     [Tooltip("Hit 애니 최소 재생 간격(초). 0 이면 매번 재생. 보스/탱키 적은 1.0+ 권장.")]
     [SerializeField] private float _hitAnimCooldown = 0f;
+    [Tooltip("피격 시 Hit 애니 재생 여부. 보스처럼 연타 경직(걷기 끊김)이 거슬리는 적은 끈다. HitFlash 등 다른 피격 피드백은 유지된다.")]
+    [SerializeField] private bool _playHitAnim = true;
 
     private Animator _animator;
     private Rigidbody _rb;
@@ -63,7 +65,7 @@ public class EnemyAnimator : MonoBehaviour
 
     private void OnDamaged(float amount, float currentHp)
     {
-        if (_animator == null) return;
+        if (_animator == null || !_playHitAnim) return;
         if (Time.time - _lastHitTime < _hitAnimCooldown) return;
         _animator.SetTrigger(Param_Hit);
         _lastHitTime = Time.time;

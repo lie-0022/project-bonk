@@ -254,6 +254,24 @@ public class WaveSpawner : MonoBehaviour
         Debug.Log($"[WaveSpawner] Wave {CurrentWave} 전환 중...");
     }
 
+    /// <summary>[디버그] 웨이브 진행과 무관하게 즉시 보스를 스폰한다(테스트 단축용). 이미 스폰됐으면 무시.</summary>
+    public void DebugSpawnBossNow()
+    {
+        if (_bossSpawned)
+        {
+            Debug.Log("[WaveSpawner] DebugSpawnBossNow: 이미 보스가 스폰됨 — 무시");
+            return;
+        }
+        if (_playerTransform == null)
+        {
+            Debug.LogWarning("[WaveSpawner] DebugSpawnBossNow: 플레이어 참조 없음 — 생략");
+            return;
+        }
+        _encounterStarted = true; // BGM/상태 정합 위해 인카운터 시작 상태로 표시
+        SpawnBoss();
+        Debug.Log("[WaveSpawner] DebugSpawnBossNow: 보스 즉시 스폰");
+    }
+
     private void SpawnBoss()
     {
         if (_bossPrefab == null)

@@ -13,7 +13,9 @@ public static class RunTotals
     public const int KillWeight = 10;
     public const int LevelWeight = 100;
     public const int StageWeight = 1000;
-    public const int TimeWeight = 1; // 생존 초당. 밸런싱 시 방향(빠른 클리어 보너스 등) 재검토 가능
+    public const int TimeWeight = 1; // 빠른 클리어 보너스: 기준시간보다 빨리 깬 '남은 초'당 점수
+    /// <summary>스테이지당 기준 클리어 시간(초). 이보다 빨리 깬 남은 시간이 TimeBonus가 된다. 5분=300초.</summary>
+    public const float TimeParPerStage = 300f;
 
     public static int TotalKills;
     public static int TotalGold;
@@ -21,13 +23,27 @@ public static class RunTotals
     public static int HighestLevel;
     public static int StagesCleared;
 
+    /// <summary>
+    /// 빠른 클리어 보너스. 클리어한 스테이지들의 기준시간 합(StagesCleared×TimeParPerStage)에서
+    /// 실제 누적 시간을 뺀 '절약한 초' × TimeWeight. 기준보다 느리면 0(감점 없음).
+    /// 빨리 깰수록 점수가 오르도록 설계.
+    /// </summary>
+    public static int TimeBonus
+    {
+        get
+        {
+            float saved = StagesCleared * TimeParPerStage - TotalTime;
+            return Mathf.Max(0, Mathf.RoundToInt(saved)) * TimeWeight;
+        }
+    }
+
     /// <summary>최종 총점.</summary>
     public static int Score =>
         TotalGold * GoldWeight
         + TotalKills * KillWeight
         + HighestLevel * LevelWeight
         + StagesCleared * StageWeight
-        + Mathf.RoundToInt(TotalTime) * TimeWeight;
+        + TimeBonus;
 
     private const string BestScoreKey = "BladeSurge.BestScore";
 

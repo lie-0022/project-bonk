@@ -42,6 +42,10 @@ public class PlayerStats : MonoBehaviour
     [Header("Base Combat")]
     [SerializeField] private float _baseMaxHp = 100f;
     [SerializeField] private float _baseHpRegen = 0f;
+    [Tooltip("기본 치명타 확률(CritChance 패시브 0레벨일 때도 적용). 0.05 = 5%.")]
+    [SerializeField] private float _baseCritChance = 0.05f;
+    [Tooltip("CritChance 패시브 effective 레벨당 추가 치명타 확률. 0.005 = 0.5%.")]
+    [SerializeField] private float _critChancePerLevel = 0.005f;
 
     [Header("Base Weapon")]
     [SerializeField] private float _baseCritMultiplier = 1.5f;
@@ -130,7 +134,8 @@ public class PlayerStats : MonoBehaviour
 
         // DR (Diminishing Returns) — final = cap × (1 - (1-perLevel)^effLv)
         DodgeChance = DiminishingReturns(GetEffectiveLevel(PassiveType.Dodge), 0.08f, 0.60f);
-        CritChance = DiminishingReturns(GetEffectiveLevel(PassiveType.CritChance), 0.08f, 0.75f);
+        // 기본 5% + effective 레벨당 0.5% 선형 가산 (cap 0.75 안전장치). 출처: PM 밸런싱 지시 2026-06-11
+        CritChance = Mathf.Min(_baseCritChance + _critChancePerLevel * GetEffectiveLevel(PassiveType.CritChance), 0.75f);
         LuckChance = DiminishingReturns(GetEffectiveLevel(PassiveType.Luck), 0.10f, 0.80f);
 
         // Cap 가산식

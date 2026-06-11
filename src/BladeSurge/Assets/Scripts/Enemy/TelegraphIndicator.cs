@@ -11,6 +11,8 @@ public class TelegraphIndicator : MonoBehaviour
     [SerializeField] private float _pulseFreq = 6f;
     [SerializeField] private float _alphaMin = 0.4f;
     [SerializeField] private float _alphaMax = 0.85f;
+    [Tooltip("표시 색 틴트. 원형(빨간색이 텍스처에 포함)은 흰색 유지. 단색 쿼드(사각 경로 예고 등)는 여기서 색 지정.")]
+    [SerializeField] private Color _tint = Color.white;
 
     private float _duration;
     private float _elapsed;
@@ -29,6 +31,28 @@ public class TelegraphIndicator : MonoBehaviour
         if (_mpb == null) _mpb = new MaterialPropertyBlock();
     }
 
+    /// <summary>
+    /// 직사각형 경로 예고. origin에서 dir(수평) 방향으로 length만큼 뻗는 폭 width의 사각형을 깐다.
+    /// 돌진(ChargeAttack) 등 직선 공격의 경로 표시용. duration 후 자동 소멸.
+    /// </summary>
+    public void SetupRect(Vector3 origin, Vector3 dir, float width, float length, float duration)
+    {
+        dir.y = 0f;
+        dir = dir.sqrMagnitude > 0.0001f ? dir.normalized : Vector3.forward;
+
+        Vector3 center = origin + dir * (length * 0.5f);
+        transform.position = new Vector3(center.x, origin.y + 0.02f, center.z); // 바닥 살짝 위
+        // Quad를 눕히고(X+90) 진행 방향으로 yaw 회전 — local Y축이 경로 방향(길이)이 된다.
+        float yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(90f, yaw, 0f);
+        transform.localScale = new Vector3(width, length, 1f);
+
+        _duration = duration;
+        _elapsed = 0f;
+        gameObject.SetActive(true);
+        if (_mpb == null) _mpb = new MaterialPropertyBlock();
+    }
+
     private void Update()
     {
         if (_renderer == null) return;
@@ -41,7 +65,7 @@ public class TelegraphIndicator : MonoBehaviour
         float alpha = Mathf.Lerp(_alphaMin, _alphaMax, pulse);
 
         _renderer.GetPropertyBlock(_mpb);
-        _mpb.SetColor(Prop_BaseColor, new Color(1f, 1f, 1f, alpha));
+        _mpb.SetColor(Prop_BaseColor, new Color(_tint.r, _tint.g, _tint.b, alpha * _tint.a));
         _renderer.SetPropertyBlock(_mpb);
 
         if (_elapsed >= _duration)

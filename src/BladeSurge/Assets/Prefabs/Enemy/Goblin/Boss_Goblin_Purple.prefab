@@ -1057,6 +1057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
   _maxHp: 1000
   _xpReward: 0
+  _hitInvincibilityDuration: 0
 --- !u!114 &7100000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,7 +1102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26a091d648c7aa479928e4d13cec119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAI
-  _moveSpeed: 2
+  _moveSpeed: 4
   _jumpMovement: 0
   _jumpInterval: 1.5
   _jumpWalkSpeed: 1.2
@@ -1114,7 +1115,7 @@ MonoBehaviour:
   _slamImpactPrefab: {fileID: 0}
   _contactDamage: 25
   _contactInterval: 0.8
-  _contactRadius: 2.5
+  _contactRadius: 4
 --- !u!114 &7100000006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,6 +1143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
   _movingThreshold: 0.1
   _hitAnimCooldown: 1.5
+  _playHitAnim: 0
 --- !u!114 &648009667002292077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,9 +1198,18 @@ MonoBehaviour:
   _radius: 2
   _telegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
   _impactPrefab: {fileID: 0}
-  _chargeSpeed: 20
-  _chargeDuration: 0.7
-  _hitRadius: 2.2
+  _chargeSpeed: 26
+  _chargeDuration: 0.55
+  _hitRadius: 4
+  _pathTelegraphPrefab: {fileID: 90983848533297536, guid: cf6fb9991f916494f9c8744b1a5da2bf, type: 3}
+  _pathWidth: 8
+  _slamTelegraphPrefab: {fileID: 90983848533297536, guid: d32502f6ceab95f4cbe878239d089502, type: 3}
+  _slamImpactPrefab: {fileID: 2964909414532251546, guid: de196ae499305d948b581626c66f5461, type: 3}
+  _slamRadius: 8
+  _slamDamage: 25
+  _slamDelay: 0.75
+  _doubleDashHpRatio: 0.5
+  _secondWindup: 0.45
 --- !u!1 &6698579138562145050
 GameObject:
   m_ObjectHideFlags: 0
