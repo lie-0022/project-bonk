@@ -104,13 +104,15 @@ public class DebugStageSelector : MonoBehaviour
 
     private void Update()
     {
-        // [디버그] F9: 웨이브를 기다리지 않고 즉시 보스 스폰 (보스 테스트 단축용)
+#if UNITY_EDITOR
+        // [디버그] F9: 웨이브를 기다리지 않고 즉시 보스 스폰 (보스 테스트 단축용). 빌드에서는 제외.
         if (_waveSpawner != null
             && UnityEngine.InputSystem.Keyboard.current != null
             && UnityEngine.InputSystem.Keyboard.current.f9Key.wasPressedThisFrame)
         {
             _waveSpawner.DebugSpawnBossNow();
         }
+#endif
     }
 
     /// <summary>
